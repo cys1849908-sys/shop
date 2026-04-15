@@ -5,6 +5,7 @@ import Modal from "@/src/components/common/modals/Modal";
 import { useModal } from "@/src/hooks/useModal";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
+import FormRowVertical from "@/src/components/common/ui/FormRowVertical";
 
 export default function UserInfoEditPage() {
   const [emailPrefix, setEmailPrefix] = useState("cys23568");
@@ -127,7 +128,22 @@ export default function UserInfoEditPage() {
       <Modal isOpen={isOpen} onClose={closeModal} backdropBlur>
         <div className="bg-white w-[430px]">
           <div className="flex items-center px-6 py-2 border-b border-gray-200">
-            <span className="text-[14px] font-medium mx-auto">배송지 관리</span>
+            <span className="text-[14px] font-medium mx-auto">
+              비밀번호 변경
+            </span>
+          </div>
+          <div className="p-4">
+            <p className="text-[17px] py-3">새로운 비밀번호를 설정해 주세요</p>
+            <FormRowVertical>
+              <Input
+                label="비밀번호"
+                type="text"
+                placeholder="8자리 이상"
+              ></Input>
+            </FormRowVertical>
+            <FormRowVertical>
+              <Input type="text" placeholder="비밀번호를 확인해 주세요"></Input>
+            </FormRowVertical>
           </div>
         </div>
       </Modal>
