@@ -85,8 +85,8 @@ export default function AddressManagement({
   };
 
   return (
-    <div className="bg-white w-[450px]">
-      <div className="flex items-center px-6 py-4 border-b border-gray-200">
+    <div className="bg-white w-[430px]">
+      <div className="flex items-center px-6 py-2 border-b border-gray-200">
         <span className="text-[14px] font-medium mx-auto">배송지 관리</span>
       </div>
 
@@ -161,11 +161,11 @@ export default function AddressManagement({
               ))
             ) : (
               // 수정 폼
-              <div className="p-6">
-                <AddressForm
-                  onSuccess={handleAddressSave}
-                  initialData={editingAddress}
-                  action={(isValid) => (
+              <AddressForm
+                onSuccess={handleAddressSave}
+                initialData={editingAddress}
+                action={(isValid) => (
+                  <div className="flex justify-center">
                     <button
                       type="submit"
                       disabled={!isValid}
@@ -178,9 +178,9 @@ export default function AddressManagement({
                     >
                       확인
                     </button>
-                  )}
-                />
-              </div>
+                  </div>
+                )}
+              />
             )}
           </div>
           {!isEdit && (
@@ -195,26 +195,24 @@ export default function AddressManagement({
           )}
         </div>
       ) : (
-        <div className="p-6">
-          <AddressForm
-            onSuccess={handleAddressSave}
-            // initialData={null}
-            action={(isValid) => (
-              <button
-                type="submit"
-                disabled={!isValid}
-                className={clsx(
-                  "w-full py-3 text-sm font-medium",
-                  isValid
-                    ? "bg-black text-white cursor-pointer"
-                    : "bg-gray-200 text-black cursor-default",
-                )}
-              >
-                확인
-              </button>
-            )}
-          />
-        </div>
+        <AddressForm
+          onSuccess={handleAddressSave}
+          // initialData={null}
+          action={(isValid) => (
+            <button
+              type="submit"
+              disabled={!isValid}
+              className={clsx(
+                "w-full py-3 text-sm font-medium ",
+                isValid
+                  ? "bg-black text-white cursor-pointer"
+                  : "bg-gray-200 text-black cursor-default",
+              )}
+            >
+              확인
+            </button>
+          )}
+        />
       )}
 
       {isAlertOpen && (

@@ -5,6 +5,7 @@ import AddressForm from "./AddressForm";
 import { addAddress } from "@/src/lib/actions/address";
 import { AddressInput } from "@/src/types/address";
 import { useRouter } from "next/navigation";
+import clsx from "clsx";
 
 export default function AddressAdder({
   isFirstAddress,
@@ -35,6 +36,23 @@ export default function AddressAdder({
         <AddressForm
           onSuccess={handleAddressSave}
           isFirstAddress={isFirstAddress}
+          title="배송지 추가"
+          action={(isValid) => (
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                disabled={!isValid}
+                className={clsx(
+                  "w-full py-3 text-sm font-medium",
+                  isValid
+                    ? "bg-black text-white cursor-pointer"
+                    : "bg-gray-200 text-black cursor-default",
+                )}
+              >
+                확인
+              </button>
+            </div>
+          )}
         />
       </Modal>
     </div>

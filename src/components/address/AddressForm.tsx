@@ -73,123 +73,126 @@ export default function AddressForm({
 
   return (
     <Form onSubmit={handleSubmit(onSuccess)}>
-      <div className="w-full bg-white flex flex-col gap-4 px-9 py-8">
-        {title ?? (
-          <div className="text-center text-[15px] font-bold mb-4">{title}</div>
+      <div className="w-[430px] bg-white flex flex-col ">
+        {title && (
+          <div className="flex items-center px-6 py-2 border-b border-gray-200">
+            <span className="text-[14px] font-medium mx-auto">{title}</span>
+          </div>
         )}
+        <div className="px-6">
+          <FormRowVertical>
+            <Input
+              label="배송지명"
+              placeholder="예: 우리집, 회사"
+              {...register("addressName")}
+            />
+          </FormRowVertical>
 
-        <FormRowVertical>
-          <Input
-            label="배송지명"
-            placeholder="예: 우리집, 회사"
-            {...register("addressName")}
-          />
-        </FormRowVertical>
+          <FormRowVertical>
+            <Input
+              label="이름"
+              placeholder="수령인 이름을 입력해 주세요"
+              {...register("receiverName", { required: "이름은 필수입니다" })}
+              className={clsx(
+                errors.receiverName ? "border-red-500" : "border-gray-200",
+              )}
+              error={errors.receiverName?.message}
+              required
+            />
+          </FormRowVertical>
 
-        <FormRowVertical>
-          <Input
-            label="이름"
-            placeholder="수령인 이름을 입력해 주세요"
-            {...register("receiverName", { required: "이름은 필수입니다" })}
-            className={clsx(
-              errors.receiverName ? "border-red-500" : "border-gray-200",
-            )}
-            error={errors.receiverName?.message}
-            required
-          />
-        </FormRowVertical>
+          <FormRowVertical>
+            <Input
+              label="연락처"
+              placeholder="연락처를 입력해 주세요"
+              {...register("phone", {
+                required: "연락처를 입력해주세요",
+                pattern: {
+                  value: /^01[0-9]-?\d{3,4}-?\d{4}$/,
+                  message: "연락처가 정확한지 확인해 주세요.",
+                },
+              })}
+              error={errors.phone?.message}
+              required
+            />
+          </FormRowVertical>
+          <FormRowVertical>
+            <Input
+              label="추가 연락처"
+              placeholder="추가 연락처가 있으시다면 입력해 주세요"
+              {...register("secondaryPhone", {
+                pattern: {
+                  value: /^01[0-9]-?\d{3,4}-?\d{4}$/,
+                  message: "연락처가 정확한지 확인해 주세요.",
+                },
+              })}
+              error={errors.secondaryPhone?.message}
+            />
+          </FormRowVertical>
 
-        <FormRowVertical>
-          <Input
-            label="연락처"
-            placeholder="연락처를 입력해 주세요"
-            {...register("phone", {
-              required: "연락처를 입력해주세요",
-              pattern: {
-                value: /^01[0-9]-?\d{3,4}-?\d{4}$/,
-                message: "연락처가 정확한지 확인해 주세요.",
-              },
-            })}
-            error={errors.phone?.message}
-            required
-          />
-        </FormRowVertical>
-        <FormRowVertical>
-          <Input
-            label="추가 연락처"
-            placeholder="추가 연락처가 있으시다면 입력해 주세요"
-            {...register("secondaryPhone", {
-              pattern: {
-                value: /^01[0-9]-?\d{3,4}-?\d{4}$/,
-                message: "연락처가 정확한지 확인해 주세요.",
-              },
-            })}
-            error={errors.secondaryPhone?.message}
-          />
-        </FormRowVertical>
-
-        <FormRowVertical>
-          <div className="space-y-1">
-            <div className="relative">
-              <p className="block w-full text-[14px]">주소</p>
-              <div className="absolute w-[3px] h-[4px] top-1 left-7 rounded-sm border-red-500 bg-red-500 "></div>
-            </div>
-            <div className="flex gap-2">
+          <FormRowVertical>
+            <div className="space-y-1">
+              <div className="relative">
+                <p className="block w-full text-[14px]">주소</p>
+                <div className="absolute w-[3px] h-[4px] top-1 left-7 rounded-sm border-red-500 bg-red-500 "></div>
+              </div>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="우편번호"
+                  {...register("postcode")}
+                  readOnly
+                  className="bg-gray-100"
+                />
+                <button
+                  type="button"
+                  className="bg-black text-white text-[12px] px-4 py-2 shrink-0 whitespace-nowrap cursor-pointer"
+                  onClick={handleSearchAddress}
+                >
+                  주소찾기
+                </button>
+              </div>
               <Input
-                placeholder="우편번호"
-                {...register("postcode")}
+                placeholder="주소"
                 readOnly
                 className="bg-gray-100"
+                {...register("address")}
               />
-              <button
-                type="button"
-                className="bg-black text-white text-[12px] px-4 py-2 shrink-0 whitespace-nowrap cursor-pointer"
-                onClick={handleSearchAddress}
-              >
-                주소찾기
-              </button>
-            </div>
-            <Input
-              placeholder="주소"
-              readOnly
-              className="bg-gray-100"
-              {...register("address")}
-            />
 
-            <Input
-              placeholder="상세주소"
-              {...register("detailAddress", {
-                required: "우편번호/주소/상세주소를 입력해주세요.",
-              })}
-              error={errors.detailAddress?.message}
+              <Input
+                placeholder="상세주소"
+                {...register("detailAddress", {
+                  required: "우편번호/주소/상세주소를 입력해주세요.",
+                })}
+                error={errors.detailAddress?.message}
+              />
+            </div>
+          </FormRowVertical>
+          <div className="flex gap-1 items-center">
+            <input
+              className={clsx(
+                "cursor-default",
+                isValid && "accent-black cursor-pointer",
+              )}
+              type="checkbox"
+              id="isDefault"
+              {...register("isDefault")}
+              disabled={!isValid}
+              checked={isFirstAddress ? true : watchedIsDefault}
             />
+            <label
+              htmlFor="isDefault"
+              className={clsx(
+                "text-[12px] cursor-default",
+                watchedIsDefault && isValid ? "text-black" : "text-gray-500",
+                isValid && "cursor-pointer",
+              )}
+            >
+              기본배송지로등록
+            </label>
           </div>
-        </FormRowVertical>
-        <div className="flex gap-1 items-center">
-          <input
-            className={clsx(
-              "cursor-default",
-              isValid && "accent-black cursor-pointer",
-            )}
-            type="checkbox"
-            id="isDefault"
-            {...register("isDefault")}
-            disabled={!isValid}
-            checked={isFirstAddress ? true : watchedIsDefault}
-          />
-          <label
-            htmlFor="isDefault"
-            className={clsx(
-              "text-[12px] cursor-default",
-              watchedIsDefault && isValid ? "text-black" : "text-gray-500",
-              isValid && "cursor-pointer",
-            )}
-          >
-            기본배송지로등록
-          </label>
         </div>
 
-        <div className="mt-6">
+        <div className="p-5">
           {typeof action === "function" ? action(isValid) : action}
         </div>
       </div>

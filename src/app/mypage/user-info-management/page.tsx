@@ -3,6 +3,7 @@
 import Form from "@/src/components/common/ui/Form";
 import FormRowVertical from "@/src/components/common/ui/FormRowVertical";
 import Input from "@/src/components/common/ui/Input";
+import { useModal } from "@/src/hooks/useModal";
 import { verifyCurrentPassword } from "@/src/lib/actions/user";
 import clsx from "clsx";
 import Link from "next/link";
@@ -35,9 +36,10 @@ export default function UserInfoPage() {
       setIsPending(false);
     }
   };
+
   return (
     <div className="mb-4">
-      <h4 className="text-lg font-bold">배송지 관리</h4>
+      <h4 className="text-lg font-bold">내정보 관리</h4>
       <hr />
       <div className="flex flex-col items-center justify-center mt-20  p-10 ">
         <div className="flex flex-col justify-center items-center mb-10">
@@ -50,7 +52,7 @@ export default function UserInfoPage() {
         </div>
 
         <Form onSubmit={handleSubmit} className="w-90">
-          <FormRowVertical>
+          <FormRowVertical error={error && error}>
             <Input
               type="password"
               placeholder="비밀번호를 입력해 주세요"

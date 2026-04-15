@@ -125,7 +125,11 @@ export default function UserInfoEditPage() {
       </div>
 
       <Modal isOpen={isOpen} onClose={closeModal} backdropBlur>
-        <div className="bg-white w-40">border</div>
+        <div className="bg-white w-[430px]">
+          <div className="flex items-center px-6 py-2 border-b border-gray-200">
+            <span className="text-[14px] font-medium mx-auto">배송지 관리</span>
+          </div>
+        </div>
       </Modal>
     </div>
   );
