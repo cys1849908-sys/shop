@@ -28,7 +28,7 @@ export async function signUp({
 
   if (authError) throw authError;
 
-  return data.user;
+  return { success: true, data };
 }
 
 export async function login({
@@ -53,7 +53,7 @@ export async function login({
     throw new Error(error.message);
   }
 
-  return data;
+  return { success: true, data };
 }
 
 export async function verifyCurrentPassword({
@@ -65,21 +65,37 @@ export async function verifyCurrentPassword({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
   if (!user || !user.email) {
     throw new Error("로그인이 필요합니다.");
   }
-
   const { data, error } = await supabase.auth.signInWithPassword({
     email: user.email,
     password: password,
   });
-
   if (error) {
     throw new Error("현재 비밀번호가 일치하지 않습니다.");
   }
+  return { success: true, data };
+}
 
-  return data;
+export async function updatePassword({ newPassword }: { newPassword: string }) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("로그인이 필요합니다.");
+  }
+  const { data, error } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+
+  if (error) {
+    throw new Error(error.message || "비밀번호 변경 중 오류가 발생했습니다.");
+  }
+
+  return { success: true, data };
 }
 
 export async function signOut() {

@@ -4,8 +4,15 @@ import Input from "@/src/components/common/ui/Input";
 import Modal from "@/src/components/common/modals/Modal";
 import { useModal } from "@/src/hooks/useModal";
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import FormRowVertical from "@/src/components/common/ui/FormRowVertical";
+import { updatePassword } from "@/src/lib/actions/user";
+import { useForm } from "react-hook-form";
+
+type PasswordForm = {
+  password: string;
+  confirmPassword: string;
+};
 
 export default function UserInfoEditPage() {
   const [emailPrefix, setEmailPrefix] = useState("cys23568");
@@ -13,9 +20,25 @@ export default function UserInfoEditPage() {
   const [isCustom, setIsCustom] = useState(false);
   const { isOpen, openModal, closeModal } = useModal();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm<PasswordForm>({
+    mode: "onChange",
+  });
+
+  const onSubmit = async (data: PasswordForm) => {
+    try {
+      await updatePassword({ newPassword: data.password });
+      closeModal();
+    } catch (err: any) {
+      alert("기존 비밀번호와 다른 비밀번호를 입력해주세요");
+    }
+  };
+
   const handleDomainChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-
     if (value === "직접 입력") {
       setIsCustom(true);
       setEmailDomain("");
@@ -24,8 +47,9 @@ export default function UserInfoEditPage() {
       setEmailDomain(value);
     }
   };
+
   return (
-    <div className=" mx-auto p-4 text-[14px]">
+    <div className="mx-auto p-4 text-[14px]">
       <div className="mb-12">
         <h4 className="text-lg font-bold mb-2">로그인 정보</h4>
         <hr className="border-black mb-6" />
@@ -88,7 +112,7 @@ export default function UserInfoEditPage() {
                   type="text"
                   value={emailPrefix}
                   onChange={(e) => setEmailPrefix(e.target.value)}
-                  className="flex-1 p-2 border border-gray-300 rounded-sm focus:outline-none"
+                  className="flex-1 p-2 border border-gray-300 rounded-sm"
                 />
                 <span className="text-gray-500">@</span>
                 <Input
@@ -97,14 +121,14 @@ export default function UserInfoEditPage() {
                   readOnly={!isCustom}
                   onChange={(e) => setEmailDomain(e.target.value)}
                   className={clsx(
-                    "flex-1 p-2 border border-gray-300 rounded-sm focus:outline-none",
+                    "flex-1 p-2 border border-gray-300 rounded-sm",
                     !isCustom && "bg-gray-50",
                   )}
                 />
               </div>
 
               <select
-                className="w-full p-2 border border-gray-300 rounded-sm bg-white text-gray-600 focus:outline-none"
+                className="w-full p-2 border border-gray-300 rounded-sm bg-white text-gray-600"
                 onChange={handleDomainChange}
                 value={isCustom ? "직접 입력" : emailDomain}
               >
@@ -126,26 +150,61 @@ export default function UserInfoEditPage() {
       </div>
 
       <Modal isOpen={isOpen} onClose={closeModal} backdropBlur>
-        <div className="bg-white w-[430px]">
-          <div className="flex items-center px-6 py-2 border-b border-gray-200">
-            <span className="text-[14px] font-medium mx-auto">
-              비밀번호 변경
-            </span>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="bg-white w-[430px]">
+            <div className="flex items-center px-6 py-2 border-b border-gray-200">
+              <span className="text-[14px] font-medium mx-auto">
+                비밀번호 변경
+              </span>
+            </div>
+
+            <div className="p-7">
+              <p className="text-[17px] py-3">
+                새로운 비밀번호를 설정해 주세요
+              </p>
+
+              <FormRowVertical error={errors.password?.message}>
+                <Input
+                  label="비밀번호"
+                  isPassword
+                  placeholder="8자리 이상"
+                  {...register("password", {
+                    required: "비밀번호를 입력해주세요",
+                    minLength: {
+                      value: 8,
+                      message: "8자 이상 입력해주세요",
+                    },
+                  })}
+                  error={!!errors.password}
+                />
+              </FormRowVertical>
+
+              <FormRowVertical error={errors.confirmPassword?.message}>
+                <Input
+                  isPassword
+                  placeholder="비밀번호를 확인해 주세요"
+                  {...register("confirmPassword", {
+                    required: "비밀번호 확인을 입력해주세요",
+                    validate: (value, formValues) =>
+                      value === formValues.password ||
+                      "비밀번호가 일치하지 않습니다.",
+                  })}
+                  error={!!errors.confirmPassword}
+                />
+              </FormRowVertical>
+
+              <div className="pt-8">
+                <button
+                  type="submit"
+                  disabled={!isValid || isSubmitting}
+                  className="w-full bg-black text-white py-3 text-[14px] cursor-pointer disabled:opacity-50"
+                >
+                  {isSubmitting ? "변경 중..." : "확인"}
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="p-4">
-            <p className="text-[17px] py-3">새로운 비밀번호를 설정해 주세요</p>
-            <FormRowVertical>
-              <Input
-                label="비밀번호"
-                type="text"
-                placeholder="8자리 이상"
-              ></Input>
-            </FormRowVertical>
-            <FormRowVertical>
-              <Input type="text" placeholder="비밀번호를 확인해 주세요"></Input>
-            </FormRowVertical>
-          </div>
-        </div>
+        </form>
       </Modal>
     </div>
   );

@@ -1,82 +1,49 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Input from "@/src/components/common/ui/Input";
 import { signUp } from "@/src/lib/actions/user";
 import { useRouter } from "next/navigation";
+import FormRowVertical from "@/src/components/common/ui/FormRowVertical";
+import { useForm } from "react-hook-form";
+import clsx from "clsx";
 
-type FormErrors = {
-  password?: string;
-  passwordConfirm?: string;
-  email?: string;
-  general?: string;
+type SignupForm = {
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
 };
 
 export default function SignupPage() {
   const router = useRouter();
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    passwordConfirm: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isValid },
+  } = useForm<SignupForm>({
+    mode: "onChange",
   });
 
-  const [errors, setErrors] = useState<FormErrors>({}); // 이건 분리해서 사용가능할듯
-  const [isLoading, setIsLoading] = useState(false);
-
-  const validate = (): FormErrors => {
-    const newErrors: FormErrors = {};
-    if (formData.password.length < 8) {
-      newErrors.password = "비밀번호는 최소 8자리 이상이어야 합니다.";
-    }
-    if (formData.password !== formData.passwordConfirm) {
-      newErrors.passwordConfirm = "비밀번호가 일치하지 않습니다.";
-    }
-    return newErrors;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({});
-
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    setIsLoading(true);
+  const onSubmit = async (data: SignupForm) => {
     try {
-      const { name, email, password } = formData;
-      const user = await signUp({ name, email, password });
+      const user = await signUp({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
 
       if (user) {
         router.replace("/#");
       }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        if (error.message.includes("already registered")) {
-          setErrors({ email: "이미 사용 중인 이메일입니다." });
-        } else {
-          setErrors({
-            general: "가입 중 오류가 발생했습니다: " + error.message,
-          });
-        }
+    } catch (error: any) {
+      if (error.message.includes("already registered")) {
+        alert("이미 사용 중인 이메일입니다.");
       } else {
-        setErrors({ general: "알 수 없는 오류가 발생했습니다." });
+        alert("가입 중 오류 발생: " + error.message);
       }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    // 입력 시 해당 필드 에러 초기화
-    if (errors[e.target.name as keyof FormErrors]) {
-      setErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
     }
   };
 
@@ -92,71 +59,82 @@ export default function SignupPage() {
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
-            <Input
-              label="이름"
-              name="name"
-              placeholder="홍길동"
-              required
-              onChange={handleChange}
-            />
+            <FormRowVertical error={errors.name?.message}>
+              <Input
+                label="이름"
+                {...register("name", {
+                  required: "이름을 입력해주세요",
+                })}
+                error={!!errors.name}
+                required
+              />
+            </FormRowVertical>
 
-            <div>
+            <FormRowVertical error={errors.email?.message}>
               <Input
                 label="이메일"
-                name="email"
                 type="email"
-                placeholder="example@mail.com"
+                placeholder="이메일을 입력해주세요"
+                {...register("email", {
+                  required: "이메일을 입력해주세요",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "이메일 형식이 올바르지 않습니다.",
+                  },
+                })}
+                error={!!errors.email}
                 required
-                onChange={handleChange}
               />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-              )}
-            </div>
+            </FormRowVertical>
 
-            <div>
+            <FormRowVertical error={errors.password?.message}>
               <Input
                 label="비밀번호"
-                name="password"
-                type="password"
+                isPassword
                 placeholder="8자 이상 입력"
+                {...register("password", {
+                  required: "비밀번호를 입력해주세요",
+                  minLength: {
+                    value: 8,
+                    message: "비밀번호는 8자 이상이어야 합니다.",
+                  },
+                })}
+                error={!!errors.password}
                 required
-                onChange={handleChange}
               />
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-500">{errors.password}</p>
-              )}
-            </div>
+            </FormRowVertical>
 
-            <div>
+            <FormRowVertical error={errors.passwordConfirm?.message}>
               <Input
                 label="비밀번호 확인"
-                name="passwordConfirm"
-                type="password"
+                isPassword
                 placeholder="비밀번호 재입력"
+                {...register("passwordConfirm", {
+                  required: "비밀번호 확인을 입력해주세요",
+                  validate: (value, formValues) =>
+                    value === formValues.password ||
+                    "비밀번호가 일치하지 않습니다.",
+                })}
+                error={!!errors.passwordConfirm}
                 required
-                onChange={handleChange}
               />
-              {errors.passwordConfirm && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.passwordConfirm}
-                </p>
-              )}
-            </div>
+            </FormRowVertical>
           </div>
-
-          {errors.general && (
-            <p className="text-sm text-red-500 text-center">{errors.general}</p>
-          )}
 
           <button
             type="submit"
-            disabled={isLoading}
-            className="w-full rounded-md bg-black py-3 font-semibold text-white transition hover:bg-gray-800 active:scale-[0.98] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={!isValid}
+            className={clsx(
+              "w-full py-3 text-sm font-medium",
+              isValid
+                ? "bg-black text-white cursor-pointer"
+                : "bg-gray-200 text-black cursor-default",
+            )}
           >
-            {isLoading ? "처리 중..." : "가입하기"}
+            확인
+            {isSubmitting ? "처리 중..." : "가입하기"}
           </button>
         </form>
 

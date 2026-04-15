@@ -67,6 +67,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="비밀번호"
+              isPassword
             />
           </FormRowVertical>
 

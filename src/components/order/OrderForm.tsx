@@ -35,12 +35,6 @@ export default function OrderForm({ addresses }: { addresses: Address[] }) {
     formState: { errors, isValid },
   } = useForm({
     mode: "onChange",
-    defaultValues: {
-      ordererName: "",
-      phone: "",
-      secondaryPhone: "",
-      shippingMessage: "",
-    },
   });
 
   const handleConfirmAddress = (selectedId: string) => {
@@ -68,11 +62,8 @@ export default function OrderForm({ addresses }: { addresses: Address[] }) {
                 {...register("ordererName", {
                   required: "주문하시는 분의 이름을 입력해 주세요",
                 })}
-                className={clsx(
-                  errors.ordererName ? "border-red-500" : "border-gray-200",
-                )}
-                error={errors.ordererName?.message}
                 autoFocus
+                error={!!errors.ordererName}
                 required
               />
             </FormRowVertical>
@@ -88,7 +79,7 @@ export default function OrderForm({ addresses }: { addresses: Address[] }) {
                     message: "연락처가 정확한지 확인해 주세요.",
                   },
                 })}
-                error={errors.phone?.message}
+                error={!!errors.phone}
                 required
               />
             </FormRowVertical>
@@ -103,7 +94,7 @@ export default function OrderForm({ addresses }: { addresses: Address[] }) {
                     message: "연락처가 정확한지 확인해 주세요.",
                   },
                 })}
-                error={errors.secondaryPhone?.message}
+                error={!!errors.secondaryPhone}
               />
             </FormRowVertical>
 
@@ -143,7 +134,7 @@ export default function OrderForm({ addresses }: { addresses: Address[] }) {
                   placeholder="요청사항을 직접 입력해 주세요"
                   {...register("shippingMessage")}
                   autoFocus
-                  error={errors.shippingMessage?.message}
+                  error={!!errors.shippingMessage}
                 />
               )}
             </div>

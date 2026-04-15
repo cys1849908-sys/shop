@@ -96,7 +96,7 @@ export default function AddressForm({
               className={clsx(
                 errors.receiverName ? "border-red-500" : "border-gray-200",
               )}
-              error={errors.receiverName?.message}
+              error={!!errors.receiverName?.message}
               required
             />
           </FormRowVertical>
@@ -112,7 +112,7 @@ export default function AddressForm({
                   message: "연락처가 정확한지 확인해 주세요.",
                 },
               })}
-              error={errors.phone?.message}
+              error={!!errors.phone?.message}
               required
             />
           </FormRowVertical>
@@ -126,7 +126,7 @@ export default function AddressForm({
                   message: "연락처가 정확한지 확인해 주세요.",
                 },
               })}
-              error={errors.secondaryPhone?.message}
+              error={!!errors.secondaryPhone?.message}
             />
           </FormRowVertical>
 
@@ -163,7 +163,7 @@ export default function AddressForm({
                 {...register("detailAddress", {
                   required: "우편번호/주소/상세주소를 입력해주세요.",
                 })}
-                error={errors.detailAddress?.message}
+                error={!!errors.detailAddress?.message}
               />
             </div>
           </FormRowVertical>
