@@ -10,6 +10,7 @@ import IconLink from "../common/IconLink";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { signOut } from "@/src/lib/actions/user";
 import { useOutsideClick } from "@/src/hooks/useOutsideClick";
+import { useCartStore } from "@/src/store/CartStore";
 
 const NAV_MENU = [
   { label: "NEW", href: "/new" },
@@ -60,6 +61,7 @@ export default function HeaderClient({ user }: { user: SupabaseUser | null }) {
     setIsOpen(false);
     window.location.href = "/#";
   };
+  const cartLength = useCartStore((c) => c.items).length;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -98,7 +100,7 @@ export default function HeaderClient({ user }: { user: SupabaseUser | null }) {
         <div className="flex items-center gap-5">
           <Search />
 
-          <div className="relative" ref={ref}>
+          <div className="relative p-2" ref={ref}>
             {user ? (
               <button
                 onClick={() => setIsOpen(!isOpen)}
@@ -122,7 +124,7 @@ export default function HeaderClient({ user }: { user: SupabaseUser | null }) {
 
             {user && isOpen && (
               <div
-                className="absolute mt-3 w-24 bg-white border
+                className="absolute mt-3 w-24 bg-white border 
                 border-neutral-100 rounded-md shadow-xl flex flex-col overflow-hidden z-50"
               >
                 <Link
@@ -155,8 +157,11 @@ export default function HeaderClient({ user }: { user: SupabaseUser | null }) {
             <div className="flex flex-col items-center gap-0.5 relative">
               <div className="relative">
                 <ShoppingBag className="w-5 h-5 stroke-[1.5]" />
-                <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-white text-[9px] font-bold">
-                  3
+                <span
+                  className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center 
+                justify-center rounded-full bg-black text-white text-[9px] font-bold"
+                >
+                  {cartLength}
                 </span>
               </div>
               <span className="text-[9px] tracking-tight text-neutral-500 hidden md:block">

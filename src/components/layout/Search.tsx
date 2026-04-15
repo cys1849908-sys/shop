@@ -33,7 +33,7 @@ export default function Search() {
   };
 
   return (
-    <div className="relative" ref={containerRef}>
+    <div className="relative p-2" ref={containerRef}>
       <button
         type="button"
         aria-label="검색창 열기"
@@ -47,7 +47,7 @@ export default function Search() {
       </button>
 
       {isOpen && (
-        <div className="fixed right-0 top-0 w-full border-t z-100 border-b border-gray-200 bg-white py-10 py-10">
+        <div className="fixed right-0 top-0 w-full border-t z-100 border-b border-gray-200 bg-white p-10">
           <div className="inner">
             <form onSubmit={onSearchSubmit}>
               <div className="w-[700px] left-1/2 -translate-x-1/2 relative flex items-center gap-3 pb-10">
