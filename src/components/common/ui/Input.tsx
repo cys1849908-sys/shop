@@ -37,7 +37,7 @@ export default function Input({
         <input
           className={`border-none focus:outline-none w-full bg-white px-4 py-2 text-[12px] text-gray-900 ${className}`}
           {...props}
-          type={showPassword ? "text" : "password"}
+          type={isPassword ? (showPassword ? "text" : "password") : props.type}
         />
         {isPassword &&
           (showPassword ? (

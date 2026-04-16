@@ -1,36 +1,55 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Form from "@/src/components/common/ui/Form";
 import FormRowVertical from "@/src/components/common/ui/FormRowVertical";
 import Input from "@/src/components/common/ui/Input";
 import { login } from "@/src/lib/actions/user";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+
+type LoginForm = {
+  email: string;
+  password: string;
+  saveEmail: boolean;
+};
 
 export default function LoginPage() {
   const router = useRouter();
-  const [password, setPassword] = useState<string>("");
 
-  const [email, setEmail] = useState<string>(() => {
-    if (typeof window === "undefined") return "";
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginForm>({
+    defaultValues: {
+      email: "",
+      password: "",
+      saveEmail: false,
+    },
+  });
+
+  useEffect(() => {
     const savedCheck = localStorage.getItem("saveEmail");
     const savedEmail = localStorage.getItem("email");
-    return savedCheck === "true" && savedEmail ? savedEmail : "";
-  });
 
-  const [saveEmail, setSaveEmail] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    return localStorage.getItem("saveEmail") === "true";
-  });
+    if (savedCheck === "true" && savedEmail) {
+      setValue("email", savedEmail);
+      setValue("saveEmail", true);
+    }
+  }, [setValue]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: LoginForm) => {
     try {
-      await login({ email, password });
+      await login({
+        email: data.email,
+        password: data.password,
+      });
 
-      if (saveEmail) {
-        localStorage.setItem("email", email);
+      if (data.saveEmail) {
+        localStorage.setItem("email", data.email);
         localStorage.setItem("saveEmail", "true");
       } else {
         localStorage.removeItem("email");
@@ -39,86 +58,76 @@ export default function LoginPage() {
 
       router.replace("/#");
     } catch (err) {
-      console.error("실패");
+      console.error("로그인 실패");
     }
   };
 
   return (
-    <div className="flex min-h-screen items-start pt-30 justify-center bg-white ">
-      <div className="w-full max-w-md bg-white p-10 ">
+    <div className="flex min-h-screen items-start pt-30 justify-center bg-white">
+      <div className="w-full max-w-md bg-white p-10">
         <h1 className="text-2xl font-semibold text-center mb-8">로그인</h1>
-        <Form onSubmit={handleSubmit}>
-          <FormRowVertical label="">
+
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <FormRowVertical error={errors.email?.message}>
             <Input
               type="email"
-              id="email"
-              autoComplete="username"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               placeholder="이메일"
+              autoComplete="username"
+              {...register("email", {
+                required: "이메일을 입력해주세요",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "이메일 형식이 올바르지 않습니다.",
+                },
+              })}
+              error={!!errors.email}
             />
           </FormRowVertical>
 
-          <FormRowVertical label="">
+          <FormRowVertical error={errors.password?.message}>
             <Input
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="비밀번호"
               isPassword
+              placeholder="비밀번호"
+              autoComplete="current-password"
+              {...register("password", {
+                required: "비밀번호를 입력해주세요",
+              })}
+              error={!!errors.password}
             />
           </FormRowVertical>
 
           <button
             type="submit"
-            className="w-full py-3 bg-black text-white text-[11px]  "
+            disabled={isSubmitting}
+            className="w-full py-3 bg-black text-white text-[11px]"
           >
-            로그인
+            {isSubmitting ? "로그인 중..." : "로그인"}
           </button>
 
           <div className="flex justify-between items-center text-sm text-black mt-1 mb-4">
-            <div>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  id="saveEmail"
-                  className="accent-black"
-                  checked={saveEmail}
-                  onChange={() => setSaveEmail(!saveEmail)}
-                />
-                이메일 저장하기
-              </label>
-            </div>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                className="accent-black"
+                {...register("saveEmail")}
+              />
+              이메일 저장하기
+            </label>
 
-            <div className="flex gap-3 ">
-              <Link href="/find-id" className="cursor-pointer">
-                아이디 찾기
-              </Link>
-              <Link href="/find-password" className="cursor-pointer">
-                비밀번호 찾기
-              </Link>
+            <div className="flex gap-3">
+              <Link href="/find-id">아이디 찾기</Link>
+              <Link href="/find-password">비밀번호 찾기</Link>
             </div>
           </div>
         </Form>
 
         <div className="flex flex-col gap-2">
-          <div className="text-center px-4 py-2 text-[12px] text-gray-600 border border-gray-200">
-            <Link href="/signup" className="cursor-pointer">
-              회원가입
-            </Link>
-          </div>
-          <div className="text-center px-4 py-2 text-[12px] text-gray-600 border border-gray-200">
-            <Link href="/signup" className="cursor-pointer">
-              회원가입
-            </Link>
-          </div>
-          <div className="text-center px-4 py-2 text-[12px] text-gray-600 border border-gray-200">
-            <Link href="/signup" className="cursor-pointer">
-              회원가입
-            </Link>
-          </div>
+          <Link
+            href="/signup"
+            className="text-center px-4 py-2 text-[12px] text-gray-600 border border-gray-200"
+          >
+            회원가입
+          </Link>
         </div>
       </div>
     </div>
