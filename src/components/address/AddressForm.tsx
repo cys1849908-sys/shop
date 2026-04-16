@@ -144,7 +144,6 @@ export default function AddressForm({
                   placeholder="우편번호"
                   {...register("postcode")}
                   readOnly
-                  className="bg-gray-100"
                 />
                 <button
                   type="button"
@@ -154,12 +153,7 @@ export default function AddressForm({
                   주소찾기
                 </button>
               </div>
-              <Input
-                placeholder="주소"
-                readOnly
-                className="bg-gray-100"
-                {...register("address")}
-              />
+              <Input placeholder="주소" readOnly {...register("address")} />
 
               <Input
                 placeholder="상세주소"
