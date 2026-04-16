@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Address,
   AddressInput,
@@ -17,7 +17,6 @@ import {
 } from "@/src/lib/actions/address";
 import { useAlert } from "@/src/hooks/useAlert";
 import ConfirmModal from "../common/modals/ConfirmModal";
-import { useModal } from "@/src/hooks/useModal";
 
 type AddressMode = "list" | "manual";
 
@@ -25,19 +24,21 @@ export default function AddressManagement({
   defaultAddressId,
   addresses,
   onConfirm,
+  closeModal,
 }: {
   defaultAddressId: string;
   addresses: Address[];
   onConfirm: (selectedId: string) => void;
+  closeModal: () => void;
 }) {
   const [addressMode, setAddressMode] = useState<AddressMode>("list");
   const [selectedId, setSelectedId] = useState<string>(defaultAddressId);
+  const [localAddresses, setLocalAddresses] = useState<Address[]>(addresses);
   const [editingAddress, setEditingAddress] =
     useState<UpdateAddressRequest | null>(null);
   const [isEdit, setIsEdit] = useState(false);
 
   const { isAlertOpen, alertMessage, openAlert, confirm, cancel } = useAlert();
-  const { closeModal } = useModal();
   const router = useRouter();
 
   const handleConfirm = () => {
@@ -79,6 +80,7 @@ export default function AddressManagement({
       isCancelActive: true,
     });
     if (!isConfirmed) return;
+    setLocalAddresses((prev) => prev.filter((a) => a.id !== id));
 
     await deleteAddress(id);
     router.refresh();
@@ -121,7 +123,7 @@ export default function AddressManagement({
         <div className="flex flex-col">
           <div className="divide-y divide-gray-100 max-h-[60vh] overflow-y-auto">
             {!isEdit ? (
-              addresses.map((addr) => (
+              localAddresses.map((addr) => (
                 <label
                   key={addr.id}
                   className="flex items-start gap-4 px-6 py-5 cursor-pointer"

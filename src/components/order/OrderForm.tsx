@@ -1,8 +1,6 @@
 "use client";
 
-import clsx from "clsx";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useModal } from "@/src/hooks/useModal";
 import { useCartStore } from "@/src/store/CartStore";
@@ -18,35 +16,45 @@ import FormRowVertical from "../common/ui/FormRowVertical";
 import AddressManagement from "../address/AddressManagement";
 import AddressCard from "../address/AddressCard";
 import OrderPaymentMethods from "./OrderPaymentMethods";
+import AddressAdder from "../address/AddressAdder";
+import { UserInfo } from "@/src/types/user";
 
-export default function OrderForm({ addresses }: { addresses: Address[] }) {
+export default function OrderForm({
+  addresses,
+  user,
+}: {
+  addresses: Address[];
+  user: UserInfo | null;
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [option, setOption] = useState("직접 입력");
-  const [selectedAddress, setSelectedAddress] = useState<Address>(addresses[0]);
+  const [manualSelected, setManualSelected] = useState<Address | null>(null);
   const { isOpen, openModal, closeModal } = useModal();
   const checkoutItems = useCartStore((state) => state.checkoutItems);
+  const selectedAddress = manualSelected ?? addresses?.[0] ?? null;
 
-  const router = useRouter();
+  const initialData = {
+    name: user?.name ?? "",
+    email: user?.email ?? "",
+    phone_number: user?.phone_number ?? "",
+    secondary_phone: "",
+    shipping_message: "",
+  };
 
   const {
     register,
     handleSubmit,
-    setFocus,
     formState: { errors, isValid },
   } = useForm({
     mode: "onChange",
+    defaultValues: initialData || {},
   });
 
   const handleConfirmAddress = (selectedId: string) => {
     const found = addresses.find((a) => a.id === selectedId);
-    if (found) setSelectedAddress(found);
+    if (found) setManualSelected(found);
     closeModal();
-    router.refresh();
   };
-
-  useEffect(() => {
-    setFocus("ordererName");
-  }, [setFocus]);
 
   return (
     <div className="flex-2">
@@ -55,46 +63,43 @@ export default function OrderForm({ addresses }: { addresses: Address[] }) {
         <hr />
         <div className="w-full">
           <div className="flex flex-col gap-2 w-[60%] py-4 px-6">
-            <FormRowVertical>
+            <FormRowVertical label="주문자명" required>
               <Input
-                label="주문자명"
                 placeholder="주문하시는 분의 이름을 입력해 주세요"
-                {...register("ordererName", {
+                {...register("name", {
                   required: "주문하시는 분의 이름을 입력해 주세요",
                 })}
-                autoFocus
-                error={!!errors.ordererName}
+                error={!!errors.name}
                 required
               />
             </FormRowVertical>
 
-            <FormRowVertical>
+            <FormRowVertical label="연락처" required>
               <Input
-                label="연락처"
+                type="tel"
                 placeholder="연락처를 입력해 주세요"
-                {...register("phone", {
+                {...register("phone_number", {
                   required: "연락처를 입력해주세요",
                   pattern: {
                     value: /^01[0-9]-?\d{3,4}-?\d{4}$/,
                     message: "연락처가 정확한지 확인해 주세요.",
                   },
                 })}
-                error={!!errors.phone}
+                error={!!errors.phone_number}
                 required
               />
             </FormRowVertical>
 
-            <FormRowVertical>
+            <FormRowVertical label="추가 연락처">
               <Input
-                label="추가 연락처"
                 placeholder="추가 연락처가 있으시다면 입력해 주세요"
-                {...register("secondaryPhone", {
+                {...register("secondary_phone", {
                   pattern: {
                     value: /^01[0-9]-?\d{3,4}-?\d{4}$/,
                     message: "연락처가 정확한지 확인해 주세요.",
                   },
                 })}
-                error={!!errors.secondaryPhone}
+                error={!!errors.secondary_phone}
               />
             </FormRowVertical>
 
@@ -107,18 +112,25 @@ export default function OrderForm({ addresses }: { addresses: Address[] }) {
         <h4>배송지정보</h4>
         <hr />
         <div className="w-[60%] py-4 px-6">
-          <AddressCard
-            address={selectedAddress}
-            actions={
-              <button
-                className="text-[13px] text-white bg-black px-4 py-1 hover:opacity-80 cursor-pointer"
-                onClick={openModal}
-              >
-                변경
-              </button>
-            }
-          />
-
+          {selectedAddress && (
+            <AddressCard
+              address={selectedAddress}
+              actions={
+                <button
+                  className="bg-black text-[14px] text-white px-2 py-1 cursor-pointer"
+                  onClick={openModal}
+                >
+                  변경
+                </button>
+              }
+            />
+          )}
+          {addresses.length === 0 && (
+            <div>
+              <p className="text-[14px] pb-3">등록된 배송지가 없습니다</p>
+              <AddressAdder />
+            </div>
+          )}
           <div className="py-4">
             <p className="text-[14px] ">요청사항</p>
             <div className="flex flex-col gap-2">
@@ -132,9 +144,9 @@ export default function OrderForm({ addresses }: { addresses: Address[] }) {
               {option === "직접 입력" && (
                 <Input
                   placeholder="요청사항을 직접 입력해 주세요"
-                  {...register("shippingMessage")}
+                  {...register("shipping_message")}
                   autoFocus
-                  error={!!errors.shippingMessage}
+                  error={!!errors.shipping_message}
                 />
               )}
             </div>
@@ -182,10 +194,10 @@ export default function OrderForm({ addresses }: { addresses: Address[] }) {
 
       <Modal isOpen={isOpen} onClose={closeModal} backdropBlur>
         <AddressManagement
-          defaultAddressId={selectedAddress.id}
-          // isValid={isValid}
           addresses={addresses}
+          defaultAddressId={selectedAddress?.id ?? ""}
           onConfirm={handleConfirmAddress}
+          closeModal={closeModal}
         />
       </Modal>
     </div>

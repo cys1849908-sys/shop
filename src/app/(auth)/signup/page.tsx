@@ -61,20 +61,21 @@ export default function SignupPage() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
-            <FormRowVertical error={errors.name?.message}>
+            <FormRowVertical label="이름" required error={errors.name?.message}>
               <Input
-                label="이름"
                 {...register("name", {
                   required: "이름을 입력해주세요",
                 })}
                 error={!!errors.name}
-                required
               />
             </FormRowVertical>
 
-            <FormRowVertical error={errors.email?.message}>
+            <FormRowVertical
+              label="이메일"
+              required
+              error={errors.email?.message}
+            >
               <Input
-                label="이메일"
                 type="email"
                 placeholder="이메일을 입력해주세요"
                 {...register("email", {
@@ -85,13 +86,15 @@ export default function SignupPage() {
                   },
                 })}
                 error={!!errors.email}
-                required
               />
             </FormRowVertical>
 
-            <FormRowVertical error={errors.password?.message}>
+            <FormRowVertical
+              label="비밀번호"
+              required
+              error={errors.password?.message}
+            >
               <Input
-                label="비밀번호"
                 isPassword
                 placeholder="8자 이상 입력"
                 {...register("password", {
@@ -102,14 +105,15 @@ export default function SignupPage() {
                   },
                 })}
                 error={!!errors.password}
-                required
               />
             </FormRowVertical>
 
-            <FormRowVertical error={errors.passwordConfirm?.message}>
+            <FormRowVertical
+              label="비밀번호 확인"
+              required
+              error={errors.passwordConfirm?.message}
+            >
               <Input
-                label="비밀번호 확인"
-                isPassword
                 placeholder="비밀번호 재입력"
                 {...register("passwordConfirm", {
                   required: "비밀번호 확인을 입력해주세요",
@@ -118,7 +122,7 @@ export default function SignupPage() {
                     "비밀번호가 일치하지 않습니다.",
                 })}
                 error={!!errors.passwordConfirm}
-                required
+                isPassword
               />
             </FormRowVertical>
           </div>
@@ -133,8 +137,7 @@ export default function SignupPage() {
                 : "bg-gray-200 text-black cursor-default",
             )}
           >
-            확인
-            {isSubmitting ? "처리 중..." : "가입하기"}
+            가입하기
           </button>
         </form>
 

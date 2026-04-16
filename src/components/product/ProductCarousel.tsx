@@ -5,7 +5,6 @@ import { useState } from "react";
 import Carousel from "../Carousel";
 import ProductCard from "./ProductCard";
 import { Product } from "@/src/types/product";
-import Toast from "../common/Toast";
 
 interface ProductCarouselProps {
   products: Product[];

@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "../supabase/server";
 import { CartItem } from "@/src/types/cart";
 
-export async function addToCart(item: CartItem) {
+export async function addToCart(item: CartItem): Promise<void> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -47,7 +47,7 @@ export async function updateCartItem(
   id: string,
   quantity: number,
   newSize?: string,
-) {
+): Promise<void> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -66,7 +66,7 @@ export async function updateCartItem(
   revalidatePath("/cart");
 }
 
-export async function removeItemsFromCart(ids: string[]) {
+export async function removeItemsFromCart(ids: string[]): Promise<void> {
   const supabase = await createClient();
   const {
     data: { user },

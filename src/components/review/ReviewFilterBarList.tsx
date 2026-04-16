@@ -3,8 +3,8 @@ import { ReviewFilterContent } from "./ReviewFilterContent";
 import { FILTER_CONFIG, FilterLabel, LABEL_TO_KEY } from "@/src/types/review";
 import clsx from "clsx";
 import { useOutsideClick } from "@/src/hooks/useOutsideClick";
-import { FilterState, useFilterActions } from "@/src/hooks/useFilterActions";
 import { HiChevronDown } from "react-icons/hi";
+import { useFilter } from "@/src/hooks/useFilter";
 
 export default function ReviewFilterBarList() {
   const [activeFilter, setActiveFilter] = useState<FilterLabel | null>(null);
@@ -15,7 +15,7 @@ export default function ReviewFilterBarList() {
     applyFilter,
     resetFilter,
     cancelFilter,
-  } = useFilterActions();
+  } = useFilter();
 
   const containerRef = useOutsideClick<HTMLDivElement>(() => {
     console.log("닫혀야함");

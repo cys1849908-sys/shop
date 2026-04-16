@@ -2,9 +2,9 @@ import { Product } from "./product";
 
 export type Wish = {
   id: string;
-  userId: string;
+  user_id: string;
   product: Product;
-  createdAt: string;
+  created_at: string;
 };
 
 export interface WishStore {

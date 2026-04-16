@@ -10,7 +10,7 @@ export default function IconLink({
   return (
     <Link
       href={href}
-      className="relative p-2 text-black rounded-full flex items-center gap-1 justify-center"
+      className="relative  text-black rounded-full flex items-center gap-1 justify-center"
     >
       {children}
     </Link>

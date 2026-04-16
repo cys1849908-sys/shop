@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import ProductList from "@/src/components/product/ProductList";
@@ -8,16 +7,14 @@ import { Product } from "@/src/types/product";
 import { useAlert } from "@/src/hooks/useAlert";
 import Modal from "@/src/components/common/modals/Modal";
 import { useWishStore } from "@/src/store/wishStore";
-import { useRouter } from "next/navigation";
 import clsx from "clsx";
 
-interface Props {
+export default function WishlistClient({
+  initialProducts,
+}: {
   initialProducts: Product[];
-}
-
-export default function WishlistClient({ initialProducts }: Props) {
-  const { isAlertOpen, alertTitle, alertMessage, openAlert, confirm, cancel } =
-    useAlert();
+}) {
+  const { isAlertOpen, alertMessage, openAlert, confirm, cancel } = useAlert();
 
   const clearAll = useWishStore((s) => s.clearAll);
   const wishedIds = useWishStore((s) => s.wishedIds);

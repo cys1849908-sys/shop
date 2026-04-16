@@ -1,101 +1,76 @@
 "use server";
 
+import { LoginInput, SignUpInput } from "@/src/types/user";
 import { createClient } from "../supabase/server";
 
 export async function signUp({
   email,
   password,
   name,
-  phone,
-}: {
-  email: string;
-  password: string;
-  name: string;
-  phone?: string;
-}) {
+  phone_number,
+}: SignUpInput): Promise<void> {
   const supabase = await createClient();
 
-  const { data, error: authError } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: {
-        full_name: name,
-        phone: phone,
+        name: name,
+        phone_number: phone_number,
       },
     },
   });
 
-  if (authError) throw authError;
-
-  return { success: true, data };
+  if (error) throw new Error(error.message);
 }
 
-export async function login({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) {
-  if (!email || !password) {
-    throw new Error("이메일 혹은 비밀번호를 입력하지 않음");
-  }
+export async function login({ email, password }: LoginInput): Promise<void> {
+  if (!email || !password)
+    throw new Error("이메일과 비밀번호를 모두 입력해주세요.");
 
   const supabase = await createClient();
-
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return { success: true, data };
+  if (error) throw new Error(error.message);
 }
 
 export async function verifyCurrentPassword({
   password,
 }: {
   password: string;
-}) {
+}): Promise<void> {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user || !user.email) {
-    throw new Error("로그인이 필요합니다.");
-  }
-  const { data, error } = await supabase.auth.signInWithPassword({
+
+  if (!user?.email) throw new Error("로그인이 필요합니다.");
+
+  const { error } = await supabase.auth.signInWithPassword({
     email: user.email,
-    password: password,
+    password,
   });
-  if (error) {
-    throw new Error("현재 비밀번호가 일치하지 않습니다.");
-  }
-  return { success: true, data };
+
+  if (error) throw new Error("현재 비밀번호가 일치하지 않습니다.");
 }
 
-export async function updatePassword({ newPassword }: { newPassword: string }) {
+export async function updatePassword({
+  newPassword,
+}: {
+  newPassword: string;
+}): Promise<void> {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
-  if (!user) {
-    throw new Error("로그인이 필요합니다.");
-  }
-  const { data, error } = await supabase.auth.updateUser({
+  const { error } = await supabase.auth.updateUser({
     password: newPassword,
   });
 
-  if (error) {
+  if (error)
     throw new Error(error.message || "비밀번호 변경 중 오류가 발생했습니다.");
-  }
-
-  return { success: true, data };
 }
 
 export async function signOut() {

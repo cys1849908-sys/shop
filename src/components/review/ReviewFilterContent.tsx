@@ -1,4 +1,4 @@
-import { FilterState } from "@/src/hooks/useFilterActions";
+import { FilterState } from "@/src/hooks/useFilter";
 import {
   FILTER_CONFIG,
   FilterLabel,

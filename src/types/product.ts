@@ -3,7 +3,7 @@ export type Product = {
   name: string;
   price: number;
   description: string;
-  categoryId: string;
+  category_id: string;
   thumbnail: string[];
   images: string[];
   colors?: string[];
@@ -11,11 +11,5 @@ export type Product = {
   slug: string;
   stock: number;
   discount?: number;
-  isNew?: boolean;
+  is_new?: boolean;
 };
-// export interface DiscountInfo {
-//   product: string; // 할인 대상 상품명 또는 ID
-//   discountRate: number; // 할인율 (예: 10)
-//   startDate: string; // YYYY-MM-DD
-//   endDate: string; // YYYY-MM-DD
-// }

@@ -36,7 +36,7 @@ export default function ProductSummary({ product }: { product: Product }) {
 
   const { finalPrice } = calculateDiscount(
     product.price,
-    product.discount?.discountRate || 0,
+    product.discount || 0,
   );
 
   const totalPrice = pendingItems.reduce(
@@ -60,7 +60,7 @@ export default function ProductSummary({ product }: { product: Product }) {
 
     const cartItems: CartItem[] = pendingItems.map((item) => ({
       id: product.id,
-      productId: product.id,
+      product_id: product.id,
       name: product.name,
       price: finalPrice,
       thumbnail: product.images[0],

@@ -33,18 +33,20 @@ export default function AddressForm({
   } = useForm<AddressInput>({
     mode: "onChange",
     defaultValues: initialData || {
-      addressName: "",
-      receiverName: "",
-      phone: "",
-      secondaryPhone: "",
+      address_name: "",
+      receiver_name: "",
+      phone_number: "",
+      secondary_phone: "",
       postcode: "",
       address: "",
-      detailAddress: "",
-      isDefault: false,
+      detail_address: "",
+      is_default: false,
     },
   });
 
-  const watchedIsDefault = watch("isDefault");
+  // 필드명 변경 적용
+  const watchedIsDefault = watch("is_default");
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
@@ -66,7 +68,7 @@ export default function AddressForm({
       oncomplete: function (data: any) {
         setValue("postcode", data.zonecode);
         setValue("address", data.address);
-        setFocus("detailAddress");
+        setFocus("detail_address");
       },
     }).open();
   };
@@ -80,53 +82,54 @@ export default function AddressForm({
           </div>
         )}
         <div className="px-6">
-          <FormRowVertical>
+          <FormRowVertical label="배송지명">
             <Input
-              label="배송지명"
               placeholder="예: 우리집, 회사"
-              {...register("addressName")}
+              {...register("address_name")}
             />
           </FormRowVertical>
 
-          <FormRowVertical>
+          <FormRowVertical
+            label="이름"
+            required
+            error={errors.receiver_name?.message}
+          >
             <Input
-              label="이름"
               placeholder="수령인 이름을 입력해 주세요"
-              {...register("receiverName", { required: "이름은 필수입니다" })}
-              className={clsx(
-                errors.receiverName ? "border-red-500" : "border-gray-200",
-              )}
-              error={!!errors.receiverName?.message}
-              required
+              {...register("receiver_name", { required: "이름은 필수입니다" })}
+              error={!!errors.receiver_name?.message}
             />
           </FormRowVertical>
 
-          <FormRowVertical>
+          <FormRowVertical
+            label="연락처"
+            required
+            error={errors.phone_number?.message}
+          >
             <Input
-              label="연락처"
+              type="tel"
               placeholder="연락처를 입력해 주세요"
-              {...register("phone", {
+              {...register("phone_number", {
                 required: "연락처를 입력해주세요",
                 pattern: {
                   value: /^01[0-9]-?\d{3,4}-?\d{4}$/,
                   message: "연락처가 정확한지 확인해 주세요.",
                 },
               })}
-              error={!!errors.phone?.message}
-              required
+              error={!!errors.phone_number?.message}
             />
           </FormRowVertical>
-          <FormRowVertical>
+
+          <FormRowVertical label="추가 연락처">
             <Input
-              label="추가 연락처"
               placeholder="추가 연락처가 있으시다면 입력해 주세요"
-              {...register("secondaryPhone", {
+              {...register("secondary_phone", {
                 pattern: {
                   value: /^01[0-9]-?\d{3,4}-?\d{4}$/,
                   message: "연락처가 정확한지 확인해 주세요.",
                 },
               })}
-              error={!!errors.secondaryPhone?.message}
+              error={!!errors.secondary_phone?.message}
             />
           </FormRowVertical>
 
@@ -160,13 +163,14 @@ export default function AddressForm({
 
               <Input
                 placeholder="상세주소"
-                {...register("detailAddress", {
+                {...register("detail_address", {
                   required: "우편번호/주소/상세주소를 입력해주세요.",
                 })}
-                error={!!errors.detailAddress?.message}
+                error={!!errors.detail_address?.message}
               />
             </div>
           </FormRowVertical>
+
           <div className="flex gap-1 items-center">
             <input
               className={clsx(
@@ -174,20 +178,20 @@ export default function AddressForm({
                 isValid && "accent-black cursor-pointer",
               )}
               type="checkbox"
-              id="isDefault"
-              {...register("isDefault")}
+              id="is_default"
+              {...register("is_default")}
               disabled={!isValid}
               checked={isFirstAddress ? true : watchedIsDefault}
             />
             <label
-              htmlFor="isDefault"
+              htmlFor="is_default"
               className={clsx(
                 "text-[12px] cursor-default",
                 watchedIsDefault && isValid ? "text-black" : "text-gray-500",
                 isValid && "cursor-pointer",
               )}
             >
-              기본배송지로등록
+              기본배송지로 등록
             </label>
           </div>
         </div>

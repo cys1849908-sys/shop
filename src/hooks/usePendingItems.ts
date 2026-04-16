@@ -11,8 +11,8 @@ interface PendingItem {
 export function usePendingItems() {
   const [pendingItems, setPendingItems] = useState<PendingItem[]>([]);
 
-  const handleSelectSize = (productId: string, size: string) => {
-    const uniqueKey = createUniqueKey(productId, size);
+  const handleSelectSize = (product_id: string, size: string) => {
+    const uniqueKey = createUniqueKey(product_id, size);
 
     if (pendingItems.some((item) => item.uniqueKey === uniqueKey)) {
       alert("이미 같은 상품이 존재합니다.");
@@ -20,7 +20,7 @@ export function usePendingItems() {
     }
     setPendingItems((prev) => [
       ...prev,
-      { id: productId, uniqueKey: uniqueKey, size, quantity: 1 },
+      { id: product_id, uniqueKey: uniqueKey, size, quantity: 1 },
     ]);
   };
 

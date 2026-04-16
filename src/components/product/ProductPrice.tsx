@@ -10,7 +10,7 @@ export default function ProductPrice({
   finalPrice: number;
 }) {
   return (
-    <div className="  my-3">
+    <div className="my-3">
       {hasDiscount && (
         <span className="text-[16px] text-gray-400 line-through">
           {price.toLocaleString()}원

@@ -2,32 +2,21 @@ import clsx from "clsx";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
   error?: boolean;
-  required?: boolean;
   isPassword?: boolean;
+  tel?: boolean;
 }
 
 export default function Input({
-  label,
-  className = "",
   error,
-  required = false,
   isPassword = false,
+  tel = true,
   ...props
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
-
+  const isTelType = props.type === "tel"; // 아 이건 나중에 하는걸로
   return (
     <div className="flex flex-col gap-2 w-full">
-      {label && (
-        <div className="flex items-center">
-          <label className="text-sm text-black">{label}</label>
-          {required && (
-            <span className="w-[3px] h-[4px] rounded-sm bg-red-500 mr-1 mb-2" />
-          )}
-        </div>
-      )}
       <div
         className={clsx(
           "flex items-center border focus-within:border-gray-500 placeholder:text-gray-400",
@@ -35,8 +24,14 @@ export default function Input({
         )}
       >
         <input
-          className={`border-none focus:outline-none w-full bg-white px-4 py-2 text-[12px] text-gray-900 ${className}`}
+          className="border-none focus:outline-none w-full bg-white px-4 py-2 text-[12px] text-gray-900 "
           {...props}
+          onChange={(e) => {
+            if (isTelType) {
+              console.log("?");
+            }
+            props.onChange?.(e);
+          }}
           type={isPassword ? (showPassword ? "text" : "password") : props.type}
         />
         {isPassword &&
@@ -46,7 +41,7 @@ export default function Input({
               className="px-2 cursor-pointer"
               onClick={() => setShowPassword(!showPassword)}
             >
-              <EyeOff className="w-4 h-4 stroke-[0.5]" />
+              <Eye className="w-4 h-4 stroke-[0.5]" />
             </button>
           ) : (
             <button
@@ -54,7 +49,7 @@ export default function Input({
               className="px-2 cursor-pointer"
               onClick={() => setShowPassword(!showPassword)}
             >
-              <Eye className="w-4 h-4 stroke-[0.5]" />
+              <EyeOff className="w-4 h-4 stroke-[0.5]" />
             </button>
           ))}
       </div>

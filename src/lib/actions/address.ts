@@ -2,7 +2,7 @@
 import { Address } from "@/src/types/address";
 import { createClient } from "../supabase/server";
 
-export async function addAddress(formData: any) {
+export async function addAddress(formData: any): Promise<void> {
   const supabase = await createClient();
 
   const {
@@ -10,14 +10,15 @@ export async function addAddress(formData: any) {
   } = await supabase.auth.getUser();
 
   if (!user) throw new Error("로그인이 필요합니다.");
+
   if (formData.isDefault) {
     await supabase
       .from("addresses")
-      .update({ isDefault: false })
+      .update({ is_default: false })
       .eq("user_id", user.id);
   }
 
-  const { data, error } = await supabase.from("addresses").insert([
+  const { error } = await supabase.from("addresses").insert([
     {
       ...formData,
       addressName: formData.addressName || formData.receiverName,
@@ -29,11 +30,9 @@ export async function addAddress(formData: any) {
     console.error("배송지 추가 실패:", error.message);
     throw new Error("배송지 저장 중 오류가 발생했습니다.");
   }
-
-  return data;
 }
 
-export async function deleteAddress(id: string) {
+export async function deleteAddress(id: string): Promise<void> {
   const supabase = await createClient();
 
   const {
@@ -50,11 +49,14 @@ export async function deleteAddress(id: string) {
 
   if (error) {
     console.error("배송지 삭제 실패:", error.message);
-    throw new Error("실패햇다오.");
+    throw new Error("배송지 삭제 중 오류가 발생했습니다.");
   }
 }
 
-export async function patchAddress(formData: Address, id: string) {
+export async function patchAddress(
+  formData: Address,
+  id: string,
+): Promise<void> {
   const supabase = await createClient();
 
   const {
@@ -63,21 +65,21 @@ export async function patchAddress(formData: Address, id: string) {
 
   if (!user) throw new Error("로그인이 필요합니다.");
 
-  await supabase
-    .from("addresses")
-    .update({ isDefault: false })
-    .eq("user_id", user.id);
+  if (formData.is_default) {
+    await supabase
+      .from("addresses")
+      .update({ isDefault: false })
+      .eq("user_id", user.id);
+  }
 
   const { error } = await supabase
     .from("addresses")
-    .update({
-      ...formData,
-    })
+    .update({ ...formData })
     .eq("user_id", user.id)
     .eq("id", id);
 
   if (error) {
     console.error("배송지 수정 실패:", error.message);
-    throw new Error("실패햇다오.");
+    throw new Error("배송지 수정 중 오류가 발생했습니다.");
   }
 }

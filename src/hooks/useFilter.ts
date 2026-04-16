@@ -2,27 +2,28 @@ import { useState } from "react";
 
 export interface FilterState {
   rating: number[];
-  height: string[];
-  weight: string[];
+  height: { min: number; max: number } | null;
+  weight: { min: number; max: number } | null;
   size: string[];
 }
 
-const initialFilter: FilterState = {
+export const getInitialFilter = (): FilterState => ({
   rating: [],
-  height: [],
-  weight: [],
+  height: null,
+  weight: null,
   size: [],
-};
+});
 
-export function useFilterActions() {
-  const [tempValues, setTempValues] = useState<FilterState>(initialFilter); // 임시
-  const [appliedValues, setAppliedValues] = // 저장된것
-    useState<FilterState>(initialFilter);
+export function useFilter() {
+  const [tempValues, setTempValues] = useState<FilterState>(getInitialFilter);
+  const [appliedValues, setAppliedValues] =
+    useState<FilterState>(getInitialFilter);
 
   const handleChange = (key: keyof FilterState, value: string | number) => {
     setTempValues((prev) => {
       const current = prev[key] as (string | number)[];
       const exists = current.includes(value);
+
       return {
         ...prev,
         [key]: exists
@@ -37,12 +38,10 @@ export function useFilterActions() {
   };
 
   const resetFilter = (key: keyof FilterState) => {
-    // 초기화
     setTempValues((prev) => ({ ...prev, [key]: [] }));
     setAppliedValues((prev) => ({ ...prev, [key]: [] }));
   };
   const cancelFilter = () => {
-    // 취소
     setTempValues(appliedValues);
   };
 

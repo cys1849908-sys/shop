@@ -23,14 +23,14 @@ export default function ConfirmModal({
           {onCancel && (
             <button
               onClick={onCancel}
-              className="flex-1 py-2 bg-gray-100 rounded text-sm"
+              className="flex-1 py-2 bg-gray-100 rounded text-sm cursor-pointer"
             >
               취소
             </button>
           )}
           <button
             onClick={onConfirm}
-            className="flex-1 py-2 bg-black text-white rounded text-sm"
+            className="flex-1 py-2 bg-black text-white rounded text-sm cursor-pointer"
           >
             확인
           </button>

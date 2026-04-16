@@ -23,13 +23,11 @@ export default function OrderStatus() {
       <div className="flex justify-around items-center py-4 relative">
         {statusItems.map((item, index) => (
           <div key={index} className="flex items-center w-full">
-            {/* 숫자와 라벨 */}
             <div className="flex flex-col items-center flex-1">
               <span className="text-3xl font-bold mb-2">{item.count}</span>
               <span className="text-sm text-gray-600">{item.label}</span>
             </div>
 
-            {/* 마지막 아이템이 아닐 때만 화살표 표시 */}
             {index !== statusItems.length - 1 && (
               <FiChevronRight className="text-gray-300 text-xl" />
             )}

@@ -1,12 +1,17 @@
 export type Order = {
   id: string;
-  userId: string;
+  user_id: string;
   items: OrderItem[];
-  totalPrice: number;
+  original_price: number;
+  discount_price: number;
+  total_price: number;
   status: OrderStatus;
-  createdAt: string;
   address: string;
-  phoneNumber: string;
+  postcode: string;
+  detail_address: string;
+  phone_number: string;
+  secondary_phone?: string;
+  created_at: string;
 };
 
 export type OrderStatus =
@@ -18,10 +23,11 @@ export type OrderStatus =
 
 export type OrderItem = {
   id: string;
-  orderId: string;
-  productId: string;
+  order_id: string;
+  product_id: string;
   name: string;
   price: number;
+  original_price?: number;
   quantity: number;
   thumbnail: string;
   slug: string;

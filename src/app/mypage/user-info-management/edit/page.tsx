@@ -163,9 +163,12 @@ export default function UserInfoEditPage() {
                 새로운 비밀번호를 설정해 주세요
               </p>
 
-              <FormRowVertical error={errors.password?.message}>
+              <FormRowVertical
+                label="비밀번호"
+                required
+                error={errors.password?.message}
+              >
                 <Input
-                  label="비밀번호"
                   isPassword
                   placeholder="8자리 이상"
                   {...register("password", {

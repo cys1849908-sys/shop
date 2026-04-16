@@ -33,7 +33,7 @@ export default function Search() {
   };
 
   return (
-    <div className="relative p-2" ref={containerRef}>
+    <div className="relative " ref={containerRef}>
       <button
         type="button"
         aria-label="검색창 열기"

@@ -67,8 +67,8 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-white p-10">
         <h1 className="text-2xl font-semibold text-center mb-8">로그인</h1>
 
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <FormRowVertical error={errors.email?.message}>
+        <Form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+          <FormRowVertical label="아이디" error={errors.email?.message}>
             <Input
               type="email"
               placeholder="이메일"
@@ -84,7 +84,7 @@ export default function LoginPage() {
             />
           </FormRowVertical>
 
-          <FormRowVertical error={errors.password?.message}>
+          <FormRowVertical label="비밀번호" error={errors.password?.message}>
             <Input
               isPassword
               placeholder="비밀번호"
@@ -99,9 +99,9 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3 bg-black text-white text-[11px]"
+            className="w-full py-3 bg-black text-white text-[11px] cursor-pointer"
           >
-            {isSubmitting ? "로그인 중..." : "로그인"}
+            로그인
           </button>
 
           <div className="flex justify-between items-center text-sm text-black mt-1 mb-4">
@@ -121,7 +121,7 @@ export default function LoginPage() {
           </div>
         </Form>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 my-3">
           <Link
             href="/signup"
             className="text-center px-4 py-2 text-[12px] text-gray-600 border border-gray-200"

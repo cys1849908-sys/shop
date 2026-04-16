@@ -3,16 +3,20 @@ import OrderSteps from "../../components/order/OrderSteps";
 import OrderForm from "@/src/components/order/OrderForm";
 import { getAddress } from "@/src/lib/data/address";
 import { FinalPaymentInfo } from "@/src/components/common/PaymentInfo";
+import { getUserInfo } from "@/src/lib/data/user";
 
 export default async function OrderCheckoutPage() {
   const addresses = await getAddress();
+  const user = await getUserInfo();
+
+  console.log(user);
 
   return (
     <div className="w-full mx-auto p-6">
       <Breadcrumb />
       <OrderSteps />
       <div className="flex gap-8 mt-10">
-        <OrderForm addresses={addresses} />
+        <OrderForm addresses={addresses} user={user} />
 
         <FinalPaymentInfo />
       </div>

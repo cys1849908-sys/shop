@@ -51,37 +51,61 @@ const NavItem = ({
 
 export default function HeaderClient({ user }: { user: SupabaseUser | null }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [top, setTop] = useState(true);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [showtopBanner, setShowTopBanner] = useState(true);
+  // const [isScrolled, setIsScrolled] = useState(false);
 
   const ref = useOutsideClick(() => setIsOpen(false));
-
   const handleLogout = async () => {
     signOut();
     setIsOpen(false);
     window.location.href = "/#";
   };
   const cartLength = useCartStore((c) => c.items).length;
+  const handleClose = () => {
+    const minutes = 30;
+    const expiryTime = Date.now() + minutes * 60 * 1000;
+    const data = {
+      value: !showtopBanner,
+      expiry: expiryTime,
+    };
+    localStorage.setItem("showtopBanner", JSON.stringify(data));
+    setShowTopBanner(false);
+  };
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const itemStr = localStorage.getItem("showtopBanner");
+    console.log(itemStr);
+    if (itemStr) {
+      const item = JSON.parse(itemStr);
+      console.log(item);
+      const now = Date.now();
+      if (now > item.expiry) {
+        localStorage.removeItem("topBanner");
+        setShowTopBanner(true);
+      } else {
+        setShowTopBanner(item.value);
+      }
+    }
   }, []);
 
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     setIsScrolled(window.scrollY > 50);
+  //   };
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
   return (
     <header className="bg-white ">
-      {top && (
+      {showtopBanner && (
         <div className="relative flex items-center bg-black h-10">
           <div className="inner w-full flex items-center justify-end">
             <p className="absolute left-1/2 -translate-x-1/2 text-[11px] tracking-[0.15em] text-white font-medium whitespace-nowrap">
               ₩50,000 이상 무료배송 · 신규가입 10% 쿠폰 증정
             </p>
             <button
-              onClick={() => setTop(false)}
-              className="text-white text-[11px] hover:opacity-70 transition-opacity"
+              onClick={handleClose}
+              className="text-white text-[11px]  cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -100,7 +124,7 @@ export default function HeaderClient({ user }: { user: SupabaseUser | null }) {
         <div className="flex items-center gap-5">
           <Search />
 
-          <div className="relative p-2" ref={ref}>
+          <div className="relative " ref={ref}>
             {user ? (
               <button
                 onClick={() => setIsOpen(!isOpen)}

@@ -23,8 +23,12 @@ export default async function AddressPage() {
           </span>
         </div>
       )}
-
-      <AddressAdder isFirstAddress={isFirstAddress} />
+      <div
+        className="p-20 border-t border-gray-200 flex justify-center
+      "
+      >
+        <AddressAdder isFirstAddress={isFirstAddress} />
+      </div>
     </div>
   );
 }
