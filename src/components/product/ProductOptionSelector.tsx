@@ -15,9 +15,9 @@ export default function ProductOptionSelector({
   onRemoveSize: () => void;
 }) {
   return (
-    <div className="flex items-center justify-between px-2 py-1 bg-white border-b border-white">
+    <div className="flex items-center justify-between px-2 py-1 bg-white border-gray-300 border ">
       <div className="flex-1">
-        <span className="text-[13px]   font-medium text-[#333333]">{size}</span>
+        <span className="text-[13px] text-black">{size}</span>
       </div>
 
       <div className="flex items-center gap-3">
@@ -31,10 +31,10 @@ export default function ProductOptionSelector({
 
         <button
           onClick={onRemoveSize}
-          className="flex items-center justify-center p-1 cursor-pointer hover:bg-gray-200 rounded-sm transition-colors"
+          className="flex items-center justify-center p-1 cursor-pointer  "
           aria-label="옵션 삭제"
         >
-          <XIcon size={14} className="text-gray-200 hover:text-gray-500" />
+          <XIcon size={14} className="text-gray-500" />
         </button>
       </div>
     </div>

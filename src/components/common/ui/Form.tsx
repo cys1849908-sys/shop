@@ -1,4 +1,4 @@
-import { cn } from "@/src/lib/utils";
+import clsx from "clsx";
 
 export default function Form({
   children,
@@ -9,7 +9,10 @@ export default function Form({
   className?: string;
 } & React.ComponentProps<"form">) {
   return (
-    <form className={cn("overflow-hidden text-[1.4rem]", className)} {...props}>
+    <form
+      className={clsx("overflow-hidden text-[1.4rem]", className)}
+      {...props}
+    >
       {children}
     </form>
   );

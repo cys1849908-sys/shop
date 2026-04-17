@@ -34,3 +34,7 @@ export type OrderItem = {
   thumbnail: string;
   slug: string;
 };
+export interface OrderStore {
+  isValid: boolean;
+  setIsValid: (v: boolean) => void;
+}

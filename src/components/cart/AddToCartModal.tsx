@@ -80,7 +80,6 @@ export default function AddToCartModal({ onClose }: { onClose: () => void }) {
         함께 구매하면 좋은 상품
       </p>
 
-      {/* 추천 상품 그리드 */}
       <div className="grid grid-cols-4 gap-2">
         {mockProducts.map((product) => (
           <div key={product.id} className="flex flex-col group">
@@ -125,18 +124,15 @@ export default function AddToCartModal({ onClose }: { onClose: () => void }) {
         ))}
       </div>
 
-      {/* 하단 버튼 영역 */}
       <div className="flex justify-center gap-2 mt-10 pb-8">
         <Link
           href="/cart"
-          className=" border border-gray-300 w-33 h-12 rounded
-          py-3.5 text-center text-[13px] font-medium text-gray-800 hover:bg-gray-50 transition-colors"
+          className=" border border-gray-300 w-33 h-12 py-3.5 text-center text-[13px] text-gray-800"
         >
           장바구니 보기
         </Link>
         <button
-          className=" bg-black py-3.5 text-center  w-33 h-12 rounded
-        text-[13px] font-medium text-white hover:bg-zinc-800 transition-colors"
+          className=" bg-black py-3.5 text-center  w-33 h-12 text-[13px] text-white "
           onClick={onClose}
         >
           쇼핑 계속하기

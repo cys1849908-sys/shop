@@ -2,7 +2,6 @@
 
 import { startTransition, useState } from "react";
 import { FiShare2 } from "react-icons/fi";
-import { calculateDiscount, createUniqueKey } from "@/src/lib/utils";
 import { usePendingItems } from "@/src/hooks/usePendingItems";
 import { Product } from "@/src/types/product";
 
@@ -31,12 +30,9 @@ export default function ProductSummary({ product }: { product: Product }) {
   const wishedIds = useWishStore((s) => s.wishedIds);
   const isWished = wishedIds.has(product.id);
   const toggle = useWishStore((s) => s.toggle);
-
   const addToCart = useCartStore((c) => c.addItem);
-
-  const { finalPrice } = calculateDiscount(
-    product.price,
-    product.discount || 0,
+  const finalPrice = Math.floor(
+    product.price * (1 - (product.discount ?? 0) / 100),
   );
 
   const totalPrice = pendingItems.reduce(
@@ -161,12 +157,12 @@ export default function ProductSummary({ product }: { product: Product }) {
 
       <div className="flex gap-0 h-12">
         <button
-          className="flex-1 bg-black text-white border-r-1 rounded-sm cursor-pointer"
+          className="flex-1 bg-black text-white border-r cursor-pointer"
           onClick={handleAddToCart}
         >
           장바구니
         </button>
-        <button className="flex-1 bg-black text-white rounded-sm cursor-pointer">
+        <button className="flex-1 bg-black text-white cursor-pointer">
           바로 구매
         </button>
       </div>

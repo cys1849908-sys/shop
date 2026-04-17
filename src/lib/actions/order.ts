@@ -1,3 +1,4 @@
+"use server";
 import { Order } from "@/src/types/order";
 import { createClient } from "../supabase/server";
 

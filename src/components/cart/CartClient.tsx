@@ -4,7 +4,7 @@ import { ChangeEvent, useState } from "react";
 import Breadcrumb from "../Breadcrumb";
 import OrderSteps from "../order/OrderSteps";
 import { useAlert } from "@/src/hooks/useAlert";
-import { PayMentinfo } from "../common/PaymentInfo";
+import { PaymentInfo } from "../common/PaymentInfo";
 import CartItem from "./CartItem";
 import { useCartStore } from "@/src/store/CartStore";
 import ConfirmModal from "../common/modals/ConfirmModal";
@@ -21,8 +21,7 @@ export default function CartClient() {
     selectedKeys.includes(item.id),
   );
 
-  const { isAlertOpen, alertTitle, alertMessage, openAlert, confirm, cancel } =
-    useAlert();
+  const { isAlertOpen, alertMessage, openAlert, confirm, cancel } = useAlert();
   const { removeItems } = useCartStore();
   const isAllChecked =
     cartItems.length > 0 && selectedKeys.length === cartItems.length;
@@ -116,7 +115,8 @@ export default function CartClient() {
         </div>
 
         <div className="flex-1">
-          <PayMentinfo
+          <PaymentInfo
+            variant="cart"
             totalAmount={totalAmount}
             selectedItems={selectedItems}
             handleCheckout={handleCheckout}

@@ -1,5 +1,3 @@
-// components/common/HorizontalSlider.tsx
-import { getResponsiveWidth } from "@/src/lib/utils";
 import React from "react";
 
 interface HorizontalSliderProps {
@@ -13,6 +11,17 @@ export default function HorizontalSlider({
   containerRef,
   children,
 }: HorizontalSliderProps) {
+  const getResponsiveWidth = ({
+    itemCount,
+    gapPx = 4,
+  }: {
+    itemCount: number;
+    gapPx?: number;
+  }) => {
+    const totalGap = gapPx * (itemCount - 1);
+    return `calc((100% - ${totalGap}px) / ${itemCount})`;
+  };
+
   return (
     <ul
       ref={containerRef}

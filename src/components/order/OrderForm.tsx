@@ -18,7 +18,10 @@ import AddressCard from "../address/AddressCard";
 import OrderPaymentMethods from "./OrderPaymentMethods";
 import AddressAdder from "../address/AddressAdder";
 import { UserInfo } from "@/src/types/user";
-import { PaymentMethod } from "@/src/types/order";
+import { Order, PaymentMethod } from "@/src/types/order";
+import Form from "../common/ui/Form";
+import { createOrder } from "@/src/lib/actions/order";
+import { useOrderStore } from "@/src/store/OrderStore";
 
 export default function OrderForm({
   addresses,
@@ -52,10 +55,38 @@ export default function OrderForm({
     defaultValues: initialData || {},
   });
 
+  const setIsValid = useOrderStore((state) => state.setIsValid);
+  useEffect(() => {
+    setIsValid(isValid);
+  }, [isValid]);
   const handleConfirmAddress = (selectedId: string) => {
     const found = addresses.find((a) => a.id === selectedId);
     if (found) setManualSelected(found);
     closeModal();
+  };
+  const totalAmount = checkoutItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
+
+  const onSubmit = async (orderData: Order) => {
+    try {
+      const orderPayload = {
+        ...orderData,
+        items: checkoutItems.map((item) => ({
+          ...item,
+          order_id: "",
+        })),
+        address: selectedAddress.address,
+        postcode: selectedAddress.postcode,
+        detail_address: selectedAddress.detail_address,
+        payment_method: selectedMethod as PaymentMethod,
+        total_price: totalAmount,
+      };
+      const order = await createOrder(orderPayload);
+    } catch (error: any) {
+      alert("에러임");
+    }
   };
 
   return (
@@ -64,7 +95,11 @@ export default function OrderForm({
         <h4>주문자 정보</h4>
         <hr />
         <div className="w-full">
-          <div className="flex flex-col gap-2 w-[60%] py-4 px-6">
+          <Form
+            id="order-form"
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-2 w-[60%] py-4 px-6"
+          >
             <FormRowVertical label="주문자명" required>
               <Input
                 placeholder="주문하시는 분의 이름을 입력해 주세요"
@@ -106,7 +141,7 @@ export default function OrderForm({
             </FormRowVertical>
 
             <div className="w-full border border-gray-200 my-7" />
-          </div>
+          </Form>
         </div>
       </div>
 
@@ -134,7 +169,7 @@ export default function OrderForm({
             </div>
           )}
           <div className="py-4">
-            <p className="text-[14px] ">요청사항</p>
+            <p className="text-[14px]">요청사항</p>
             <div className="flex flex-col gap-2">
               <OptionSelect
                 options={shippingMessageOptions}
@@ -186,7 +221,7 @@ export default function OrderForm({
         </div>
       </div>
 
-      <div>
+      <div className="py-6">
         <h4>결제수단</h4>
         <hr />
         <div className="w-full py-4 px-6">
