@@ -32,6 +32,8 @@ export function PaymentInfo(props: Props) {
           0,
         );
 
+  // console.log(isValid);
+
   return (
     <div className="flex-1 border border-gray-200 h-fit sticky top-4 bg-white">
       <div className="p-5">

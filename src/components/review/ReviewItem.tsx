@@ -2,12 +2,12 @@
 
 import { MdStar } from "react-icons/md";
 import Image from "next/image";
-
-type Gender = "male" | "female" | string;
+import { maskUserName } from "@/src/lib/utils";
+import { Gender, GENDER_LABELS } from "@/src/types/common";
 
 interface ReviewItemProps {
   user: string;
-  gender: Gender;
+  gender: Gender | string;
   rating: number;
   date: string;
   option: string;
@@ -30,9 +30,8 @@ export function ReviewItem({
   weight,
   size = "W",
 }: ReviewItemProps) {
-  const maskName = (name: string) => {
-    return name.slice(0, 1) + "****";
-  };
+  const genderLabel = GENDER_LABELS[gender as Gender] || gender;
+
   return (
     <div className="py-8 border-b border-gray-100 last:border-0">
       <div className="flex justify-between items-start mb-4">
@@ -50,11 +49,11 @@ export function ReviewItem({
 
           {/* 유저 정보 */}
           <div className="flex items-center gap-2 text-sm">
-            <span className="font-bold text-gray-900">{maskName(user)}</span>
-            <span className="text-gray-300">|</span>
-            <span className="text-gray-500">
-              {gender === "female" ? "여성" : "남성"}
+            <span className="font-bold text-gray-900">
+              {maskUserName(user)}
             </span>
+            <span className="text-gray-300">|</span>
+            <span className="text-gray-500">{genderLabel}</span>
             <span className="text-gray-300">|</span>
             <span className="text-gray-400">{date}</span>
           </div>

@@ -7,6 +7,11 @@ import {
   updateCartItem,
 } from "@/src/lib/actions/cart";
 import { getCartItem } from "../lib/data/cart";
+import { ERROR_MESSAGES } from "@/src/constants/messages";
+
+const logError = (context: string, error: unknown) => {
+  console.error(`[${context}]`, error instanceof Error ? error.message : error);
+};
 
 export const useCartStore = create<CartStore>()(
   persist(
@@ -43,7 +48,7 @@ export const useCartStore = create<CartStore>()(
           set({ items: synced });
         } catch (e) {
           set({ items: previousItems });
-          console.error("장바구니 추가 실패:", e);
+          logError(ERROR_MESSAGES.ADD_TO_CART_FAILED, e);
         }
       },
 
@@ -62,7 +67,7 @@ export const useCartStore = create<CartStore>()(
           await removeItemsFromCart(targetIds);
         } catch (e) {
           set({ items: previousItems });
-          console.error("삭제 실패:", e);
+          logError(ERROR_MESSAGES.REMOVE_FROM_CART_FAILED, e);
         }
       },
 
@@ -87,7 +92,7 @@ export const useCartStore = create<CartStore>()(
           await updateCartItem(id, quantity ?? item.quantity, size);
         } catch (e) {
           set({ items: previousItems });
-          console.error("업데이트 실패:", e);
+          logError(ERROR_MESSAGES.UPDATE_CART_FAILED, e);
         }
       },
     }),

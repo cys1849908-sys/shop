@@ -117,7 +117,7 @@ export default function ProductSummary({ product }: { product: Product }) {
         </div>
       </div>
 
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <span className="text-[12px] text-gray-500 block mb-2">상품컬러</span>
         <div className="flex gap-2">
           {[1, 2, 3].map((i) => (
@@ -127,7 +127,7 @@ export default function ProductSummary({ product }: { product: Product }) {
             />
           ))}
         </div>
-      </div>
+      </div> */}
 
       <OptionSelect
         options={product.sizes ?? []}
@@ -155,13 +155,15 @@ export default function ProductSummary({ product }: { product: Product }) {
         <span className="text-[14px]">{totalPrice.toLocaleString()}원</span>
       </div>
 
-      <div className="flex gap-0 h-12">
+      <div className="flex h-12">
         <button
           className="flex-1 bg-black text-white border-r cursor-pointer"
           onClick={handleAddToCart}
         >
           장바구니
         </button>
+
+        {/* 수정해야함 */}
         <button className="flex-1 bg-black text-white cursor-pointer">
           바로 구매
         </button>

@@ -2,6 +2,11 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { clearWishlist, toggleWishlist } from "../lib/actions/wish";
 import { WishStore } from "../types/wish";
+import { ERROR_MESSAGES } from "@/src/constants/messages";
+
+const logError = (context: string, error: unknown) => {
+  console.error(`[${context}]`, error instanceof Error ? error.message : error);
+};
 
 export const useWishStore = create<WishStore>()(
   persist(
@@ -25,7 +30,7 @@ export const useWishStore = create<WishStore>()(
         try {
           await toggleWishlist(id);
         } catch (error) {
-          console.error("찜하기 실패:", error);
+          logError(ERROR_MESSAGES.WISHLIST_TOGGLE_FAILED, error);
           set({ wishedIds: prev });
         }
       },
@@ -39,7 +44,7 @@ export const useWishStore = create<WishStore>()(
         try {
           await clearWishlist();
         } catch (error) {
-          console.error("전체 삭제 실패:", error);
+          logError(ERROR_MESSAGES.WISHLIST_CLEAR_FAILED, error);
           set({ wishedIds: prev });
         }
       },

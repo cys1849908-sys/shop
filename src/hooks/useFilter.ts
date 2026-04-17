@@ -19,29 +19,43 @@ export function useFilter() {
   const [appliedValues, setAppliedValues] =
     useState<FilterState>(getInitialFilter);
 
-  const handleChange = (key: keyof FilterState, value: string | number) => {
+  const handleChange = (
+    key: keyof FilterState,
+    value: string | number,
+  ): void => {
     setTempValues((prev) => {
-      const current = prev[key] as (string | number)[];
-      const exists = current.includes(value);
+      const current = prev[key];
 
-      return {
-        ...prev,
-        [key]: exists
-          ? current.filter((v) => v !== value)
-          : [...current, value],
-      };
+      if (Array.isArray(current)) {
+        const exists = current.includes(value as never);
+        return {
+          ...prev,
+          [key]: exists
+            ? current.filter((v) => v !== value)
+            : [...current, value],
+        };
+      }
+
+      return prev;
     });
   };
 
-  const applyFilter = () => {
+  const applyFilter = (): void => {
     setAppliedValues(tempValues);
   };
 
-  const resetFilter = (key: keyof FilterState) => {
-    setTempValues((prev) => ({ ...prev, [key]: [] }));
-    setAppliedValues((prev) => ({ ...prev, [key]: [] }));
+  const resetFilter = (key: keyof FilterState): void => {
+    setTempValues((prev) => ({
+      ...prev,
+      [key]: Array.isArray(prev[key]) ? [] : null,
+    }));
+    setAppliedValues((prev) => ({
+      ...prev,
+      [key]: Array.isArray(prev[key]) ? [] : null,
+    }));
   };
-  const cancelFilter = () => {
+
+  const cancelFilter = (): void => {
     setTempValues(appliedValues);
   };
 

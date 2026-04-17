@@ -10,6 +10,9 @@ import Toast from "../common/Toast";
 import { Heart } from "lucide-react";
 import { useWishStore } from "@/src/store/wishStore";
 import { useCartStore } from "@/src/store/CartStore";
+import { createUniqueKey, formatCurrency } from "@/src/lib/utils";
+import { TOAST_MESSAGES } from "@/src/constants/messages";
+import { UI_CONSTANTS } from "@/src/constants/ui-constants";
 
 export default function ProductCard({
   product,
@@ -37,7 +40,7 @@ export default function ProductCard({
     e.preventDefault();
 
     addItem({
-      id: `${product.id}-${size}`,
+      id: createUniqueKey(product.id, size),
       product_id: product.id,
       name: product.name,
       price: product.price,
@@ -49,7 +52,7 @@ export default function ProductCard({
     });
 
     setIsToastVisible(true);
-    setTimeout(() => setIsToastVisible(false), 2500);
+    setTimeout(() => setIsToastVisible(false), UI_CONSTANTS.TOAST_TIMEOUT);
   };
 
   const handleWishClick = (e: React.MouseEvent) => {
@@ -110,7 +113,7 @@ export default function ProductCard({
           >
             <Heart
               className="stroke-[1.5] transition-transform duration-100 active:scale-125"
-              size={15}
+              size={UI_CONSTANTS.ICON_SIZE_SM}
               fill={isWished ? "red" : "white"}
               stroke={isWished ? "red" : ""}
             />
@@ -168,12 +171,12 @@ export default function ProductCard({
             </span>
           )}
           <span className="text-[14px] font-bold text-gray-900">
-            {displayPrice.toLocaleString()}
+            {formatCurrency(Math.floor(displayPrice))}
           </span>
         </div>
       </div>
 
-      {isToastVisible && <Toast message="해당 상품이 장바구니에 담겼습니다" />}
+      {isToastVisible && <Toast message={TOAST_MESSAGES.ADD_TO_CART_SUCCESS} />}
     </div>
   );
 }

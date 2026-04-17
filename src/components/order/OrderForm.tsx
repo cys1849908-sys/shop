@@ -83,7 +83,8 @@ export default function OrderForm({
         payment_method: selectedMethod as PaymentMethod,
         total_price: totalAmount,
       };
-      const order = await createOrder(orderPayload);
+      console.log(orderPayload);
+      // const order = await createOrder(orderPayload);
     } catch (error: any) {
       alert("에러임");
     }
@@ -179,12 +180,16 @@ export default function OrderForm({
                 onChange={(val: string) => setOption(val)}
               />
               {option === "직접 입력" && (
-                <Input
-                  placeholder="요청사항을 직접 입력해 주세요"
-                  {...register("shipping_message")}
-                  autoFocus
-                  error={!!errors.shipping_message}
-                />
+                <FormRowVertical error={errors.shipping_message?.message}>
+                  <Input
+                    placeholder="요청사항을 직접 입력해 주세요"
+                    {...register("shipping_message", {
+                      required: "요청사항을 직접 입력해 주세요",
+                    })}
+                    autoFocus
+                    error={!!errors.shipping_message}
+                  />
+                </FormRowVertical>
               )}
             </div>
           </div>

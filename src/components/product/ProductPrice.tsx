@@ -1,3 +1,5 @@
+import { formatCurrency } from "@/src/lib/utils";
+
 export default function ProductPrice({
   price,
   hasDiscount,
@@ -13,7 +15,7 @@ export default function ProductPrice({
     <div className="my-3">
       {hasDiscount && (
         <span className="text-[16px] text-gray-400 line-through">
-          {price.toLocaleString()}원
+          {formatCurrency(price)}
         </span>
       )}
       <div>
@@ -24,7 +26,7 @@ export default function ProductPrice({
         )}
 
         <span className="text-[18px] font-bold text-brand-black">
-          {finalPrice.toLocaleString()}원
+          {formatCurrency(finalPrice)}
         </span>
       </div>
     </div>
