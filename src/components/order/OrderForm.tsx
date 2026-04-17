@@ -18,6 +18,7 @@ import AddressCard from "../address/AddressCard";
 import OrderPaymentMethods from "./OrderPaymentMethods";
 import AddressAdder from "../address/AddressAdder";
 import { UserInfo } from "@/src/types/user";
+import { PaymentMethod } from "@/src/types/order";
 
 export default function OrderForm({
   addresses,
@@ -29,6 +30,7 @@ export default function OrderForm({
   const [isExpanded, setIsExpanded] = useState(false);
   const [option, setOption] = useState("직접 입력");
   const [manualSelected, setManualSelected] = useState<Address | null>(null);
+  const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | "">("");
   const { isOpen, openModal, closeModal } = useModal();
   const checkoutItems = useCartStore((state) => state.checkoutItems);
   const selectedAddress = manualSelected ?? addresses?.[0] ?? null;
@@ -188,7 +190,10 @@ export default function OrderForm({
         <h4>결제수단</h4>
         <hr />
         <div className="w-full py-4 px-6">
-          <OrderPaymentMethods />
+          <OrderPaymentMethods
+            selectedMethod={selectedMethod}
+            onMethodChange={setSelectedMethod}
+          />
         </div>
       </div>
 

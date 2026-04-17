@@ -1,3 +1,12 @@
+export type PaymentMethod = "kakaopay" | "toss" | "bank_transfer";
+
+export type OrderStatus =
+  | "pending"
+  | "processing"
+  | "shipped"
+  | "delivered"
+  | "cancelled";
+
 export type Order = {
   id: string;
   user_id: string;
@@ -14,15 +23,6 @@ export type Order = {
   secondary_phone?: string;
   created_at: string;
 };
-
-export type PaymentMethod = "kakaopay" | "toss" | "bank_transfer";
-export type OrderStatus =
-  | "pending"
-  | "processing"
-  | "shipped"
-  | "delivered"
-  | "cancelled";
-
 export type OrderItem = {
   id: string;
   order_id: string;
