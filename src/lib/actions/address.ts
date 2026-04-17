@@ -11,7 +11,7 @@ export async function addAddress(formData: any): Promise<void> {
 
   if (!user) throw new Error("로그인이 필요합니다.");
 
-  if (formData.isDefault) {
+  if (formData.is_default) {
     await supabase
       .from("addresses")
       .update({ is_default: false })
@@ -21,7 +21,7 @@ export async function addAddress(formData: any): Promise<void> {
   const { error } = await supabase.from("addresses").insert([
     {
       ...formData,
-      addressName: formData.addressName || formData.receiverName,
+      address_name: formData.address_name || formData.receiver_name,
       user_id: user.id,
     },
   ]);
@@ -68,7 +68,7 @@ export async function patchAddress(
   if (formData.is_default) {
     await supabase
       .from("addresses")
-      .update({ isDefault: false })
+      .update({ is_default: false })
       .eq("user_id", user.id);
   }
 

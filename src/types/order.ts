@@ -5,6 +5,7 @@ export type Order = {
   original_price: number;
   discount_price: number;
   total_price: number;
+  payment_method: PaymentMethod; // 추가된 필드
   status: OrderStatus;
   address: string;
   postcode: string;
@@ -14,6 +15,7 @@ export type Order = {
   created_at: string;
 };
 
+export type PaymentMethod = "kakaopay" | "toss" | "bank_transfer";
 export type OrderStatus =
   | "pending"
   | "processing"

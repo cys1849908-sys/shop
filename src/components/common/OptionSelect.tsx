@@ -33,7 +33,7 @@ export default function OptionSelect({
       <div
         onClick={() => setIsExpanded((prev) => !prev)}
         className={clsx(
-          "text-[13px] border p-2 rounded-md bg-white cursor-pointer flex justify-between items-center transition-all",
+          "text-[13px] border p-2  bg-white cursor-pointer flex justify-between items-center transition-all",
           isExpanded ? "border-black" : "border-gray-300",
         )}
       >

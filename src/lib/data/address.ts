@@ -12,7 +12,7 @@ export async function getAddress(): Promise<Address[]> {
     .from("addresses")
     .select("*")
     .eq("user_id", user.id)
-    .order("isDefault", { ascending: false })
+    .order("is_default", { ascending: false })
     .order("created_at", { ascending: false });
 
   if (error) {
