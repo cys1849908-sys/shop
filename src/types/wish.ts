@@ -1,9 +1,7 @@
-import { Product } from "./product";
-
 export type Wish = {
   id: string;
   user_id: string;
-  product: Product;
+  product_id: string;
   created_at: string;
 };
 

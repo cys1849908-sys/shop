@@ -35,6 +35,15 @@ export type OrderItem = {
   slug: string;
 };
 export interface OrderStore {
+  order: Order | null;
+  isLoading: boolean;
+  error: OrderError | null;
   isValid: boolean;
-  setIsValid: (v: boolean) => void;
+  setOrder: (order: Order) => void;
+  setError: (error: OrderError | null) => void;
 }
+export type OrderError = {
+  code: string;
+  message: string;
+  field?: keyof Order;
+};

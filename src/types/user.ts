@@ -1,7 +1,7 @@
 export type UserRole = "user" | "admin" | "seller";
 export type AuthProvider = "email" | "google" | "kakao";
 
-export interface User {
+export type User = {
   id: string;
   email: string;
   name: string;
@@ -12,19 +12,19 @@ export interface User {
   is_active: boolean;
   created_at: string;
   updated_at: string;
-}
+};
 
-export interface SignUpInput {
+export type SignUpInput = {
   email: string;
   password: string;
   name: string;
   phone_number?: string;
-}
+};
 
-export interface UserInfo {
+export type UserInfo = {
   email: string | null;
   name: string | null;
   phone_number: string | null;
-}
+};
 
 export type LoginInput = Pick<SignUpInput, "email" | "password">;

@@ -1,16 +1,16 @@
-export interface Address {
+export type Address = {
   id: string;
   user_id: string;
-  address_name: string; // 수정
-  receiver_name: string; // 수정
-  phone_number: string; // 수정
-  secondary_phone?: string; // 수정
+  address_name: string;
+  receiver_name: string;
+  phone_number: string;
+  secondary_phone?: string;
   postcode: string;
   address: string;
-  detail_address: string; // 수정
-  is_default: boolean; // 수정
+  detail_address: string;
+  is_default: boolean;
   created_at: string;
-}
+};
 
 export interface UpdateAddressRequest extends AddressInput {
   id: string;

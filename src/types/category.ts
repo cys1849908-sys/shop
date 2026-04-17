@@ -6,7 +6,7 @@ export type CategorySlug =
   | "accessories"
   | "shoes";
 
-export interface Category {
+export type Category = {
   id: string;
   name: string;
   slug: CategorySlug;
@@ -14,7 +14,7 @@ export interface Category {
   level: number;
   parent_id?: string | null;
   path: string;
-}
+};
 
 export const Categories = [
   { id: "All", label: "ALL" },
