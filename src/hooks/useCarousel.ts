@@ -10,12 +10,12 @@ import {
   RefObject,
 } from "react";
 
-export interface UseCarouselOptions {
+export type UseCarouselOptions = {
   itemsPerView?: number;
   loop?: boolean;
-}
+};
 
-export interface UseCarouselReturn {
+export type UseCarouselReturn = {
   containerRef: RefObject<HTMLDivElement | null>;
   slideIndex: number;
   canGoPrev: boolean;
@@ -31,7 +31,7 @@ export interface UseCarouselReturn {
     onMouseUp: () => void;
     onMouseLeave: () => void;
   };
-}
+};
 
 export function useCarousel(
   itemCount: number,

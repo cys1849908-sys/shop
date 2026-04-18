@@ -26,7 +26,7 @@ export default function AddressCard({
       </div>
       <div className="flex items-center  gap-3">
         <div className="text-[14px] text-gray-500">{address.phone_number}</div>
-        <div className="w-[1px] h-3 bg-gray-200"></div>
+        <div className="w-px h-3 bg-gray-200"></div>
         <div className="text-[14px] text-gray-500">{address.phone_number}</div>
       </div>
     </div>

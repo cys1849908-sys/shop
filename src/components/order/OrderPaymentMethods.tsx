@@ -46,8 +46,6 @@ export default function OrderPaymentMethods({
           </button>
         );
       })}
-
-      <input type="hidden" name="payment_method" value={selectedMethod} />
     </div>
   );
 }

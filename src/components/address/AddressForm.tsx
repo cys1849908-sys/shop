@@ -44,7 +44,6 @@ export default function AddressForm({
     },
   });
 
-  // 필드명 변경 적용
   const watchedIsDefault = watch("is_default");
 
   useEffect(() => {

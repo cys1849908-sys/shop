@@ -34,10 +34,7 @@ export default function SignupPage() {
         email: data.email,
         password: data.password,
       });
-
-      if (user) {
-        router.replace("/#");
-      }
+      router.replace("/");
     } catch (error: any) {
       if (error.message.includes("already registered")) {
         alert("이미 사용 중인 이메일입니다.");

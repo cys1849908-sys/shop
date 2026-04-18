@@ -1,8 +1,9 @@
 "use server";
-import { Order } from "@/src/types/order";
+import { CreateOrderPayload } from "@/src/types/order";
 import { createClient } from "../supabase/server";
+import { calculateDisplayPrice } from "../utils";
 
-export async function createOrder(formData: Order): Promise<void> {
+export async function createOrder(formData: CreateOrderPayload): Promise<void> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -13,8 +14,9 @@ export async function createOrder(formData: Order): Promise<void> {
     .from("orders")
     .insert([
       {
-        user_id: formData.user_id,
-        items: formData.items,
+        user_id: user.id,
+        receiver_name: formData.receiver_name,
+        email: formData.email,
         original_price: formData.original_price,
         discount_price: formData.discount_price,
         total_price: formData.total_price,
@@ -25,6 +27,7 @@ export async function createOrder(formData: Order): Promise<void> {
         detail_address: formData.detail_address,
         phone_number: formData.phone_number,
         secondary_phone: formData.secondary_phone,
+        shipping_message: formData.shipping_message,
       },
     ])
     .select("id")
@@ -33,25 +36,41 @@ export async function createOrder(formData: Order): Promise<void> {
   if (error) {
     console.error("주문 생성 실패:", error.message);
   }
-
   const orderId = orderData?.id;
 
-  const itemsToInsert = formData.items.map((item) => ({
-    order_id: orderId,
-    product_id: item.product_id,
-    original_price: item.original_price,
-    quantity: item.quantity,
-    name: item.name,
-    price: item.price,
-    slug: item.slug,
-    thumbnail: item.thumbnail,
-  }));
+  const itemsToInsert = formData.items.map((item) => {
+    const finalUnitPrice = calculateDisplayPrice(
+      item.unit_price,
+      item.discount_rate,
+    );
+    const subtotal = finalUnitPrice * item.quantity;
 
+    return {
+      order_id: orderId,
+      product_id: item.product_id,
+      name: item.name,
+      unit_price: item.unit_price,
+      discount_rate: item.discount_rate,
+      quantity: item.quantity,
+      subtotal: subtotal,
+      thumbnail: item.thumbnail,
+      slug: item.slug,
+    };
+  });
   const { error: itemsError } = await supabase
     .from("order_items")
     .insert(itemsToInsert);
-
   if (itemsError) {
     console.error("주문 생성 실패:", itemsError.message);
+  }
+
+  const ids = formData.items.map((i) => i.product_id);
+  if (!user || ids.length === 0) return;
+  try {
+    await supabase.from("carts").delete().eq("user_id", user.id).in("id", ids);
+  } catch (error) {
+    // logError(ERROR_MESSAGES.REMOVE_FROM_CART_FAILED, error);
+    // throw new Error(ERROR_MESSAGES.REMOVE_FROM_CART_FAILED);
+    console.log("에러");
   }
 }

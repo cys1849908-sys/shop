@@ -1,38 +1,24 @@
 "use client";
 import clsx from "clsx";
-import { useCartStore } from "@/src/store/CartStore";
 import { CartItem } from "@/src/types/cart";
 import { useOrderStore } from "@/src/store/OrderStore";
 
-type Props =
-  | {
-      variant: "cart";
-      totalAmount: number;
-      selectedItems: CartItem[];
-      handleCheckout: () => void;
-    }
-  | {
-      variant: "order";
-    };
+type Props = {
+  variant: "cart" | "order";
+  totalPrice: number;
+  originalPrice: number;
+  discountPrice: number;
+  selectedItems: CartItem[];
+  handleCheckout: () => void;
+};
 
 export function PaymentInfo(props: Props) {
-  const checkoutItems = useCartStore((state) => state.checkoutItems);
   const isValid = useOrderStore((state) => state.isValid);
 
   const isOrderable =
     props.variant === "cart"
-      ? props.selectedItems.length > 0 && props.totalAmount > 0
+      ? props.selectedItems.length > 0 && props.totalPrice > 0
       : isValid;
-
-  const totalAmount =
-    props.variant === "cart"
-      ? props.totalAmount
-      : checkoutItems.reduce(
-          (sum, item) => sum + item.price * item.quantity,
-          0,
-        );
-
-  // console.log(isValid);
 
   return (
     <div className="flex-1 border border-gray-200 h-fit sticky top-4 bg-white">
@@ -44,7 +30,7 @@ export function PaymentInfo(props: Props) {
         <div className="space-y-4 text-sm">
           <div className="flex justify-between">
             <span className="text-gray-500">상품 금액</span>
-            <span>{totalAmount.toLocaleString()}원</span>
+            <span>{props.originalPrice.toLocaleString()}원</span>
           </div>
           <div className="flex justify-between pb-4 border-b border-gray-100">
             <span className="text-gray-500">배송비</span>
@@ -53,24 +39,24 @@ export function PaymentInfo(props: Props) {
 
           <div className="flex justify-between items-center">
             <span className="text-gray-500">총 할인금액</span>
-            <span className="text-red-500 ">-0원</span>
+            <span className="text-red-500 ">{props.discountPrice}원</span>
           </div>
 
-          {props.variant === "order" && (
-            <div className="pl-3 space-y-2 text-gray-400 text-[13px]">
-              <div className="flex justify-between font-light">
-                <span>상품 할인</span>
-                <span>0원</span>
-              </div>
+          {/* {props.variant === "order" && ( */}
+          <div className="pl-3 space-y-2 text-gray-400 text-[13px]">
+            <div className="flex justify-between font-light">
+              <span>상품 할인</span>
+              <span>{props.discountPrice}원</span>
             </div>
-          )}
+          </div>
+          {/* )} */}
 
           <div className="flex justify-between items-end  border-t-2 border-black pt-5 mt-2">
             <span className="text-base">
               총 {props.variant === "cart" ? "주문" : "결제"}금액
             </span>
             <span className="text-2xl leading-none">
-              {totalAmount.toLocaleString()}원
+              {props.totalPrice.toLocaleString()}원
             </span>
           </div>
 

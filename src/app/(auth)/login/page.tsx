@@ -39,7 +39,7 @@ export default function LoginPage() {
       setValue("email", savedEmail);
       setValue("saveEmail", true);
     }
-  }, [setValue]);
+  }, []);
 
   const onSubmit = async (data: LoginForm) => {
     try {
@@ -56,7 +56,7 @@ export default function LoginPage() {
         localStorage.removeItem("saveEmail");
       }
 
-      router.replace("/#");
+      router.replace("/");
     } catch (err) {
       console.error("로그인 실패");
     }

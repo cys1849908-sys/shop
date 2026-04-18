@@ -39,12 +39,11 @@ export const formatPrice = (
     discountPercent,
   };
 };
+export const calculateDisplayPrice = (price: number, discount?: number) => {
+  if (!discount || discount <= 0) return price;
+  return Math.round(price * (1 - discount / 100));
+};
 
 export const maskUserName = (name: string): string => {
   return name.slice(0, 1) + "****";
-};
-
-export const formatDiscount = (discountRate: number | undefined): number => {
-  if (!discountRate) return 0;
-  return Math.round(discountRate * 100);
 };

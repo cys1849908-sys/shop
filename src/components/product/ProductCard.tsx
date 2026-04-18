@@ -1,4 +1,3 @@
-// ProductCard.tsx
 "use client";
 
 import Link from "next/link";
@@ -10,7 +9,11 @@ import Toast from "../common/Toast";
 import { Heart } from "lucide-react";
 import { useWishStore } from "@/src/store/wishStore";
 import { useCartStore } from "@/src/store/CartStore";
-import { createUniqueKey, formatCurrency } from "@/src/lib/utils";
+import {
+  calculateDisplayPrice,
+  createUniqueKey,
+  formatCurrency,
+} from "@/src/lib/utils";
 import { TOAST_MESSAGES } from "@/src/constants/messages";
 import { UI_CONSTANTS } from "@/src/constants/ui-constants";
 
@@ -62,10 +65,6 @@ export default function ProductCard({
       await toggle(product.id);
     });
   };
-
-  const displayPrice = product.discount
-    ? product.price * (1 - product.discount / 100)
-    : product.price;
 
   const pointerClass = hasMoved ? "pointer-events-none" : "pointer-events-auto";
   const hasSecondImage =
@@ -171,7 +170,9 @@ export default function ProductCard({
             </span>
           )}
           <span className="text-[14px] font-bold text-gray-900">
-            {formatCurrency(Math.floor(displayPrice))}
+            {formatCurrency(
+              calculateDisplayPrice(product.price, product.discount),
+            )}
           </span>
         </div>
       </div>

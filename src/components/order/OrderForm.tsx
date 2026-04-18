@@ -8,6 +8,7 @@ import { useCartStore } from "@/src/store/CartStore";
 import { Address } from "@/src/types/address";
 import { shippingMessageOptions } from "@/src/constants/data/order";
 
+import Form from "../common/ui/Form";
 import Input from "../common/ui/Input";
 import OptionSelect from "../common/OptionSelect";
 import CartItem from "../cart/CartItem";
@@ -18,10 +19,10 @@ import AddressCard from "../address/AddressCard";
 import OrderPaymentMethods from "./OrderPaymentMethods";
 import AddressAdder from "../address/AddressAdder";
 import { UserInfo } from "@/src/types/user";
-import { Order, PaymentMethod } from "@/src/types/order";
-import Form from "../common/ui/Form";
+import { OrderFormFields, PaymentMethod } from "@/src/types/order";
 import { createOrder } from "@/src/lib/actions/order";
 import { useOrderStore } from "@/src/store/OrderStore";
+import { calculateDisplayPrice } from "@/src/lib/utils";
 
 export default function OrderForm({
   addresses,
@@ -31,9 +32,8 @@ export default function OrderForm({
   user: UserInfo | null;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [option, setOption] = useState("직접 입력");
+  const [shippingMessage, setShippingMessage] = useState("직접 입력");
   const [manualSelected, setManualSelected] = useState<Address | null>(null);
-  const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | "">("");
   const { isOpen, openModal, closeModal } = useModal();
   const checkoutItems = useCartStore((state) => state.checkoutItems);
   const selectedAddress = manualSelected ?? addresses?.[0] ?? null;
@@ -43,48 +43,69 @@ export default function OrderForm({
     email: user?.email ?? "",
     phone_number: user?.phone_number ?? "",
     secondary_phone: "",
+    payment_method: "",
     shipping_message: "",
   };
 
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isValid },
   } = useForm({
     mode: "onChange",
-    defaultValues: initialData || {},
+    defaultValues: initialData || {
+      shipping_message: shippingMessage,
+    },
   });
+
+  const selectedMethod = watch("payment_method") as PaymentMethod | "";
 
   const setIsValid = useOrderStore((state) => state.setIsValid);
   useEffect(() => {
-    setIsValid(isValid);
-  }, [isValid]);
+    const isPaymentSelected = selectedMethod !== "";
+    setIsValid(isValid && isPaymentSelected);
+  }, [isValid, selectedMethod, setIsValid]);
+
   const handleConfirmAddress = (selectedId: string) => {
     const found = addresses.find((a) => a.id === selectedId);
     if (found) setManualSelected(found);
     closeModal();
   };
-  const totalAmount = checkoutItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
-
-  const onSubmit = async (orderData: Order) => {
+  const handleShippingMessageChange = (val: string) => {
+    setShippingMessage(val);
+    if (val === "직접 입력") {
+      setValue("shipping_message", "", { shouldValidate: true });
+    } else {
+      setValue("shipping_message", shippingMessage, { shouldValidate: true });
+    }
+  };
+  const onSubmit = async (orderData: OrderFormFields) => {
     try {
       const orderPayload = {
         ...orderData,
         items: checkoutItems.map((item) => ({
           ...item,
+          unit_price: item.price,
+          discount_rate: item.discount,
           order_id: "",
+          subtotal: item.discount
+            ? calculateDisplayPrice(item.price, item.discount) * item.quantity
+            : item.price * item.quantity,
         })),
+        receiver_name: orderData.name,
+        email: orderData.email,
+        shipping_message: orderData.shipping_message,
+        discount_price: discountPrice,
+        original_price: originalPrice,
+        total_price: totalPrice,
         address: selectedAddress.address,
         postcode: selectedAddress.postcode,
         detail_address: selectedAddress.detail_address,
         payment_method: selectedMethod as PaymentMethod,
-        total_price: totalAmount,
       };
-      console.log(orderPayload);
-      // const order = await createOrder(orderPayload);
+      await createOrder(orderPayload);
     } catch (error: any) {
       alert("에러임");
     }
@@ -174,12 +195,12 @@ export default function OrderForm({
             <div className="flex flex-col gap-2">
               <OptionSelect
                 options={shippingMessageOptions}
-                value={option}
+                value={shippingMessage}
                 isExpanded={isExpanded}
                 setIsExpanded={setIsExpanded}
-                onChange={(val: string) => setOption(val)}
+                onChange={handleShippingMessageChange}
               />
-              {option === "직접 입력" && (
+              {shippingMessage === "직접 입력" && (
                 <FormRowVertical error={errors.shipping_message?.message}>
                   <Input
                     placeholder="요청사항을 직접 입력해 주세요"
@@ -232,7 +253,7 @@ export default function OrderForm({
         <div className="w-full py-4 px-6">
           <OrderPaymentMethods
             selectedMethod={selectedMethod}
-            onMethodChange={setSelectedMethod}
+            onMethodChange={(metod) => setValue("payment_method", metod)}
           />
         </div>
       </div>

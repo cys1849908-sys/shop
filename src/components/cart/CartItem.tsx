@@ -5,7 +5,7 @@ import { useModal } from "@/src/hooks/useModal";
 import ChangeOptionModal from "./ChangeOptionModal";
 import type { CartItem } from "@/src/types/cart";
 import clsx from "clsx";
-import { formatCurrency } from "@/src/lib/utils";
+import { calculateDisplayPrice, formatCurrency } from "@/src/lib/utils";
 
 export default function CartItem({
   product,
@@ -50,7 +50,9 @@ export default function CartItem({
             </span>
           )}
           <p className="text-[14px] ">
-            {formatCurrency(product.price * product.quantity)}
+            {formatCurrency(
+              calculateDisplayPrice(product.price, product.discount),
+            )}
           </p>
         </div>
       </div>

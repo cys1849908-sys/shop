@@ -9,6 +9,7 @@ import CartItem from "./CartItem";
 import { useCartStore } from "@/src/store/CartStore";
 import ConfirmModal from "../common/modals/ConfirmModal";
 import { useRouter } from "next/navigation";
+import { calculateDisplayPrice } from "@/src/lib/utils";
 
 export default function CartClient() {
   const router = useRouter();
@@ -17,14 +18,31 @@ export default function CartClient() {
   const [selectedKeys, setSelectedKeys] = useState<string[]>(() =>
     cartItems.map((item) => item.id),
   );
+  const { isAlertOpen, alertMessage, openAlert, confirm, cancel } = useAlert();
+
+  const { removeItems } = useCartStore();
+
+  // 결제상품
   const selectedItems = cartItems.filter((item) =>
     selectedKeys.includes(item.id),
   );
 
-  const { isAlertOpen, alertMessage, openAlert, confirm, cancel } = useAlert();
-  const { removeItems } = useCartStore();
   const isAllChecked =
     cartItems.length > 0 && selectedKeys.length === cartItems.length;
+
+  const { originalPrice, totalPrice } = selectedItems.reduce(
+    (acc, item) => {
+      const itemOriginal = item.price * item.quantity;
+      const itemFinal =
+        calculateDisplayPrice(item.price, item.discount) * item.quantity;
+      return {
+        originalPrice: acc.originalPrice + itemOriginal,
+        totalPrice: acc.totalPrice + itemFinal,
+      };
+    },
+    { originalPrice: 0, totalPrice: 0 },
+  );
+  const discountPrice = originalPrice - totalPrice;
 
   const handleToggleAll = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedKeys(e.target.checked ? cartItems.map((item) => item.id) : []);
@@ -52,11 +70,6 @@ export default function CartClient() {
       setSelectedKeys([]);
     }
   };
-
-  const totalAmount = cartItems
-    .filter((item) => selectedKeys.includes(item.id))
-    .reduce((sum, item) => sum + item.price * item.quantity, 0);
-
   const handleCheckout = () => {
     setCheckoutItems(selectedItems);
     router.push("/order-checkout");
@@ -117,7 +130,9 @@ export default function CartClient() {
         <div className="flex-1">
           <PaymentInfo
             variant="cart"
-            totalAmount={totalAmount}
+            originalPrice={originalPrice}
+            totalPrice={totalPrice}
+            discountPrice={discountPrice}
             selectedItems={selectedItems}
             handleCheckout={handleCheckout}
           />

@@ -7,43 +7,65 @@ export type OrderStatus =
   | "delivered"
   | "cancelled";
 
-export type Order = {
+export type OrderFormFields = {
+  name: string;
+  email: string;
+  phone_number: string;
+  secondary_phone: string;
+  shipping_message: string;
+};
+
+export interface Order {
   id: string;
   user_id: string;
-  items: OrderItem[];
+  receiver_name: string;
+  email?: string;
+  phone_number: string;
+  secondary_phone?: string;
   original_price: number;
-  discount_price: number;
+  discount_price?: number;
   total_price: number;
-  payment_method: PaymentMethod; // 추가된 필드
+  payment_method: PaymentMethod;
   status: OrderStatus;
   address: string;
   postcode: string;
   detail_address: string;
-  phone_number: string;
-  secondary_phone?: string;
+  shipping_message: string;
   created_at: string;
-};
+  updated_at: string;
+}
 export type OrderItem = {
   id: string;
   order_id: string;
   product_id: string;
   name: string;
-  price: number;
-  original_price?: number;
+  unit_price: number;
+  discount_rate?: number;
   quantity: number;
+  subtotal: number;
   thumbnail: string;
   slug: string;
 };
-export interface OrderStore {
-  order: Order | null;
-  isLoading: boolean;
-  error: OrderError | null;
-  isValid: boolean;
-  setOrder: (order: Order) => void;
-  setError: (error: OrderError | null) => void;
-}
+export type CreateOrderPayload = Omit<
+  OrderWithItems,
+  "id" | "user_id" | "status" | "created_at" | "updated_at"
+>;
 export type OrderError = {
   code: string;
   message: string;
   field?: keyof Order;
 };
+
+export interface OrderWithItems extends Order {
+  items: OrderItem[];
+}
+
+export interface OrderStore {
+  order: Order | null;
+  isValid: boolean;
+  setIsValid: (v: any) => void;
+  // isLoading: boolean;
+  // error: OrderError | null;
+  // setOrder: (order: Order) => void;
+  // setError: (error: OrderError | null) => void;
+}
