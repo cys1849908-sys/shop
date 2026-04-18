@@ -9,7 +9,6 @@ import CartItem from "./CartItem";
 import { useCartStore } from "@/src/store/CartStore";
 import ConfirmModal from "../common/modals/ConfirmModal";
 import { useRouter } from "next/navigation";
-import { calculateDisplayPrice } from "@/src/lib/utils";
 
 export default function CartClient() {
   const router = useRouter();
@@ -22,32 +21,14 @@ export default function CartClient() {
 
   const { removeItems } = useCartStore();
 
-  // 결제상품
   const selectedItems = cartItems.filter((item) =>
     selectedKeys.includes(item.id),
   );
-
   const isAllChecked =
     cartItems.length > 0 && selectedKeys.length === cartItems.length;
-
-  const { originalPrice, totalPrice } = selectedItems.reduce(
-    (acc, item) => {
-      const itemOriginal = item.price * item.quantity;
-      const itemFinal =
-        calculateDisplayPrice(item.price, item.discount) * item.quantity;
-      return {
-        originalPrice: acc.originalPrice + itemOriginal,
-        totalPrice: acc.totalPrice + itemFinal,
-      };
-    },
-    { originalPrice: 0, totalPrice: 0 },
-  );
-  const discountPrice = originalPrice - totalPrice;
-
   const handleToggleAll = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedKeys(e.target.checked ? cartItems.map((item) => item.id) : []);
   };
-
   const handleToggleItem = (id: string) => {
     setSelectedKeys((prev) =>
       prev.includes(id) ? prev.filter((key) => key !== id) : [...prev, id],
@@ -130,9 +111,6 @@ export default function CartClient() {
         <div className="flex-1">
           <PaymentInfo
             variant="cart"
-            originalPrice={originalPrice}
-            totalPrice={totalPrice}
-            discountPrice={discountPrice}
             selectedItems={selectedItems}
             handleCheckout={handleCheckout}
           />

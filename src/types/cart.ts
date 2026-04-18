@@ -13,6 +13,7 @@ export type CartItem = {
 export interface CartStore {
   items: CartItem[];
   checkoutItems: CartItem[];
+
   setCheckoutItems: (items: CartItem[]) => void;
   addItem: (item: CartItem | CartItem[]) => Promise<void>;
   removeItems: (ids: string | string[]) => Promise<void>;

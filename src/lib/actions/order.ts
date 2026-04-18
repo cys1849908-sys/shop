@@ -2,6 +2,7 @@
 import { CreateOrderPayload } from "@/src/types/order";
 import { createClient } from "../supabase/server";
 import { calculateDisplayPrice } from "../utils";
+import { revalidatePath } from "next/cache";
 
 export async function createOrder(formData: CreateOrderPayload): Promise<void> {
   const supabase = await createClient();
@@ -63,11 +64,12 @@ export async function createOrder(formData: CreateOrderPayload): Promise<void> {
   if (itemsError) {
     console.error("주문 생성 실패:", itemsError.message);
   }
-
   const ids = formData.items.map((i) => i.product_id);
   if (!user || ids.length === 0) return;
+
   try {
     await supabase.from("carts").delete().eq("user_id", user.id).in("id", ids);
+    revalidatePath("/cart");
   } catch (error) {
     // logError(ERROR_MESSAGES.REMOVE_FROM_CART_FAILED, error);
     // throw new Error(ERROR_MESSAGES.REMOVE_FROM_CART_FAILED);

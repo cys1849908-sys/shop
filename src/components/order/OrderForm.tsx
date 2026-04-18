@@ -38,6 +38,22 @@ export default function OrderForm({
   const checkoutItems = useCartStore((state) => state.checkoutItems);
   const selectedAddress = manualSelected ?? addresses?.[0] ?? null;
 
+  const summary = checkoutItems.reduce(
+    (acc, item) => {
+      const itemOriginal = item.price * item.quantity;
+      const itemFinal =
+        calculateDisplayPrice(item.price, item.discount) * item.quantity;
+
+      return {
+        originalPrice: acc.originalPrice + itemOriginal,
+        totalPrice: acc.totalPrice + itemFinal,
+      };
+    },
+    { originalPrice: 0, totalPrice: 0 },
+  );
+
+  const discountPrice = summary.originalPrice - summary.totalPrice;
+
   const initialData = {
     name: user?.name ?? "",
     email: user?.email ?? "",
@@ -98,8 +114,8 @@ export default function OrderForm({
         email: orderData.email,
         shipping_message: orderData.shipping_message,
         discount_price: discountPrice,
-        original_price: originalPrice,
-        total_price: totalPrice,
+        original_price: summary.originalPrice,
+        total_price: summary.totalPrice,
         address: selectedAddress.address,
         postcode: selectedAddress.postcode,
         detail_address: selectedAddress.detail_address,
