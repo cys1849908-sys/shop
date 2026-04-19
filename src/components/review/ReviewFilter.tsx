@@ -1,15 +1,12 @@
 "use client";
 
-import { MdChevronRight, MdSearch, MdCheck } from "react-icons/md";
+import { MdSearch, MdCheck } from "react-icons/md";
 import clsx from "clsx";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useOutsideClick } from "@/src/hooks/useOutsideClick";
 import ReviewFilterBarList from "./ReviewFilterBarList";
-const SORT_OPTIONS = [
-  { id: "latest", label: "최신순" },
-  { id: "recommend", label: "추천순" },
-  { id: "rating", label: "별점순" },
-];
+import { SORT_OPTIONS } from "@/src/types/review";
+
 export default function ReviewFilter() {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isPhotoOnly, setIsPhotoOnly] = useState<boolean>(false);
@@ -21,9 +18,7 @@ export default function ReviewFilter() {
   const handleSortChange = (id: string) => {
     setSortBy(id);
 
-    // 실무에서는 여기서 API 호출을 함
     console.log(`${id} 로 서버에 데이터를 요청합니다.`);
-    // fetchReviews(id);
   };
   return (
     <div className="py-6 border-b border-gray-100">
@@ -34,7 +29,7 @@ export default function ReviewFilter() {
               key={option.id}
               onClick={() => handleSortChange(option.id)}
               className={clsx(
-                "text-sm transition-colors relative",
+                "text-sm transition-colors relative cursor-pointer",
                 sortBy === option.id
                   ? "font-bold text-black"
                   : "text-gray-400 hover:text-gray-600",

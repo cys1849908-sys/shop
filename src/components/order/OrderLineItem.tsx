@@ -1,22 +1,25 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import Modal from "../common/modals/Modal";
 import { useModal } from "@/src/hooks/useModal";
-import ChangeOptionModal from "./ChangeOptionModal";
+import ChangeOptionModal from "../cart/ChangeOptionModal";
 import type { CartItem } from "@/src/types/cart";
 import clsx from "clsx";
 import { calculateDisplayPrice, formatCurrency } from "@/src/lib/utils";
 
-export default function CartItem({
+export default function OrderLineItem({
   product,
-  order = false,
-  handleDelete,
   className = "",
+  cart = false,
+  readOnly = false,
+  handleDelete,
 }: {
   product: CartItem;
-  handleDelete?: (type: "single", key: string) => Promise<void>;
-  order?: boolean;
   className?: string;
+  cart?: boolean;
+  readOnly?: boolean;
+  handleDelete?: (type: "single", key: string) => Promise<void>;
 }) {
   const { isOpen, openModal, closeModal } = useModal();
 
@@ -25,6 +28,7 @@ export default function CartItem({
       className={clsx(
         "flex justify-between items-center gap-4 w-full",
         className,
+        readOnly ? "pointer-events-none" : "",
       )}
     >
       <div className="w-24 h-32 bg-gray-200 relative shrink-0">
@@ -41,6 +45,7 @@ export default function CartItem({
         </Link>
 
         <p className="text-xs text-black mt-1">
+          <span>옵션:</span>
           {product.size} | {product.quantity}개
         </p>
         <div className="flex items-center gap-2 mt-5">
@@ -56,7 +61,7 @@ export default function CartItem({
           </p>
         </div>
       </div>
-      {!order && (
+      {cart && (
         <div className="flex flex-col gap-2 justify-center">
           <button
             className="border border-gray-300 px-4 py-1 text-xs hover:bg-gray-50"

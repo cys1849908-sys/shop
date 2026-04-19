@@ -11,7 +11,7 @@ import { shippingMessageOptions } from "@/src/constants/data/order";
 import Form from "../common/ui/Form";
 import Input from "../common/ui/Input";
 import OptionSelect from "../common/OptionSelect";
-import CartItem from "../cart/CartItem";
+import OrderLineItem from "./OrderLineItem";
 import Modal from "../common/modals/Modal";
 import FormRowVertical from "../common/ui/FormRowVertical";
 import AddressManagement from "../address/AddressManagement";
@@ -23,6 +23,7 @@ import { OrderFormFields, PaymentMethod } from "@/src/types/order";
 import { createOrder } from "@/src/lib/actions/order";
 import { useOrderStore } from "@/src/store/OrderStore";
 import { calculateDisplayPrice } from "@/src/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function OrderForm({
   addresses,
@@ -37,6 +38,8 @@ export default function OrderForm({
   const { isOpen, openModal, closeModal } = useModal();
   const checkoutItems = useCartStore((state) => state.checkoutItems);
   const selectedAddress = manualSelected ?? addresses?.[0] ?? null;
+
+  const router = useRouter();
 
   const summary = checkoutItems.reduce(
     (acc, item) => {
@@ -101,7 +104,7 @@ export default function OrderForm({
     try {
       const orderPayload = {
         ...orderData,
-        items: checkoutItems.map((item) => ({
+        order_items: checkoutItems.map((item) => ({
           ...item,
           unit_price: item.price,
           discount_rate: item.discount,
@@ -121,7 +124,10 @@ export default function OrderForm({
         detail_address: selectedAddress.detail_address,
         payment_method: selectedMethod as PaymentMethod,
       };
-      await createOrder(orderPayload);
+      const orderId = await createOrder(orderPayload);
+      if (orderId) {
+        router.replace(`/order-confirmation?id=${orderId}`);
+      }
     } catch (error: any) {
       alert("에러임");
     }
@@ -239,12 +245,7 @@ export default function OrderForm({
         <div className="w-[60%] py-4 px-6">
           <div className="flex flex-col gap-4">
             {checkoutItems.map((item) => (
-              <CartItem
-                className="pointer-events-none"
-                key={item.id}
-                product={item}
-                order
-              />
+              <OrderLineItem readOnly key={item.id} product={item} order />
             ))}
           </div>
         </div>

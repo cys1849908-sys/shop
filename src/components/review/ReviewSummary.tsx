@@ -1,16 +1,7 @@
 "use client";
 
-import { Star } from "lucide-react"; // lucide-react 아이콘 추천
-
-interface ReviewSummaryProps {
-  averageRating: number;
-  totalReviews: number;
-  ratingDistribution: {
-    label: string; // 5점, 4점...
-    count: number;
-    percentage: number;
-  }[];
-}
+import { ReviewSummaryProps } from "@/src/types/review";
+import { Star } from "lucide-react";
 
 export default function ReviewSummary({
   averageRating = 4.3,
@@ -23,12 +14,15 @@ export default function ReviewSummary({
     { label: "1점", count: 1, percentage: 1 },
   ],
 }: ReviewSummaryProps) {
+  // const percentage = (count: number) => {
+  //   return (100 % totalReviews) * count;
+  // };
   return (
     <div className="flex flex-col md:flex-row items-center gap-8 p-6 bg-gray-50 rounded-lg border">
       <div className="flex flex-col items-center justify-center text-center px-4">
         <div className="flex items-center justify-center">
-          <Star size={40} className={"fill-black text-black"} />
-          <span className="text-5xl font-bold text-black">
+          <Star size={40} className="fill-black text-black" />
+          <span className="text-[40px] font-bold text-black">
             {averageRating.toFixed(1)}
           </span>
         </div>

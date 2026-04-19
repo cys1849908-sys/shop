@@ -5,7 +5,7 @@ import Breadcrumb from "../Breadcrumb";
 import OrderSteps from "../order/OrderSteps";
 import { useAlert } from "@/src/hooks/useAlert";
 import { PaymentInfo } from "../common/PaymentInfo";
-import CartItem from "./CartItem";
+import OrderLineItem from "../order/OrderLineItem";
 import { useCartStore } from "@/src/store/CartStore";
 import ConfirmModal from "../common/modals/ConfirmModal";
 import { useRouter } from "next/navigation";
@@ -98,7 +98,11 @@ export default function CartClient() {
                   checked={selectedKeys.includes(product.id)}
                   onChange={() => handleToggleItem(product.id)}
                 />
-                <CartItem product={product} handleDelete={handleDelete} />
+                <OrderLineItem
+                  product={product}
+                  handleDelete={handleDelete}
+                  cart
+                />
               </div>
             ))
           ) : (

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { ReviewFilterContent } from "./ReviewFilterContent";
 import { FILTER_CONFIG, FilterLabel, LABEL_TO_KEY } from "@/src/types/review";
 import clsx from "clsx";
@@ -18,7 +18,6 @@ export default function ReviewFilterBarList() {
   } = useFilter();
 
   const containerRef = useOutsideClick<HTMLDivElement>(() => {
-    console.log("닫혀야함");
     cancelFilter();
     setActiveFilter(null);
   });
@@ -47,7 +46,7 @@ export default function ReviewFilterBarList() {
                 }
               }}
               className={clsx(
-                "px-4 py-2 rounded-md border cursor-pointer",
+                "px-4 py-2 border cursor-pointer",
                 activeFilter === filter.label
                   ? "border-black"
                   : "border-gray-200",
@@ -71,7 +70,7 @@ export default function ReviewFilterBarList() {
 
       {activeFilter && (
         <div
-          className="absolute top-12 left-0 z-20 border-gray-200 rounded-tr-sm shadow-lg w-90"
+          className="absolute top-12 left-0 z-20 border-gray-500 shadow-lg w-90"
           ref={containerRef}
         >
           <ReviewFilterContent

@@ -45,6 +45,7 @@ export type OrderItem = {
   subtotal: number;
   thumbnail: string;
   slug: string;
+  size: string;
 };
 export type CreateOrderPayload = Omit<
   OrderWithItems,
@@ -57,7 +58,7 @@ export type OrderError = {
 };
 
 export interface OrderWithItems extends Order {
-  items: OrderItem[];
+  order_items: OrderItem[];
 }
 
 export interface OrderStore {

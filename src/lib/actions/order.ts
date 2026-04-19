@@ -4,7 +4,9 @@ import { createClient } from "../supabase/server";
 import { calculateDisplayPrice } from "../utils";
 import { revalidatePath } from "next/cache";
 
-export async function createOrder(formData: CreateOrderPayload): Promise<void> {
+export async function createOrder(
+  formData: CreateOrderPayload,
+): Promise<string | undefined> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -56,6 +58,7 @@ export async function createOrder(formData: CreateOrderPayload): Promise<void> {
       subtotal: subtotal,
       thumbnail: item.thumbnail,
       slug: item.slug,
+      size: item.size,
     };
   });
   const { error: itemsError } = await supabase
@@ -64,15 +67,21 @@ export async function createOrder(formData: CreateOrderPayload): Promise<void> {
   if (itemsError) {
     console.error("주문 생성 실패:", itemsError.message);
   }
-  const ids = formData.items.map((i) => i.product_id);
-  if (!user || ids.length === 0) return;
+  const cartItemIds = formData.items.map((i) => i.id);
+  if (!user || cartItemIds.length === 0) return;
 
   try {
-    await supabase.from("carts").delete().eq("user_id", user.id).in("id", ids);
+    await supabase
+      .from("carts")
+      .delete()
+      .eq("user_id", user.id)
+      .in("id", cartItemIds);
     revalidatePath("/cart");
   } catch (error) {
     // logError(ERROR_MESSAGES.REMOVE_FROM_CART_FAILED, error);
     // throw new Error(ERROR_MESSAGES.REMOVE_FROM_CART_FAILED);
     console.log("에러");
   }
+
+  return orderId;
 }

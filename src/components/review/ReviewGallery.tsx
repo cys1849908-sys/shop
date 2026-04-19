@@ -3,7 +3,6 @@ import Image from "next/image";
 import { MdChevronRight } from "react-icons/md";
 
 export default function ReviewGallery() {
-  // 연습용 더미 이미지 데이터
   const images = [
     "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400",
     "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400",
@@ -19,13 +18,10 @@ export default function ReviewGallery() {
           <span className="text-[17px] font-bold">포토 & 동영상</span>
         </div>
 
-        <Link
-          href="/reviews/photo"
-          className="flex items-center text-sm text-gray-500 hover:text-black transition-colors"
-        >
+        <button className="flex items-center text-sm text-gray-500 hover:text-black transition-colors">
           전체보기
           <MdChevronRight size={18} />
-        </Link>
+        </button>
       </div>
 
       <div className="grid grid-cols-5 gap-1">

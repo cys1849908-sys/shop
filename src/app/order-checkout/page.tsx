@@ -4,7 +4,6 @@ import OrderForm from "@/src/components/order/OrderForm";
 import { getAddress } from "@/src/lib/data/address";
 import { PaymentInfo } from "@/src/components/common/PaymentInfo";
 import { getUserInfo } from "@/src/lib/data/user";
-import { useCartStore } from "@/src/store/CartStore";
 
 export default async function OrderCheckoutPage() {
   const addresses = await getAddress();

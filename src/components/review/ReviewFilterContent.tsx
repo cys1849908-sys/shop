@@ -19,7 +19,7 @@ interface Props {
 export function ReviewFilterContent({ type, onSelect, tempValues }: Props) {
   return (
     <div className="relative p-4 bg-white w-full">
-      <div className="mb-3 text-sm font-bold text-gray-700">{type}</div>
+      {/* <div className="mb-3 text-sm font-bold text-gray-700">{type}</div>
       <div className="flex flex-col gap-1 w-full">
         {type === "별점" &&
           [5, 4, 3, 2, 1].map((star) => (
@@ -96,7 +96,7 @@ export function ReviewFilterContent({ type, onSelect, tempValues }: Props) {
             ))}
           </ul>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }
