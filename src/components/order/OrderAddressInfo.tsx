@@ -1,13 +1,13 @@
-interface AddressProps {
+type AddressProps = {
   addressData: {
-    receiver_name: string;
-    phone_number: string;
+    receiverName: string;
+    phoneNumber: string;
     address: string;
-    detail_address: string;
+    detailAddress: string;
     postcode: string;
-    shipping_message: string;
+    shippingMessage: string;
   };
-}
+};
 
 export default function OrderAddressInfo({ addressData }: AddressProps) {
   return (
@@ -17,20 +17,20 @@ export default function OrderAddressInfo({ addressData }: AddressProps) {
       </h2>
       <div className="grid grid-cols-[120px_1fr] gap-y-4 text-sm py-4 border-t border-gray-200">
         <span className="text-gray-500">받으시는 분</span>
-        <span className="font-bold">{addressData.receiver_name}</span>
+        <span className="font-bold">{addressData.receiverName}</span>
 
         <span className="text-gray-500">휴대폰 번호</span>
-        <span className="font-bold">{addressData.phone_number}</span>
+        <span className="font-bold">{addressData.phoneNumber}</span>
 
         <span className="text-gray-500">배송지 주소</span>
         <span className="font-bold leading-relaxed">
           ({addressData.postcode}) {addressData.address}{" "}
-          {addressData.detail_address}
+          {addressData.detailAddress}
         </span>
 
         <span className="text-gray-500">배송 요청사항</span>
         <span className="font-bold text-blue-600">
-          {addressData.shipping_message || "요청사항 없음"}
+          {addressData.shippingMessage || "요청사항 없음"}
         </span>
       </div>
     </div>

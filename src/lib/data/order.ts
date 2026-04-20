@@ -1,6 +1,6 @@
 "use server";
 
-import { Order, OrderWithItems } from "@/src/types/order";
+import { OrderWithItems } from "@/src/types/order";
 import { createClient } from "../supabase/server";
 
 export async function getOrderDetails(
@@ -19,7 +19,23 @@ export async function getOrderDetails(
     .select(
       `
       *,
-      order_items (*)
+      originalPrice:original_price,
+      discountPrice:discount_price,
+      totalPrice:total_price,
+      receiverName:receiver_name,
+      phoneNumber:phone_number,
+      secondaryPhone:secondary_phone,
+      detailAddress:detail_address,
+      shippingMessage:shipping_message,
+      paymentMethod:payment_method,
+      updatedAt:updated_at,
+      orderItems:order_items (
+      *,
+      orderId:order_id,
+      productId:product_id,
+      unitPrice:unit_price,
+      discountRate:discount_rate
+      )
     `,
     )
     .eq("id", orderId)
@@ -44,7 +60,23 @@ export async function getOrderList(): Promise<OrderWithItems[]> {
     .select(
       `
       *,
-      order_items (*)
+      originalPrice:original_price,
+      discountPrice:discount_price,
+      totalPrice:total_price,
+      receiverName:receiver_name,
+      phoneNumber:phone_number,
+      secondaryPhone:secondary_phone,
+      detailAddress:detail_address,
+      shippingMessage:shipping_message,
+      paymentMethod:payment_method,
+      updatedAt:updated_at,
+      orderItems:order_items (
+      *,
+      orderId:order_id,
+      productId:product_id,
+      unitPrice:unit_price,
+      discountRate:discount_rate
+      )
     `,
     )
     .eq("user_id", user.id);

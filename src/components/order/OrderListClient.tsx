@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import clsx from "clsx";
-import OrderItemCard from "@/src/components/order/OrderItem";
+import OrderGroup from "@/src/components/order/OrderGroup";
 import { OrderWithItems } from "@/src/types/order";
-import OrderLineItem from "./OrderLineItem";
 
 export default function OrderListClient({
   initialOrders,
@@ -68,7 +67,7 @@ export default function OrderListClient({
           </div>
         ) : (
           initialOrders.map((order) => {
-            return <OrderItemCard key={order.id} order={order} />;
+            return <OrderGroup key={order.id} order={order} />;
           })
         )}
       </div>

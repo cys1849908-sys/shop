@@ -4,9 +4,10 @@ import { formatCurrency } from "@/src/lib/utils";
 import OrderLineItem from "./OrderLineItem";
 
 export default function OrderItemCard({ order }: { order: any }) {
+  const orderItems = order.orderItems;
+
+  console.log("***************************************");
   console.log(order);
-  const orderItems = order.order_items;
-  console.log("orderItems:", orderItems);
 
   return (
     <div className="mb-10 border border-gray-200 bg-white">
@@ -28,14 +29,14 @@ export default function OrderItemCard({ order }: { order: any }) {
         </div>
         <div className="text-right">
           <div className="text-[16px] font-black text-black">
-            {formatCurrency(order.total_price)}원
+            {formatCurrency(order.totalPrice)}
           </div>
         </div>
       </div>
 
       <div className="flex flex-col">
         {orderItems.map((item: any, index: number) => (
-          <OrderLineItem product={item} key={item | index} />
+          <OrderLineItem product={item} key={item | index} readOnly order />
         ))}
       </div>
     </div>

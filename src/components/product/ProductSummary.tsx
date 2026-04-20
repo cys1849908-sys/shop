@@ -31,8 +31,9 @@ export default function ProductSummary({ product }: { product: Product }) {
   const isWished = wishedIds.has(product.id);
   const toggle = useWishStore((s) => s.toggle);
   const addToCart = useCartStore((c) => c.addItem);
+
   const finalPrice = Math.floor(
-    product.price * (1 - (product.discount ?? 0) / 100),
+    product.unitPrice * (1 - (product.discountRate ?? 0) / 100),
   );
 
   const totalPrice = pendingItems.reduce(
@@ -56,9 +57,9 @@ export default function ProductSummary({ product }: { product: Product }) {
 
     const cartItems: CartItem[] = pendingItems.map((item) => ({
       id: product.id,
-      product_id: product.id,
+      productId: product.id,
       name: product.name,
-      price: finalPrice,
+      unitPrice: finalPrice,
       thumbnail: product.images[0],
       size: item.size,
       quantity: item.quantity,

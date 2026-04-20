@@ -10,7 +10,16 @@ export async function getAddress(): Promise<Address[]> {
 
   const { data, error } = await supabase
     .from("addresses")
-    .select("*")
+    .select(
+      `*,
+      addressName:address_name,
+      receiverName:receiver_name,
+      phoneNumber:phone_number,
+      secondaryPhone:secondary_phone,
+      detailAddress:detail_address
+
+      `,
+    )
     .eq("user_id", user.id)
     .order("is_default", { ascending: false })
     .order("created_at", { ascending: false });

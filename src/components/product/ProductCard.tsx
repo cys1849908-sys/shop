@@ -9,11 +9,7 @@ import Toast from "../common/Toast";
 import { Heart } from "lucide-react";
 import { useWishStore } from "@/src/store/wishStore";
 import { useCartStore } from "@/src/store/CartStore";
-import {
-  calculateDisplayPrice,
-  createUniqueKey,
-  formatCurrency,
-} from "@/src/lib/utils";
+import { calculateDisplayPrice, createUniqueKey } from "@/src/lib/utils";
 import { TOAST_MESSAGES } from "@/src/constants/messages";
 import { UI_CONSTANTS } from "@/src/constants/ui-constants";
 
@@ -44,10 +40,10 @@ export default function ProductCard({
 
     addItem({
       id: createUniqueKey(product.id, size),
-      product_id: product.id,
+      productId: product.id,
       name: product.name,
-      price: product.price,
-      discount: product.discount,
+      unitPrice: product.unitPrice,
+      discountRate: product.discountRate,
       thumbnail: product.thumbnail[0],
       slug: product.slug,
       size: size,
@@ -164,15 +160,13 @@ export default function ProductCard({
           </h3>
         </Link>
         <div className="flex items-center gap-2">
-          {product.discount && (
+          {product.discountRate && (
             <span className="text-[15px] font-bold text-red-500">
-              {product.discount}%
+              {product.discountRate}%
             </span>
           )}
           <span className="text-[14px] font-bold text-gray-900">
-            {formatCurrency(
-              calculateDisplayPrice(product.price, product.discount),
-            )}
+            {calculateDisplayPrice(product.unitPrice, product.discountRate)}
           </span>
         </div>
       </div>

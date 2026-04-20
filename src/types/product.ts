@@ -1,7 +1,7 @@
 export type Product = {
   id: string;
   name: string;
-  price: number;
+  unitPrice: number;
   description: string;
   categoryId: string;
   thumbnail: string[];
@@ -10,6 +10,6 @@ export type Product = {
   sizes?: string[];
   slug: string;
   stock: number;
-  discount?: number;
+  discountRate?: number;
   isNew?: boolean;
 };

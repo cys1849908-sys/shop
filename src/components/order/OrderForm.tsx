@@ -43,9 +43,10 @@ export default function OrderForm({
 
   const summary = checkoutItems.reduce(
     (acc, item) => {
-      const itemOriginal = item.price * item.quantity;
+      const itemOriginal = item.unitPrice * item.quantity;
       const itemFinal =
-        calculateDisplayPrice(item.price, item.discount) * item.quantity;
+        calculateDisplayPrice(item.unitPrice, item.discountRate) *
+        item.quantity;
 
       return {
         originalPrice: acc.originalPrice + itemOriginal,
@@ -106,12 +107,13 @@ export default function OrderForm({
         ...orderData,
         orderItems: checkoutItems.map((item) => ({
           ...item,
-          unitPrice: item.price,
-          discountRate: item.discount,
+          unitPrice: item.unitPrice,
+          discountRate: item.discountRate,
           orderId: "",
-          subtotal: item.discount
-            ? calculateDisplayPrice(item.price, item.discount) * item.quantity
-            : item.price * item.quantity,
+          subtotal: item.discountRate
+            ? calculateDisplayPrice(item.unitPrice, item.discountRate) *
+              item.quantity
+            : item.unitPrice * item.quantity,
         })),
         receiverName: orderData.name,
         email: orderData.email,

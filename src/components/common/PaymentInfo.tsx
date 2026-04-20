@@ -28,10 +28,11 @@ export function PaymentInfo(props: Props) {
 
   const summary = targetItems.reduce(
     (acc, item) => ({
-      originalPrice: acc.originalPrice + item.price * item.quantity,
+      originalPrice: acc.originalPrice + item.unitPrice * item.quantity,
       totalPrice:
         acc.totalPrice +
-        calculateDisplayPrice(item.price, item.discount) * item.quantity,
+        calculateDisplayPrice(item.unitPrice, item.discountRate) *
+          item.quantity,
     }),
     { originalPrice: 0, totalPrice: 0 },
   );

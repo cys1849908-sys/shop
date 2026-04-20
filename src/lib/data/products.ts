@@ -12,7 +12,12 @@ export async function getProducts(
     .select(
       `
       *,
-      thumbnail:product_images!inner (url)
+      thumbnail:product_images!inner (url),
+      discountRate:discount_rate,
+      isNew:is_new,
+      isRecommend:is_recommend,
+      unitPrice:unit_price
+
     `,
     )
     .eq("product_images.image_type", "thumbnail")
@@ -51,7 +56,11 @@ export async function getProductDetail(slug: string): Promise<Product | null> {
     .from("products")
     .select(
       `*,
-      images:product_images!inner (url)`,
+      images:product_images!inner (url), 
+      discountRate:discount_rate,
+      isNew:is_new,
+      isRecommend:is_recommend,
+      unitPrice:unit_price`,
     )
     .eq("slug", slug)
     .eq("product_images.image_type", "detail")
@@ -75,7 +84,11 @@ export async function getProductSearch(q: string): Promise<Product[]> {
     .select(
       `
       *,
-      thumbnail:product_images!inner (url)
+      thumbnail:product_images!inner (url),
+      discountRate:discount_rate,
+      isNew:is_new,
+      isRecommend:is_recommend,
+      unitPrice:unit_price
     `,
     )
     .ilike("name", `%${q}%`)

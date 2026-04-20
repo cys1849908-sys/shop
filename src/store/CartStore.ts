@@ -8,7 +8,6 @@ import {
 } from "@/src/lib/actions/cart";
 import { getCartItem } from "../lib/data/cart";
 import { ERROR_MESSAGES } from "@/src/constants/messages";
-import { calculateDisplayPrice } from "../lib/utils";
 
 const logError = (context: string, error: unknown) => {
   console.error(`[${context}]`, error instanceof Error ? error.message : error);

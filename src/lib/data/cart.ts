@@ -20,8 +20,8 @@ export async function getCartItem(): Promise<CartItem[]> {
       product:products!inner (
         id,
         name,
-        price,
-        discount,
+        unitPrice:unit_price,
+        discountRate:discount_rate,
         slug,
         thumbnail:product_images!inner (url)
       )
@@ -41,8 +41,8 @@ export async function getCartItem(): Promise<CartItem[]> {
     id,
     productId: product.id,
     name: product.name,
-    price: product.price,
-    discount: product.discount ?? undefined,
+    unitPrice: product.unitPrice,
+    discountRate: product.discountRate ?? undefined,
     size,
     quantity,
     slug: product.slug,

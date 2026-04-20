@@ -37,6 +37,10 @@ export async function getWishProducts(): Promise<Product[]> {
       id,
       product:products!inner (
         *,
+        discountRate:discount_rate,
+        isNew:is_new,
+        isRecommend:is_recommend,
+        unitPrice:unit_price,
         thumbnail:product_images!inner (url)
       )
     `,

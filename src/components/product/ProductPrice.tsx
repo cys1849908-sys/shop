@@ -1,27 +1,27 @@
 import { formatCurrency } from "@/src/lib/utils";
 
 export default function ProductPrice({
-  price,
+  unitPrice,
   hasDiscount,
-  discountPercent = 0,
+  discountRate = 0,
   finalPrice,
 }: {
-  price: number;
+  unitPrice: number;
   hasDiscount: boolean;
-  discountPercent?: number;
+  discountRate?: number;
   finalPrice: number;
 }) {
   return (
     <div className="my-3">
       {hasDiscount && (
         <span className="text-[16px] text-gray-400 line-through">
-          {formatCurrency(price)}
+          {formatCurrency(unitPrice)}
         </span>
       )}
       <div>
         {hasDiscount && (
           <span className="text-[18px] text-red-500 font-semibold mr-3">
-            {discountPercent}%
+            {discountRate}%
           </span>
         )}
 
