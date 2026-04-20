@@ -33,18 +33,18 @@ export default function AddressForm({
   } = useForm<AddressInput>({
     mode: "onChange",
     defaultValues: initialData || {
-      address_name: "",
-      receiver_name: "",
-      phone_number: "",
-      secondary_phone: "",
+      addressName: "",
+      receiverName: "",
+      phoneNumber: "",
+      secondaryPhone: "",
       postcode: "",
       address: "",
-      detail_address: "",
-      is_default: false,
+      detailAddress: "",
+      isDefault: false,
     },
   });
 
-  const watchedIsDefault = watch("is_default");
+  const watchedIsDefault = watch("isDefault");
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -67,7 +67,7 @@ export default function AddressForm({
       oncomplete: function (data: any) {
         setValue("postcode", data.zonecode);
         setValue("address", data.address);
-        setFocus("detail_address");
+        setFocus("detailAddress");
       },
     }).open();
   };
@@ -84,51 +84,51 @@ export default function AddressForm({
           <FormRowVertical label="배송지명">
             <Input
               placeholder="예: 우리집, 회사"
-              {...register("address_name")}
+              {...register("addressName")}
             />
           </FormRowVertical>
 
           <FormRowVertical
             label="이름"
             required
-            error={errors.receiver_name?.message}
+            error={errors.receiverName?.message}
           >
             <Input
               placeholder="수령인 이름을 입력해 주세요"
-              {...register("receiver_name", { required: "이름은 필수입니다" })}
-              error={!!errors.receiver_name?.message}
+              {...register("receiverName", { required: "이름은 필수입니다" })}
+              error={!!errors.receiverName?.message}
             />
           </FormRowVertical>
 
           <FormRowVertical
             label="연락처"
             required
-            error={errors.phone_number?.message}
+            error={errors.phoneNumber?.message}
           >
             <Input
               type="tel"
               placeholder="연락처를 입력해 주세요"
-              {...register("phone_number", {
+              {...register("phoneNumber", {
                 required: "연락처를 입력해주세요",
                 pattern: {
                   value: /^01[0-9]-?\d{3,4}-?\d{4}$/,
                   message: "연락처가 정확한지 확인해 주세요.",
                 },
               })}
-              error={!!errors.phone_number?.message}
+              error={!!errors.phoneNumber?.message}
             />
           </FormRowVertical>
 
           <FormRowVertical label="추가 연락처">
             <Input
               placeholder="추가 연락처가 있으시다면 입력해 주세요"
-              {...register("secondary_phone", {
+              {...register("secondaryPhone", {
                 pattern: {
                   value: /^01[0-9]-?\d{3,4}-?\d{4}$/,
                   message: "연락처가 정확한지 확인해 주세요.",
                 },
               })}
-              error={!!errors.secondary_phone?.message}
+              error={!!errors.secondaryPhone?.message}
             />
           </FormRowVertical>
 
@@ -156,10 +156,10 @@ export default function AddressForm({
 
               <Input
                 placeholder="상세주소"
-                {...register("detail_address", {
+                {...register("detailAddress", {
                   required: "우편번호/주소/상세주소를 입력해주세요.",
                 })}
-                error={!!errors.detail_address?.message}
+                error={!!errors.detailAddress?.message}
               />
             </div>
           </FormRowVertical>
@@ -172,7 +172,7 @@ export default function AddressForm({
               )}
               type="checkbox"
               id="is_default"
-              {...register("is_default")}
+              {...register("isDefault")}
               disabled={!isValid}
               checked={isFirstAddress ? true : watchedIsDefault}
             />

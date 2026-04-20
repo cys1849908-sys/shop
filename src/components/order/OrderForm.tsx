@@ -60,10 +60,10 @@ export default function OrderForm({
   const initialData = {
     name: user?.name ?? "",
     email: user?.email ?? "",
-    phone_number: user?.phone_number ?? "",
-    secondary_phone: "",
-    payment_method: "",
-    shipping_message: "",
+    phoneNumber: user?.phoneNumber ?? "",
+    secondaryPhone: "",
+    paymentMethod: "",
+    shippingMessage: "",
   };
 
   const {
@@ -75,11 +75,11 @@ export default function OrderForm({
   } = useForm({
     mode: "onChange",
     defaultValues: initialData || {
-      shipping_message: shippingMessage,
+      shippingMessage: shippingMessage,
     },
   });
 
-  const selectedMethod = watch("payment_method") as PaymentMethod | "";
+  const selectedMethod = watch("paymentMethod") as PaymentMethod | "";
 
   const setIsValid = useOrderStore((state) => state.setIsValid);
   useEffect(() => {
@@ -95,34 +95,34 @@ export default function OrderForm({
   const handleShippingMessageChange = (val: string) => {
     setShippingMessage(val);
     if (val === "직접 입력") {
-      setValue("shipping_message", "", { shouldValidate: true });
+      setValue("shippingMessage", "", { shouldValidate: true });
     } else {
-      setValue("shipping_message", shippingMessage, { shouldValidate: true });
+      setValue("shippingMessage", shippingMessage, { shouldValidate: true });
     }
   };
   const onSubmit = async (orderData: OrderFormFields) => {
     try {
       const orderPayload = {
         ...orderData,
-        order_items: checkoutItems.map((item) => ({
+        orderItems: checkoutItems.map((item) => ({
           ...item,
-          unit_price: item.price,
-          discount_rate: item.discount,
-          order_id: "",
+          unitPrice: item.price,
+          discountRate: item.discount,
+          orderId: "",
           subtotal: item.discount
             ? calculateDisplayPrice(item.price, item.discount) * item.quantity
             : item.price * item.quantity,
         })),
-        receiver_name: orderData.name,
+        receiverName: orderData.name,
         email: orderData.email,
-        shipping_message: orderData.shipping_message,
-        discount_price: discountPrice,
-        original_price: summary.originalPrice,
-        total_price: summary.totalPrice,
+        shippingMessage: orderData.shippingMessage,
+        discountPrice: discountPrice,
+        originalPrice: summary.originalPrice,
+        totalPrice: summary.totalPrice,
         address: selectedAddress.address,
         postcode: selectedAddress.postcode,
-        detail_address: selectedAddress.detail_address,
-        payment_method: selectedMethod as PaymentMethod,
+        detailAddress: selectedAddress.detailAddress,
+        paymentMethod: selectedMethod as PaymentMethod,
       };
       const orderId = await createOrder(orderPayload);
       if (orderId) {
@@ -159,14 +159,14 @@ export default function OrderForm({
               <Input
                 type="tel"
                 placeholder="연락처를 입력해 주세요"
-                {...register("phone_number", {
+                {...register("phoneNumber", {
                   required: "연락처를 입력해주세요",
                   pattern: {
                     value: /^01[0-9]-?\d{3,4}-?\d{4}$/,
                     message: "연락처가 정확한지 확인해 주세요.",
                   },
                 })}
-                error={!!errors.phone_number}
+                error={!!errors.phoneNumber}
                 required
               />
             </FormRowVertical>
@@ -174,13 +174,13 @@ export default function OrderForm({
             <FormRowVertical label="추가 연락처">
               <Input
                 placeholder="추가 연락처가 있으시다면 입력해 주세요"
-                {...register("secondary_phone", {
+                {...register("secondaryPhone", {
                   pattern: {
                     value: /^01[0-9]-?\d{3,4}-?\d{4}$/,
                     message: "연락처가 정확한지 확인해 주세요.",
                   },
                 })}
-                error={!!errors.secondary_phone}
+                error={!!errors.secondaryPhone}
               />
             </FormRowVertical>
 
@@ -223,14 +223,14 @@ export default function OrderForm({
                 onChange={handleShippingMessageChange}
               />
               {shippingMessage === "직접 입력" && (
-                <FormRowVertical error={errors.shipping_message?.message}>
+                <FormRowVertical error={errors.shippingMessage?.message}>
                   <Input
                     placeholder="요청사항을 직접 입력해 주세요"
-                    {...register("shipping_message", {
+                    {...register("shippingMessage", {
                       required: "요청사항을 직접 입력해 주세요",
                     })}
                     autoFocus
-                    error={!!errors.shipping_message}
+                    error={!!errors.shippingMessage}
                   />
                 </FormRowVertical>
               )}
@@ -270,7 +270,7 @@ export default function OrderForm({
         <div className="w-full py-4 px-6">
           <OrderPaymentMethods
             selectedMethod={selectedMethod}
-            onMethodChange={(metod) => setValue("payment_method", metod)}
+            onMethodChange={(metod) => setValue("paymentMethod", metod)}
           />
         </div>
       </div>

@@ -7,7 +7,7 @@ export async function signUp({
   email,
   password,
   name,
-  phone_number,
+  phoneNumber,
 }: SignUpInput): Promise<void> {
   const supabase = await createClient();
 
@@ -17,7 +17,7 @@ export async function signUp({
     options: {
       data: {
         name: name,
-        phone_number: phone_number,
+        phone_number: phoneNumber,
       },
     },
   });

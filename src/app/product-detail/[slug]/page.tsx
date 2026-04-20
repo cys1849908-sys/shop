@@ -8,7 +8,6 @@ import InfoContent from "@/src/components/product/ProductInfoContent";
 import SizeContent from "@/src/components/product/ProductSizeContent";
 import ReviewContent from "@/src/components/review/ReviewContent";
 import { getProductDetail } from "@/src/lib/data/products";
-import { getWishIds } from "@/src/lib/data/wish";
 
 export default async function ProductDetailPage({
   params,

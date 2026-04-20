@@ -3,7 +3,7 @@ export type Product = {
   name: string;
   price: number;
   description: string;
-  category_id: string;
+  categoryId: string;
   thumbnail: string[];
   images: string[];
   colors?: string[];
@@ -11,5 +11,5 @@ export type Product = {
   slug: string;
   stock: number;
   discount?: number;
-  is_new?: boolean;
+  isNew?: boolean;
 };

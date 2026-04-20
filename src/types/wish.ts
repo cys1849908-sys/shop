@@ -1,8 +1,8 @@
 export type Wish = {
   id: string;
-  user_id: string;
-  product_id: string;
-  created_at: string;
+  userId: string;
+  productId: string;
+  createdAt: string;
 };
 
 export interface WishStore {

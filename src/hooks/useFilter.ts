@@ -2,15 +2,15 @@ import { useState } from "react";
 
 export interface FilterState {
   rating: number[];
-  height: { min: number; max: number } | null;
-  weight: { min: number; max: number } | null;
+  height: string[];
+  weight: string[];
   size: string[];
 }
 
 export const getInitialFilter = (): FilterState => ({
   rating: [],
-  height: null,
-  weight: null,
+  height: [],
+  weight: [],
   size: [],
 });
 
@@ -24,19 +24,15 @@ export function useFilter() {
     value: string | number,
   ): void => {
     setTempValues((prev) => {
-      const current = prev[key];
+      const current = prev[key] as (string | number)[];
+      const exists = current.includes(value);
 
-      if (Array.isArray(current)) {
-        const exists = current.includes(value as never);
-        return {
-          ...prev,
-          [key]: exists
-            ? current.filter((v) => v !== value)
-            : [...current, value],
-        };
-      }
-
-      return prev;
+      return {
+        ...prev,
+        [key]: exists
+          ? current.filter((v) => v !== value)
+          : [...current, value],
+      };
     });
   };
 
@@ -44,19 +40,20 @@ export function useFilter() {
     setAppliedValues(tempValues);
   };
 
-  const resetFilter = (key: keyof FilterState): void => {
-    setTempValues((prev) => ({
-      ...prev,
-      [key]: Array.isArray(prev[key]) ? [] : null,
-    }));
-    setAppliedValues((prev) => ({
-      ...prev,
-      [key]: Array.isArray(prev[key]) ? [] : null,
-    }));
-  };
-
   const cancelFilter = (): void => {
     setTempValues(appliedValues);
+  };
+
+  const resetFilter = (key?: keyof FilterState): void => {
+    if (key) {
+      const resetValue = { [key]: [] };
+      setTempValues((prev) => ({ ...prev, ...resetValue }));
+      setAppliedValues((prev) => ({ ...prev, ...resetValue }));
+    } else {
+      const initial = getInitialFilter();
+      setTempValues(initial);
+      setAppliedValues(initial);
+    }
   };
 
   return {

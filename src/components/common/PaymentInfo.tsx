@@ -116,7 +116,7 @@ export function PaymentInfo(props: Props) {
           </p>
           <div className="mt-10 flex flex-col gap-3">
             <Link
-              href="/orders"
+              href="/mypage/order-list"
               className="w-full py-4 bg-black text-white text-center font-bold text-lg hover:bg-zinc-800 transition-colors"
             >
               주문 내역 확인

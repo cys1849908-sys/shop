@@ -20,7 +20,7 @@ export async function addToCart(item: CartItem): Promise<void> {
       .from("carts")
       .select("id, quantity")
       .eq("user_id", user.id)
-      .eq("product_id", item.product_id)
+      .eq("product_id", item.productId)
       .eq("size", item.size)
       .maybeSingle();
 
@@ -34,7 +34,7 @@ export async function addToCart(item: CartItem): Promise<void> {
         .from("carts")
         .insert({
           user_id: user.id,
-          product_id: item.product_id,
+          product_id: item.productId,
           name: item.name,
           price: item.price,
           discount: item.discount,

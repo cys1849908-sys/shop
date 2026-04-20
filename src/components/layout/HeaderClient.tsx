@@ -74,10 +74,8 @@ export default function HeaderClient({ user }: { user: SupabaseUser | null }) {
 
   useEffect(() => {
     const itemStr = localStorage.getItem("showtopBanner");
-    console.log(itemStr);
     if (itemStr) {
       const item = JSON.parse(itemStr);
-      console.log(item);
       const now = Date.now();
       if (now > item.expiry) {
         localStorage.removeItem("topBanner");

@@ -39,7 +39,7 @@ export async function getCartItem(): Promise<CartItem[]> {
 
   return data.map(({ id, size, quantity, product }: any) => ({
     id,
-    product_id: product.id,
+    productId: product.id,
     name: product.name,
     price: product.price,
     discount: product.discount ?? undefined,

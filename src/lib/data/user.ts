@@ -11,7 +11,7 @@ export async function getUserInfo(): Promise<UserInfo | null> {
 
   const { data, error } = await supabase
     .from("users")
-    .select("email, name, phone_number")
+    .select("email, name, phoneNumber:phone_number")
     .eq("id", user.id)
     .single();
 

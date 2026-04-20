@@ -1,3 +1,4 @@
+"use client";
 import clsx from "clsx";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
@@ -14,7 +15,7 @@ export default function Input({
   ...props
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const isTelType = props.type === "tel"; // 아 이건 나중에 하는걸로
+  const isTelType = props.type === "tel";
   return (
     <div className="flex flex-col gap-2 w-full">
       <div

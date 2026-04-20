@@ -10,37 +10,37 @@ export type OrderStatus =
 export type OrderFormFields = {
   name: string;
   email: string;
-  phone_number: string;
-  secondary_phone: string;
-  shipping_message: string;
+  phoneNumber: string;
+  secondaryPhone: string;
+  shippingMessage: string;
 };
 
 export interface Order {
   id: string;
-  user_id: string;
-  receiver_name: string;
+  userId: string;
+  receiverName: string;
   email?: string;
-  phone_number: string;
-  secondary_phone?: string;
-  original_price: number;
-  discount_price?: number;
-  total_price: number;
-  payment_method: PaymentMethod;
+  phoneNumber: string;
+  secondaryPhone?: string;
+  originalPrice: number;
+  discountPrice?: number;
+  totalPrice: number;
+  paymentMethod: PaymentMethod;
   status: OrderStatus;
   address: string;
   postcode: string;
-  detail_address: string;
-  shipping_message: string;
-  created_at: string;
-  updated_at: string;
+  detailAddress: string;
+  shippingMessage: string;
+  createdAt: string;
+  updatedAt: string;
 }
 export type OrderItem = {
   id: string;
-  order_id: string;
-  product_id: string;
+  orderId: string;
+  productId: string;
   name: string;
-  unit_price: number;
-  discount_rate?: number;
+  unitPrice: number;
+  discountRate?: number;
   quantity: number;
   subtotal: number;
   thumbnail: string;
@@ -49,7 +49,7 @@ export type OrderItem = {
 };
 export type CreateOrderPayload = Omit<
   OrderWithItems,
-  "id" | "user_id" | "status" | "created_at" | "updated_at"
+  "id" | "userId" | "status" | "createdAt" | "updatedAt"
 >;
 export type OrderError = {
   code: string;
@@ -58,7 +58,7 @@ export type OrderError = {
 };
 
 export interface OrderWithItems extends Order {
-  order_items: OrderItem[];
+  orderItems: OrderItem[];
 }
 
 export interface OrderStore {

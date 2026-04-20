@@ -1,15 +1,15 @@
 export type Address = {
   id: string;
-  user_id: string;
-  address_name: string;
-  receiver_name: string;
-  phone_number: string;
-  secondary_phone?: string;
+  userId: string;
+  addressName: string;
+  receiverName: string;
+  phoneNumber: string;
+  secondaryPhone?: string;
   postcode: string;
   address: string;
-  detail_address: string;
-  is_default: boolean;
-  created_at: string;
+  detailAddress: string;
+  isDefault: boolean;
+  createdAt: string;
 };
 
 export interface UpdateAddressRequest extends AddressInput {

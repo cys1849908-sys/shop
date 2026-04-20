@@ -18,19 +18,19 @@ export async function createOrder(
     .insert([
       {
         user_id: user.id,
-        receiver_name: formData.receiver_name,
+        receiver_name: formData.receiverName,
         email: formData.email,
-        original_price: formData.original_price,
-        discount_price: formData.discount_price,
-        total_price: formData.total_price,
-        payment_method: formData.payment_method,
+        original_price: formData.originalPrice,
+        discount_price: formData.discountPrice,
+        total_price: formData.totalPrice,
+        payment_method: formData.paymentMethod,
         status: "pending",
         address: formData.address,
         postcode: formData.postcode,
-        detail_address: formData.detail_address,
-        phone_number: formData.phone_number,
-        secondary_phone: formData.secondary_phone,
-        shipping_message: formData.shipping_message,
+        detail_address: formData.detailAddress,
+        phone_number: formData.phoneNumber,
+        secondary_phone: formData.secondaryPhone,
+        shipping_message: formData.shippingMessage,
       },
     ])
     .select("id")
@@ -41,19 +41,19 @@ export async function createOrder(
   }
   const orderId = orderData?.id;
 
-  const itemsToInsert = formData.items.map((item) => {
+  const itemsToInsert = formData.orderItems.map((item) => {
     const finalUnitPrice = calculateDisplayPrice(
-      item.unit_price,
-      item.discount_rate,
+      item.unitPrice,
+      item.discountRate,
     );
     const subtotal = finalUnitPrice * item.quantity;
 
     return {
       order_id: orderId,
-      product_id: item.product_id,
+      product_id: item.productId,
       name: item.name,
-      unit_price: item.unit_price,
-      discount_rate: item.discount_rate,
+      unit_price: item.unitPrice,
+      discount_rate: item.discountRate,
       quantity: item.quantity,
       subtotal: subtotal,
       thumbnail: item.thumbnail,
@@ -67,7 +67,7 @@ export async function createOrder(
   if (itemsError) {
     console.error("주문 생성 실패:", itemsError.message);
   }
-  const cartItemIds = formData.items.map((i) => i.id);
+  const cartItemIds = formData.orderItems.map((i) => i.id);
   if (!user || cartItemIds.length === 0) return;
 
   try {

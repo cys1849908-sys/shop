@@ -8,7 +8,7 @@ const logError = (context: string, error: unknown) => {
   console.error(`[${context}]`, error instanceof Error ? error.message : error);
 };
 
-export async function toggleWishlist(productId: string) {
+export async function toggleWishlist(productId: string): Promise<void> {
   const supabase = await createClient();
 
   const {
@@ -42,15 +42,13 @@ export async function toggleWishlist(productId: string) {
 
     revalidatePath("/wishlist");
     revalidatePath("/");
-
-    return { success: true, isAdded: !existing };
   } catch (error) {
     logError(ERROR_MESSAGES.WISHLIST_TOGGLE_FAILED, error);
     throw new Error(ERROR_MESSAGES.WISHLIST_TOGGLE_FAILED);
   }
 }
 
-export async function clearWishlist() {
+export async function clearWishlist(): Promise<void> {
   const supabase = await createClient();
 
   const {
@@ -69,8 +67,6 @@ export async function clearWishlist() {
 
     revalidatePath("/mypage/wishlist");
     revalidatePath("/");
-
-    return true;
   } catch (error) {
     logError(ERROR_MESSAGES.WISHLIST_CLEAR_FAILED, error);
     throw new Error(ERROR_MESSAGES.WISHLIST_CLEAR_FAILED);

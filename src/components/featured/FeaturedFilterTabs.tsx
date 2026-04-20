@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import PillButton from "../common/buttons/PillButton";
-import { X } from "lucide-react";
 
 interface Category {
   id: string;

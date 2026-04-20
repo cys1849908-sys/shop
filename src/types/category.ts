@@ -12,7 +12,7 @@ export type Category = {
   slug: CategorySlug;
   description?: string;
   level: number;
-  parent_id?: string | null;
+  parentId?: string | null;
   path: string;
 };
 

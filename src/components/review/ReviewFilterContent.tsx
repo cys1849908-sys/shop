@@ -19,7 +19,7 @@ interface Props {
 export function ReviewFilterContent({ type, onSelect, tempValues }: Props) {
   return (
     <div className="relative p-4 bg-white w-full">
-      {/* <div className="mb-3 text-sm font-bold text-gray-700">{type}</div>
+      <div className="mb-3 text-sm font-bold text-gray-700">{type}</div>
       <div className="flex flex-col gap-1 w-full">
         {type === "별점" &&
           [5, 4, 3, 2, 1].map((star) => (
@@ -37,9 +37,9 @@ export function ReviewFilterContent({ type, onSelect, tempValues }: Props) {
                 <div className="flex items-center gap-2">
                   <span
                     className={clsx(
-                      "text-sm",
+                      "text-[14px]",
                       tempValues.rating.includes(star)
-                        ? "text-black font-semibold"
+                        ? "text-black "
                         : "text-gray-600",
                     )}
                   >
@@ -63,13 +63,13 @@ export function ReviewFilterContent({ type, onSelect, tempValues }: Props) {
                 key={option.value}
                 onClick={() => onSelect(option.value)}
                 className={clsx(
-                  "flex items-center py-2 px-1 justify-center border rounded-md cursor-pointer transition-colors text-center",
+                  "flex items-center py-2 px-1 justify-center border border-gray-200  cursor-pointer  text-center",
                   (type === "키"
                     ? tempValues.height
                     : tempValues.weight
                   ).includes(option.value)
-                    ? "border-black bg-black text-white"
-                    : "hover:border-black hover:bg-gray-50",
+                    ? "border-gray-200 bg-black text-white"
+                    : "hover:border-black ",
                 )}
               >
                 {option.label}
@@ -85,7 +85,7 @@ export function ReviewFilterContent({ type, onSelect, tempValues }: Props) {
                 key={size.value}
                 onClick={() => onSelect(size.value)}
                 className={clsx(
-                  "flex h-10 items-center justify-center border rounded-md cursor-pointer transition-colors",
+                  "flex h-10 items-center justify-center border border-gray-200 cursor-pointer ",
                   tempValues.size.includes(size.value)
                     ? "border-black bg-black text-white"
                     : "hover:border-black hover:bg-gray-50",
@@ -96,7 +96,7 @@ export function ReviewFilterContent({ type, onSelect, tempValues }: Props) {
             ))}
           </ul>
         )}
-      </div> */}
+      </div>
     </div>
   );
 }

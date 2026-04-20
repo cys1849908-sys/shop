@@ -12,16 +12,24 @@ export default function OrderLineItem({
   product,
   className = "",
   cart = false,
+  order = false,
   readOnly = false,
   handleDelete,
 }: {
   product: CartItem;
   className?: string;
   cart?: boolean;
+  order?: boolean;
   readOnly?: boolean;
   handleDelete?: (type: "single", key: string) => Promise<void>;
 }) {
   const { isOpen, openModal, closeModal } = useModal();
+
+  console.log("************************************************");
+  console.log("************************************************");
+  console.log(product);
+  console.log("************************************************");
+  console.log("************************************************");
 
   return (
     <div
@@ -45,13 +53,12 @@ export default function OrderLineItem({
         </Link>
 
         <p className="text-xs text-black mt-1">
-          <span>옵션:</span>
-          {product.size} | {product.quantity}개
+          사이즈: {product.size} / 수량{product.quantity}개
         </p>
         <div className="flex items-center gap-2 mt-5">
-          {product.discount && (
+          {product.discount_rate && (
             <span className="text-[14px] text-red-500">
-              {product.discount}%
+              {product.discount_rate}%
             </span>
           )}
           <p className="text-[14px] ">
