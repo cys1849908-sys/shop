@@ -5,15 +5,16 @@ import { getProductSearch } from "@/src/lib/data/products";
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ query: string }>;
+  searchParams: Promise<{ q: string }>;
 }) {
-  const { query } = await searchParams;
-  const products = await getProductSearch(query);
+  const { q } = await searchParams;
+  console.log(searchParams);
+  const products = await getProductSearch(q);
 
   return (
     <div>
       <div className="mb-8">
-        <SearchBar initialKeyword={query} />
+        <SearchBar initialKeyword={q} />
       </div>
 
       <ProductSearchClient products={products} />

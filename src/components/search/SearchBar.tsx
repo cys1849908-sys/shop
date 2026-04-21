@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 export default function SearchBar({
   initialKeyword = "",
 }: {
-  initialKeyword?: string;
+  initialKeyword: string;
 }) {
   const { keyword, setKeyword, handleSearch, inputRef, handleResetKeyword } =
     useSearch();

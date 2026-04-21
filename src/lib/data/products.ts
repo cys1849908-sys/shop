@@ -76,8 +76,8 @@ export async function getProductDetail(slug: string): Promise<Product | null> {
   };
 }
 
-export async function getProductSearch(q: string): Promise<Product[]> {
-  if (!q.trim()) return [];
+export async function getProductSearch(query: string): Promise<Product[]> {
+  if (!query.trim()) return [];
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("products")
@@ -91,7 +91,7 @@ export async function getProductSearch(q: string): Promise<Product[]> {
       unitPrice:unit_price
     `,
     )
-    .ilike("name", `%${q}%`)
+    .ilike("name", `%${query}%`)
     .order("created_at", { ascending: false });
 
   if (error) {
