@@ -7,7 +7,7 @@ import { FiCheck } from "react-icons/fi";
 import { HiChevronDown } from "react-icons/hi";
 
 interface OptionSelectProps {
-  options: string[];
+  options: string[] | number[];
   value?: string;
   isExpanded: boolean;
   onChange: (value: string) => void;
@@ -23,7 +23,7 @@ export default function OptionSelect({
 }: OptionSelectProps) {
   const selectRef = useOutsideClick<HTMLDivElement>(() => setIsExpanded(false));
 
-  const handleSelect = (val: string) => {
+  const handleSelect = (val: any) => {
     onChange(val);
     setIsExpanded(false);
   };

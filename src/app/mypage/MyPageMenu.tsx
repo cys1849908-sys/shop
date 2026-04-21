@@ -9,7 +9,6 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   { id: 1, title: "위시리스트", Icon: Heart },
-  { id: 2, title: "취소/교환/반품", Icon: RefreshCw },
   { id: 3, title: "1:1문의 내역", Icon: MessageSquareText },
   { id: 4, title: "재입고 알림내역", Icon: Bell },
 ];

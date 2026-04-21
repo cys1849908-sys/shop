@@ -11,9 +11,6 @@ export default function Breadcrumb() {
   const breadcrumbNameMap: { [key: string]: string } = {
     mypage: "마이페이지",
     "order-list": "주문/배송 조회",
-    "return-list": "취소/교환/반품 내역",
-    "store-history": "매장구매 내역",
-    documents: "증빙서류 조회",
 
     cart: "장바구니",
     "order-checkout": "주문결제",
@@ -23,7 +20,6 @@ export default function Breadcrumb() {
     "recent-view": "최근 본 상품",
     reviews: "상품 리뷰",
     inquiry: "1:1 문의 내역",
-    "restock-alert": "재입고 알림내역",
 
     mileage: "마일리지",
     points: "포인트",

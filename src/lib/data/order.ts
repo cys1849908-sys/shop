@@ -18,25 +18,34 @@ export async function getOrderDetails(
     .from("orders")
     .select(
       `
-      *,
-      originalPrice:original_price,
-      discountPrice:discount_price,
-      totalPrice:total_price,
-      receiverName:receiver_name,
-      phoneNumber:phone_number,
-      secondaryPhone:secondary_phone,
-      detailAddress:detail_address,
-      shippingMessage:shipping_message,
-      paymentMethod:payment_method,
-      updatedAt:updated_at,
-      orderItems:order_items (
-      *,
+    id,
+    status,
+    address,
+    createdAt:created_at,
+    originalPrice:original_price,
+    discountPrice:discount_price,
+    totalPrice:total_price,
+    receiverName:receiver_name,
+    phoneNumber:phone_number,
+    secondaryPhone:secondary_phone,
+    detailAddress:detail_address,
+    shippingMessage:shipping_message,
+    paymentMethod:payment_method,
+    updatedAt:updated_at,
+    orderItems:order_items (
+      id,
+      name,
+      quantity,
+      size,
+      slug,
+      subtotal,
+      thumbnail,
       orderId:order_id,
       productId:product_id,
       unitPrice:unit_price,
       discountRate:discount_rate
-      )
-    `,
+    )
+  `,
     )
     .eq("id", orderId)
     .eq("user_id", user.id)
@@ -59,25 +68,34 @@ export async function getOrderList(): Promise<OrderWithItems[]> {
     .from("orders")
     .select(
       `
-      *,
-      originalPrice:original_price,
-      discountPrice:discount_price,
-      totalPrice:total_price,
-      receiverName:receiver_name,
-      phoneNumber:phone_number,
-      secondaryPhone:secondary_phone,
-      detailAddress:detail_address,
-      shippingMessage:shipping_message,
-      paymentMethod:payment_method,
-      updatedAt:updated_at,
-      orderItems:order_items (
-      *,
+    id,
+    status,
+    address,
+    createdAt:created_at,
+    originalPrice:original_price,
+    discountPrice:discount_price,
+    totalPrice:total_price,
+    receiverName:receiver_name,
+    phoneNumber:phone_number,
+    secondaryPhone:secondary_phone,
+    detailAddress:detail_address,
+    shippingMessage:shipping_message,
+    paymentMethod:payment_method,
+    updatedAt:updated_at,
+    orderItems:order_items (
+      id,
+      name,
+      quantity,
+      size,
+      slug,
+      subtotal,
+      thumbnail,
       orderId:order_id,
       productId:product_id,
       unitPrice:unit_price,
       discountRate:discount_rate
-      )
-    `,
+    )
+  `,
     )
     .eq("user_id", user.id);
 

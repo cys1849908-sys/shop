@@ -12,9 +12,9 @@ export default function OrderItemCard({ order }: { order: any }) {
         <div className="flex gap-6">
           <div className="flex flex-col">
             <span className="text-[14px] ">
-              {new Date(order.updated_at)
+              {new Date(order.updatedAt)
                 .toLocaleDateString()
-                .replace(/\./g, "-")
+                .replace(/\./g, " -")
                 .slice(0, -1)}
             </span>
           </div>

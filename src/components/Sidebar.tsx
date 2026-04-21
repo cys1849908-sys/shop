@@ -9,10 +9,7 @@ export default function Sidebar() {
   const menuGroups = [
     {
       title: "나의 쇼핑정보",
-      items: [
-        { name: "주문/배송 조회", href: "/mypage/order-list" },
-        { name: "취소/교환/반품 내역", href: "/mypage/return-list" },
-      ],
+      items: [{ name: "주문/배송 조회", href: "/mypage/order-list" }],
     },
     {
       title: "나의 활동정보",
