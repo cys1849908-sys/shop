@@ -1,21 +1,11 @@
 export type Review = {
-  id: number;
-  productName: string;
-  productImage: string;
-  reviewCount: number;
+  id: string;
+  productId: string;
+  userId: string;
   rating: number;
   content: string;
-  reviewer: string;
-  date: string;
-};
-export type ReviewSummaryProps = {
-  averageRating: number;
-  totalReviews: number;
-  ratingDistribution: {
-    label: string; // 5점, 4점...
-    count: number;
-    percentage: number;
-  }[];
+  images: string[];
+  createdAt: string;
 };
 
 export const FILTER_CONFIG = {

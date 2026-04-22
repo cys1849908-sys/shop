@@ -1,4 +1,3 @@
-// hooks/useCarousel.ts
 "use client";
 
 import {

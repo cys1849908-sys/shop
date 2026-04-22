@@ -4,9 +4,11 @@ import Image from "next/image";
 import Modal from "../common/modals/Modal";
 import { useModal } from "@/src/hooks/useModal";
 import ChangeOptionModal from "../cart/ChangeOptionModal";
-import type { CartItem } from "@/src/types/cart";
 import clsx from "clsx";
 import { calculateDisplayPrice } from "@/src/lib/utils";
+import ReviewWriteModal from "../review/ReviewWriteModal";
+import { OrderItem } from "@/src/types/order";
+import { CartItem } from "@/src/types/cart";
 
 export default function OrderLineItem({
   product,
@@ -16,7 +18,7 @@ export default function OrderLineItem({
   readOnly = false,
   handleDelete,
 }: {
-  product: CartItem;
+  product: CartItem | OrderItem;
   className?: string;
   cart?: boolean;
   order?: boolean;
@@ -24,8 +26,6 @@ export default function OrderLineItem({
   handleDelete?: (type: "single", key: string) => Promise<void>;
 }) {
   const { isOpen, openModal, closeModal } = useModal();
-
-  console.log(product);
 
   return (
     <div
@@ -66,7 +66,7 @@ export default function OrderLineItem({
           </p>
         </div>
       </div>
-      {cart && (
+      {cart && !readOnly && (
         <div className="flex flex-col gap-2 justify-center">
           <button
             className="border border-gray-300 px-4 py-1 text-xs hover:bg-gray-50 cursor-pointer"
@@ -82,6 +82,7 @@ export default function OrderLineItem({
           </button>
         </div>
       )}
+
       {order && (
         <button
           className="border text-black border-gray-200 px-4 py-2 text-xs cursor-pointer "
@@ -93,7 +94,15 @@ export default function OrderLineItem({
 
       <Modal isOpen={isOpen} onClose={closeModal} backdropBlur>
         {cart && <ChangeOptionModal product={product} />}
-        {order && <ChangeOptionModal product={product} />}
+        {order && (
+          <ReviewWriteModal
+            title="리뷰 작성"
+            onClose={closeModal}
+            orderId={(product as OrderItem).orderId}
+            productId={product.productId}
+            productName={product.name}
+          />
+        )}
       </Modal>
     </div>
   );

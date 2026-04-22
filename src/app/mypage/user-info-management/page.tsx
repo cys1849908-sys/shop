@@ -3,10 +3,8 @@
 import Form from "@/src/components/common/ui/Form";
 import FormRowVertical from "@/src/components/common/ui/FormRowVertical";
 import Input from "@/src/components/common/ui/Input";
-import { useModal } from "@/src/hooks/useModal";
 import { verifyCurrentPassword } from "@/src/lib/actions/user";
 import clsx from "clsx";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

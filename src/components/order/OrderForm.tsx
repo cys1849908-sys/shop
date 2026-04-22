@@ -247,7 +247,7 @@ export default function OrderForm({
         <div className="w-[60%] py-4 px-6">
           <div className="flex flex-col gap-4">
             {checkoutItems.map((item) => (
-              <OrderLineItem readOnly key={item.id} product={item} order />
+              <OrderLineItem readOnly key={item.id} product={item} />
             ))}
           </div>
         </div>

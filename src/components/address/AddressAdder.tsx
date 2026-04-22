@@ -1,11 +1,12 @@
 "use client";
-import { useModal } from "@/src/hooks/useModal";
+import clsx from "clsx";
+
 import Modal from "../common/modals/Modal";
 import AddressForm from "./AddressForm";
+import { useModal } from "@/src/hooks/useModal";
 import { addAddress } from "@/src/lib/actions/address";
 import { AddressInput } from "@/src/types/address";
 import { useRouter } from "next/navigation";
-import clsx from "clsx";
 
 export default function AddressAdder({
   isFirstAddress,
@@ -24,7 +25,7 @@ export default function AddressAdder({
   return (
     <>
       <button
-        className="text-center px-4 py-1 text-white bg-black cursor-pointer"
+        className="text-center px-5 py-2 text-white bg-black cursor-pointer"
         onClick={openModal}
       >
         <span className="text-[14px]">배송지 추가</span>

@@ -1,5 +1,4 @@
 import UserInfoEditForm from "@/src/components/user/UserInfoEditForm";
-import { useModal } from "@/src/hooks/useModal";
 import { getUserInfo } from "@/src/lib/data/user";
 
 export default async function UserInfoEditPage() {

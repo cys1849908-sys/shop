@@ -1,45 +1,55 @@
+import { Review } from "@/src/types/review";
 import { createClient } from "../supabase/server";
 
-export async function getReviews(
-  type: "best-item-category" | "new-item-category" | "featured-category",
-  category: string = "All",
-): Promise<void> {
+export async function getReviewsByProduct(
+  productId: string,
+): Promise<Review[]> {
   const supabase = await createClient();
-
-  let query = supabase
+  const { data, error } = await supabase
     .from("reviews")
     .select(
       `
-      *,
-      thumbnail:product_images!inner (url)
+      id,
+      productId: product_id,
+      userId: user_id,
+      rating,
+      content,
+      images,
+      createdAt: created_at
     `,
     )
-    .eq("product_images.image_type", "thumbnail")
-    .in("product_images.sort_order", [0, 1])
-    .limit(10);
+    .eq("product_id", productId)
+    .order("created_at", { ascending: false });
 
-  const columnMap: Record<typeof type, string> = {
-    "best-item-category": "is_recommend",
-    "new-item-category": "is_new",
-    "featured-category": "is_featured",
-  };
+  if (error) throw new Error(error.message);
 
-  const column = columnMap[type];
-  query = query.eq(column, true);
+  return data as Review[];
+}
 
-  if (category !== "All") {
-    query = query.eq("category", category);
-  }
+export async function getMyReviews(): Promise<Review[]> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return [];
 
-  const { data, error } = await query;
+  const { data, error } = await supabase
+    .from("reviews")
+    .select(
+      `
+      id,
+      productId: product_id,
+      userId: user_id,
+      rating,
+      content,
+      images,
+      createdAt: created_at
+    `,
+    )
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
 
-  // if (error) {
-  //   console.error(`${type} 상품 조회 에러:`, error);
-  //   return [] as Product[];
-  // }
+  if (error) throw new Error(error.message);
 
-  // return data.map((product) => ({
-  //   ...product,
-  //   thumbnail: product.thumbnail.map((img: { url: string }) => img.url),
-  // }));
+  return data as Review[];
 }

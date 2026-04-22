@@ -33,7 +33,7 @@ export default function OrderItemCard({ order }: { order: any }) {
 
       <div className="flex flex-col px-6 py-4 ">
         {orderItems.map((item: any, index: number) => (
-          <OrderLineItem product={item} key={item | index} readOnly order />
+          <OrderLineItem product={item} key={index} readOnly order />
         ))}
       </div>
     </div>
