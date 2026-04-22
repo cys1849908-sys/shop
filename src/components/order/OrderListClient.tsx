@@ -7,11 +7,14 @@ import { SearchIcon } from "lucide-react";
 import DateRange from "./DateRange";
 import { useOutsideClick } from "@/src/hooks/useOutsideClick";
 import { getFormattedDate } from "@/src/lib/utils";
+import { Review } from "@/src/types/review";
 
 export default function OrderListClient({
   initialOrders,
+  myReviews,
 }: {
   initialOrders: OrderWithItems[];
+  myReviews: Review[];
 }) {
   const [filters, setFilters] = useState({
     searchQuery: "",
@@ -127,7 +130,7 @@ export default function OrderListClient({
             filters.selectedYear !== "년") && (
             <button
               onClick={handleReset}
-              className="text-[12px] px-3 py-1 cursor-pointer"
+              className="text-[12px] px-3 py-1 cursor-pointer border border-gray-200"
             >
               초기화
             </button>
@@ -158,7 +161,7 @@ export default function OrderListClient({
           </div>
         ) : (
           displayedOrders.map((order) => (
-            <OrderGroup key={order.id} order={order} />
+            <OrderGroup key={order.id} order={order} myReviews={myReviews} />
           ))
         )}
       </div>

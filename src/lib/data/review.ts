@@ -42,7 +42,9 @@ export async function getMyReviews(): Promise<Review[]> {
       userId: user_id,
       rating,
       content,
-      images,
+      reviewImages:review_images (
+        url
+      ),
       createdAt: created_at
     `,
     )
@@ -50,6 +52,9 @@ export async function getMyReviews(): Promise<Review[]> {
     .order("created_at", { ascending: false });
 
   if (error) throw new Error(error.message);
-
-  return data as Review[];
+  const formattedData = (data as any[]).map((review) => ({
+    ...review,
+    images: review.reviewImages?.map((img: any) => img.url) || [],
+  }));
+  return formattedData as Review[];
 }

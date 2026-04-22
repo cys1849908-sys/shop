@@ -9,6 +9,7 @@ import { calculateDisplayPrice } from "@/src/lib/utils";
 import ReviewWriteModal from "../review/ReviewWriteModal";
 import { OrderItem } from "@/src/types/order";
 import { CartItem } from "@/src/types/cart";
+import { Review } from "@/src/types/review";
 
 export default function OrderLineItem({
   product,
@@ -16,15 +17,21 @@ export default function OrderLineItem({
   cart = false,
   order = false,
   readOnly = false,
+  myReviews,
   handleDelete,
 }: {
   product: CartItem | OrderItem;
   className?: string;
+  myReviews?: Review[];
   cart?: boolean;
   order?: boolean;
   readOnly?: boolean;
   handleDelete?: (type: "single", key: string) => Promise<void>;
 }) {
+  const existingReview = myReviews?.find(
+    (r) => r.productId === product.productId,
+  );
+
   const { isOpen, openModal, closeModal } = useModal();
 
   return (
@@ -84,23 +91,37 @@ export default function OrderLineItem({
       )}
 
       {order && (
-        <button
-          className="border text-black border-gray-200 px-4 py-2 text-xs cursor-pointer "
-          onClick={openModal}
-        >
-          리뷰 작성
-        </button>
+        <div className="flex flex-col gap-2">
+          {existingReview ? (
+            <div>
+              <button
+                className="border border-gray-200 bg-gray-100 px-4 py-2 text-xs cursor-pointer hover:bg-gray-50"
+                onClick={openModal}
+              >
+                리뷰 수정
+              </button>
+            </div>
+          ) : (
+            <button
+              className="border text-black border-gray-200 px-4 py-2 text-xs cursor-pointer hover:bg-gray-50"
+              onClick={openModal}
+            >
+              리뷰 작성
+            </button>
+          )}
+        </div>
       )}
 
       <Modal isOpen={isOpen} onClose={closeModal} backdropBlur>
         {cart && <ChangeOptionModal product={product} />}
         {order && (
           <ReviewWriteModal
-            title="리뷰 작성"
+            title={existingReview ? "리뷰 수정" : "리뷰 작성"}
             onClose={closeModal}
             orderId={(product as OrderItem).orderId}
             productId={product.productId}
             productName={product.name}
+            initialData={existingReview}
           />
         )}
       </Modal>

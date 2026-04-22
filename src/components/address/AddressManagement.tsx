@@ -147,7 +147,7 @@ export default function AddressManagement({
                           >
                             수정
                           </button>
-                          {!addr.is_default && (
+                          {!addr.isDefault && (
                             <button
                               className="underline underline-offset-2 cursor-pointer"
                               onClick={(e) => handleDelete(e, addr.id)}

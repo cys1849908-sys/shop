@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReviewStar from "./ReviewStar";
 import ReviewImageUploader from "./ReviewImageUploader";
-import { createReview } from "@/src/lib/actions/review";
+import { createReview, updateReview } from "@/src/lib/actions/review"; // updateReview 액션 필요
+import { Review } from "@/src/types/review";
 
 interface ReviewWriteModalProps {
   productId: string;
   orderId: string;
   title?: string;
   productName: string;
+  initialData?: Review;
   onClose: () => void;
 }
 
@@ -19,26 +21,38 @@ export default function ReviewWriteModal({
   title,
   orderId,
   productName,
+  initialData,
 }: ReviewWriteModalProps) {
-  const [content, setContent] = useState("");
-  const [rating, setRating] = useState(0);
-  const [images, setImages] = useState<string[]>([]);
+  const [content, setContent] = useState(initialData?.content || "");
+  const [rating, setRating] = useState(initialData?.rating || 0);
+  const [images, setImages] = useState<string[]>(initialData?.images || []);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
 
   const handleSubmit = async () => {
     try {
-      await createReview({
-        productId,
-        orderId,
-        rating,
-        content,
-        imageFiles,
-      });
+      if (initialData) {
+        await updateReview(initialData.id, {
+          rating,
+          content,
+          existingImages: images.filter((img) => img.startsWith("blob:")),
+          newImages: imageFiles,
+        });
+      } else {
+        await createReview({
+          productId,
+          orderId,
+          rating,
+          content,
+          imageFiles,
+        });
+      }
       onClose();
     } catch (error) {
       console.error(error);
     }
   };
+
+  console.log(initialData);
 
   return (
     <div className="w-[500px] bg-white border-2 border-black px-8 pb-8 shadow-2xl relative">
@@ -88,15 +102,15 @@ export default function ReviewWriteModal({
       <div className="mt-12 flex gap-3">
         <button
           onClick={onClose}
-          className="flex-1 border border-gray-200 py-4 text-xs font-black tracking-widest text-black hover:bg-gray-50 transition-colors disabled:opacity-50"
+          className="flex-1 border border-gray-200 py-4 text-xs font-black tracking-widest text-black hover:bg-gray-50 transition-colors cursor-pointer"
         >
           취소
         </button>
         <button
           onClick={handleSubmit}
-          className="flex-1 bg-black py-4 text-xs font-black tracking-widest text-white hover:bg-zinc-800 transition-colors disabled:opacity-50"
+          className="flex-1 bg-black py-4 text-xs font-black tracking-widest text-white hover:bg-zinc-800 transition-colors cursor-pointer"
         >
-          등록 하기
+          {initialData ? "수정 하기" : "등록 하기"}
         </button>
       </div>
     </div>

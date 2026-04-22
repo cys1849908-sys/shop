@@ -2,10 +2,16 @@
 
 import { formatCurrency } from "@/src/lib/utils";
 import OrderLineItem from "./OrderLineItem";
+import { Review } from "@/src/types/review";
 
-export default function OrderItemCard({ order }: { order: any }) {
+export default function OrderItemCard({
+  order,
+  myReviews,
+}: {
+  order: any;
+  myReviews: Review[];
+}) {
   const orderItems = order.orderItems;
-
   return (
     <div className="mb-10 border border-gray-200 bg-white">
       <div className="flex justify-between items-center bg-gray-50 px-6 py-4 border-b border-gray-200">
@@ -33,7 +39,13 @@ export default function OrderItemCard({ order }: { order: any }) {
 
       <div className="flex flex-col px-6 py-4 ">
         {orderItems.map((item: any, index: number) => (
-          <OrderLineItem product={item} key={index} readOnly order />
+          <OrderLineItem
+            product={item}
+            key={index}
+            readOnly
+            order
+            myReviews={myReviews}
+          />
         ))}
       </div>
     </div>
