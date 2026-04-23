@@ -1,6 +1,6 @@
 import "./globals.css";
 
-import Header from "../components/layout/Header";
+import Header from "../components/header/Header";
 import { getWishIds } from "../lib/data/wish";
 import WishInitializer from "../components/providers/WishInitializer";
 import ScrollToTop from "../components/common/ScrollToTop";
