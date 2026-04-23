@@ -62,7 +62,7 @@ export async function getProductDetail(slug: string): Promise<Product | null> {
       unitPrice:unit_price,
       discountRate:discount_rate,
       isNew:is_new,
-      thumbnail:product_images!thumbnail_ref (url),
+      thumbnail:product_images!inner (url),
       images:product_images!inner (url)
     `,
     )

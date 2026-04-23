@@ -1,4 +1,3 @@
-// useSearch.ts
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect, useCallback } from "react";
 

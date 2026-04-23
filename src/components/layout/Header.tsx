@@ -1,4 +1,3 @@
-// src/components/layout/Header.tsx (서버 컴포넌트)
 import { createClient } from "@/src/lib/supabase/server";
 import HeaderClient from "./HeaderClient";
 

@@ -31,7 +31,6 @@ export default function OrderLineItem({
   const existingReview = myReviews?.find(
     (r) => r.productId === product.productId,
   );
-
   const { isOpen, openModal, closeModal } = useModal();
 
   return (

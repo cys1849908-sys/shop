@@ -4,7 +4,6 @@ import { MileageItem } from "@/src/types/mileage";
 import clsx from "clsx";
 import { useState } from "react";
 
-// app/mypage/mileage/page.tsx
 export default function MileagePage() {
   const [tab, setTab] = useState<string>("전체");
 

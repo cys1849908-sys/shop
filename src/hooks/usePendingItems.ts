@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { createUniqueKey } from "../lib/utils";
+import { PendingItem } from "../types/cart";
 
-interface PendingItem {
-  id: string;
-  uniqueKey: string;
-  size: string;
-  quantity: number;
-}
-
+/**
+ * @description 장바구니에 담을 상품의 사이즈와 수량을 관리하는 훅
+ * @example
+ * const { pendingItems, handleSelectSize, handleIncrease, handleDecrease, handleRemove } = usePendingItems();
+ */
 export function usePendingItems() {
   const [pendingItems, setPendingItems] = useState<PendingItem[]>([]);
 

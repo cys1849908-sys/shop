@@ -10,6 +10,13 @@ export type CartItem = {
   slug: string;
 };
 
+export type PendingItem = {
+  id: string;
+  uniqueKey: string;
+  size: string;
+  quantity: number;
+};
+
 export interface CartStore {
   items: CartItem[];
   checkoutItems: CartItem[];

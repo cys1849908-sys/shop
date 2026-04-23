@@ -61,3 +61,20 @@ export const getFormattedDate = (monthsAgo: number = 0) => {
 
   return `${year}-${month}-${day}`;
 };
+
+/**
+ *
+ * @param createdAt - 생성된 날짜
+ * @param days - 계산할 일 수 (기본값 : 14일)
+ * @returns boolean
+ */
+export const isWithinDays = (createdAt: string, days: number = 30): boolean => {
+  const createdDate = new Date(createdAt);
+  const now = new Date();
+
+  const diffInTime = now.getTime() - createdDate.getTime();
+
+  const diffInDays = diffInTime / (1000 * 60 * 60 * 24);
+
+  return diffInDays <= days;
+};

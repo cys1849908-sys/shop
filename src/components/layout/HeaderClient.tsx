@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { ShoppingBag, User, Heart, X } from "lucide-react";
 import { cls } from "@/src/lib/utils";
-import { usePathname, useRouter } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 import Search from "./Search";
 import IconLink from "../common/IconLink";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
@@ -52,15 +52,15 @@ const NavItem = ({
 export default function HeaderClient({ user }: { user: SupabaseUser | null }) {
   const [isOpen, setIsOpen] = useState(false);
   const [showtopBanner, setShowTopBanner] = useState(true);
-  // const [isScrolled, setIsScrolled] = useState(false);
 
   const ref = useOutsideClick(() => setIsOpen(false));
   const handleLogout = async () => {
     signOut();
     setIsOpen(false);
-    window.location.href = "/#";
+    window.location.href = "/";
   };
   const cartLength = useCartStore((c) => c.items).length;
+
   const handleClose = () => {
     const minutes = 30;
     const expiryTime = Date.now() + minutes * 60 * 1000;
@@ -86,15 +86,8 @@ export default function HeaderClient({ user }: { user: SupabaseUser | null }) {
     }
   }, []);
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     setIsScrolled(window.scrollY > 50);
-  //   };
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, []);
   return (
-    <header className="bg-white ">
+    <header className="sticky top-0 bg-white z-100 ">
       {showtopBanner && (
         <div className="relative flex items-center bg-black h-10">
           <div className="inner w-full flex items-center justify-end">
@@ -194,7 +187,7 @@ export default function HeaderClient({ user }: { user: SupabaseUser | null }) {
         </div>
       </div>
 
-      <div className="sticky top-10 hidden md:block">
+      <div className="sticky top-10  md:block">
         <nav className="inner flex items-center gap-10 px-6">
           {NAV_MENU.map((item) => (
             <NavItem key={item.href} href={item.href}>
