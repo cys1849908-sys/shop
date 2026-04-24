@@ -1,6 +1,3 @@
-// import { CartItemType } from "@/src/types/cart";
-import { Product } from "@/src/types/product";
-
 export default function ChangeOptionModal({ product }: { product: any }) {
   return (
     <div className="flex bg-white">

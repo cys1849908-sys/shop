@@ -8,7 +8,7 @@ export type OrderStatus =
   | "cancelled";
 
 export type OrderFormFields = {
-  name: string;
+  receiverName: string;
   email: string;
   phoneNumber: string;
   secondaryPhone: string;
@@ -38,7 +38,7 @@ export type OrderItem = {
   id: string;
   orderId: string;
   productId: string;
-  name: string;
+  productName: string;
   unitPrice: number;
   discountRate?: number;
   quantity: number;

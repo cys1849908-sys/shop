@@ -47,7 +47,7 @@ export default function HeaderIcons({ user }: { user: SupabaseUser | null }) {
           </IconLink>
         )}
         {user && isOpen && (
-          <div className="absolute mt-3 w-24 bg-white border border-neutral-100 rounded-md shadow-xl flex flex-col overflow-hidden z-50">
+          <div className="absolute mt-3 w-24 bg-white border border-neutral-100 rounded-md shadow-xl flex flex-col overflow-hidden z-999">
             <Link
               href="/mypage"
               onClick={() => setIsOpen(false)}

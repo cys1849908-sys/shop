@@ -3,7 +3,7 @@ export default function UserSummary({
   points = 0,
   coupons = 0,
 }: {
-  name: string;
+  userName: string;
   mileage: number;
   points: number;
   coupons: number;

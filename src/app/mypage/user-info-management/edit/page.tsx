@@ -19,7 +19,7 @@ export default async function UserInfoEditPage() {
           <div className="flex items-center">
             <span className="w-32 font-medium text-gray-600">이름</span>
             <span className="text-gray-900 font-semibold">
-              {userInfo?.name || "최예성"}
+              {userInfo?.userName || "최예성"}
             </span>
           </div>
           <div className="flex items-center">

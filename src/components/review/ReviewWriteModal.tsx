@@ -52,8 +52,6 @@ export default function ReviewWriteModal({
     }
   };
 
-  console.log(initialData);
-
   return (
     <div className="w-[500px] bg-white border-2 border-black px-8 pb-8 shadow-2xl relative">
       {title && (

@@ -89,14 +89,14 @@ export default function AddToCartModal({ onClose }: { onClose: () => void }) {
             >
               <Image
                 src={product.thumbnail[0]}
-                alt={product.name!}
+                alt={product.productName!}
                 fill
                 sizes="150px"
                 className="object-cover transition-transform duration-300"
               />
               {product.thumbnail[1] && (
                 <Image
-                  alt={`${product.name} hover`}
+                  alt={`${product.productName} hover`}
                   src={product.thumbnail[1]}
                   fill
                   sizes="280px"
@@ -107,10 +107,10 @@ export default function AddToCartModal({ onClose }: { onClose: () => void }) {
             </Link>
             <div className="flex flex-col">
               <span className="text-[12px] text-gray-700 leading-tight line-clamp-2">
-                {product.name}
+                {product.productName}
               </span>
               <span className="text-[14px] font-bold text-gray-900 mt-1">
-                {product.price?.toLocaleString()}
+                {product.unitPrice?.toLocaleString()}
               </span>
 
               <div className="flex items-center gap-1 mt-1">

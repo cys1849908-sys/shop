@@ -14,15 +14,21 @@ export async function addAddress(formData: any): Promise<void> {
   if (formData.isDefault) {
     await supabase
       .from("addresses")
-      .update({ isDefault: false })
+      .update({ is_default: false })
       .eq("user_id", user.id);
   }
 
   const { error } = await supabase.from("addresses").insert([
     {
-      ...formData,
-      address_name: formData.addressName || formData.receiverName,
       user_id: user.id,
+      address_name: formData.addressName || formData.receiverName,
+      receiver_name: formData.receiverName,
+      phone_number: formData.phoneNumber,
+      secondary_phone: formData.secondaryPhone || null,
+      postcode: formData.postcode,
+      address: formData.address,
+      detail_address: formData.detailAddress,
+      is_default: formData.isDefault || false,
     },
   ]);
 
@@ -74,7 +80,16 @@ export async function patchAddress(
 
   const { error } = await supabase
     .from("addresses")
-    .update({ ...formData })
+    .update({
+      address_name: formData.addressName,
+      receiver_name: formData.receiverName,
+      phone_number: formData.phoneNumber,
+      secondary_phone: formData.secondaryPhone || null,
+      postcode: formData.postcode,
+      address: formData.address,
+      detail_address: formData.detailAddress,
+      is_default: formData.isDefault,
+    })
     .eq("user_id", user.id)
     .eq("id", id);
 

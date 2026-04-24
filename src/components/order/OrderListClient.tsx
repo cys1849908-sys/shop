@@ -36,7 +36,9 @@ export default function OrderListClient({
   const displayedOrders = initialOrders.filter((order) => {
     const matchesQuery = filters.activeQuery
       ? order.orderItems?.some((item: any) =>
-          item.name?.toLowerCase().includes(filters.activeQuery.toLowerCase()),
+          item.productName
+            ?.toLowerCase()
+            .includes(filters.activeQuery.toLowerCase()),
         )
       : true;
 

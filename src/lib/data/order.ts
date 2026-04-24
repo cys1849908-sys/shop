@@ -34,7 +34,7 @@ export async function getOrderDetails(
     updatedAt:updated_at,
     orderItems:order_items (
       id,
-      name,
+      productName:product_name,
       quantity,
       size,
       slug,
@@ -84,7 +84,7 @@ export async function getOrderList(): Promise<OrderWithItems[]> {
     updatedAt:updated_at,
     orderItems:order_items (
       id,
-      name,
+      productName:product_name,
       quantity,
       size,
       slug,
@@ -97,7 +97,8 @@ export async function getOrderList(): Promise<OrderWithItems[]> {
     )
   `,
     )
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("주문 내역 조회 실패:", error.message);

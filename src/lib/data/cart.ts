@@ -19,7 +19,7 @@ export async function getCartItem(): Promise<CartItem[]> {
       quantity,
       product:products!inner (
         id,
-        name,
+        productName:product_name,
         unitPrice:unit_price,
         discountRate:discount_rate,
         slug,
@@ -40,7 +40,7 @@ export async function getCartItem(): Promise<CartItem[]> {
   return data.map(({ id, size, quantity, product }: any) => ({
     id,
     productId: product.id,
-    name: product.name,
+    productName: product.productName,
     unitPrice: product.unitPrice,
     discountRate: product.discountRate ?? undefined,
     size,

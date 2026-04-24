@@ -55,7 +55,7 @@ export default function MileagePage() {
 
   return (
     <div className="mx-auto ">
-      <UserSummary name="최예성" mileage={10000} points={5} coupons={3} />
+      <UserSummary userName="최예성" mileage={10000} points={5} coupons={3} />
 
       <div className="flex border-b mt-8">
         {["전체", "적립", "사용"].map((v) => (

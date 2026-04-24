@@ -19,7 +19,8 @@ export async function getProducts(
     .from("products")
     .select(
       `
-      id, name, description, slug, stock, colors, sizes,
+      id,description, slug, stock, colors, sizes,
+      productName:product_name,
       categoryId:category_id,
       unitPrice:unit_price,
       discountRate:discount_rate,
@@ -50,14 +51,15 @@ export async function getProducts(
   })) as Product[];
 }
 
-export async function getProductDetail(slug: string): Promise<Product | null> {
+export async function getProductDetail(slug: string): Promise<Product> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("products")
     .select(
       `
-      id, name, description, slug, stock, colors, sizes,
+      id, description, slug, stock, colors, sizes,
+      productName:product_name,
       categoryId:category_id,
       unitPrice:unit_price,
       discountRate:discount_rate,
@@ -70,15 +72,15 @@ export async function getProductDetail(slug: string): Promise<Product | null> {
     .eq("product_images.image_type", "detail")
     .single();
 
-  if (error) {
-    console.error("제품 상세 정보를 불러오는 중 에러 발생:", error.message);
-    return null;
+  if (error || !data) {
+    console.error("제품을 찾을 수 없습니다:", error?.message);
+    throw new Error("Product not found");
   }
 
   return {
     ...data,
-    thumbnail: data.thumbnail?.map((img: any) => img.url) || [],
-    images: data.images?.map((img: any) => img.url) || [],
+    thumbnail: data.thumbnail.map((img: any) => img.url),
+    images: data.images.map((img: any) => img.url),
   } as Product;
 }
 
@@ -90,7 +92,8 @@ export async function getProductSearch(query: string): Promise<Product[]> {
     .from("products")
     .select(
       `
-      id, name, description, slug, stock, colors, sizes,
+      id,description, slug, stock, colors, sizes,
+      productName:product_name,
       categoryId:category_id,
       unitPrice:unit_price,
       discountRate:discount_rate,
@@ -98,7 +101,7 @@ export async function getProductSearch(query: string): Promise<Product[]> {
       thumbnail:product_images!inner (url)
     `,
     )
-    .ilike("name", `%${query}%`)
+    .ilike("product_name", `%${query}%`)
     .eq("product_images.image_type", "thumbnail")
     .order("created_at", { ascending: false });
 

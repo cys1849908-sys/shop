@@ -7,7 +7,10 @@ import { createClient } from "../supabase/server";
 const BUCKET = "reviews_images";
 
 export async function createReview(
-  formData: Omit<Review, "id" | "userId" | "createdAt" | "images"> & {
+  formData: Omit<
+    Review,
+    "id" | "userId" | "createdAt" | "images" | "userName"
+  > & {
     imageFiles: File[];
     orderId: string;
   },
@@ -23,6 +26,7 @@ export async function createReview(
     .from("reviews")
     .insert([
       {
+        user_name: user.user_metadata.name,
         product_id: formData.productId,
         order_id: formData.orderId,
         user_id: user.id,

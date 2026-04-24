@@ -12,12 +12,6 @@ export default function HeaderClient({ user }: { user: SupabaseUser | null }) {
   const [showtopBanner, setShowTopBanner] = useState(true);
   const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   const handleClose = () => {
     const minutes = 30;
     const expiryTime = Date.now() + minutes * 60 * 1000;
@@ -27,6 +21,12 @@ export default function HeaderClient({ user }: { user: SupabaseUser | null }) {
     );
     setShowTopBanner(false);
   };
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const itemStr = localStorage.getItem("showtopBanner");

@@ -72,7 +72,7 @@ export default function LoginPage() {
             <Input
               type="email"
               placeholder="이메일"
-              autoComplete="username"
+              autoComplete="userName"
               {...register("email", {
                 required: "이메일을 입력해주세요",
                 pattern: {

@@ -29,7 +29,6 @@ export default function ReviewFilterBarList() {
   };
 
   const filterList = Object.values(FILTER_CONFIG);
-  console.log(activeFilter);
 
   return (
     <div className="relative">

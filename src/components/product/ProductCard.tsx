@@ -41,7 +41,7 @@ export default function ProductCard({
     addItem({
       id: createUniqueKey(product.id, size),
       productId: product.id,
-      name: product.name,
+      productName: product.productName,
       unitPrice: product.unitPrice,
       discountRate: product.discountRate,
       thumbnail: product.thumbnail[0],
@@ -76,7 +76,7 @@ export default function ProductCard({
         )}
       >
         <Image
-          alt={product.name}
+          alt={product.productName}
           src={product.thumbnail[0]}
           fill
           sizes="280px"
@@ -91,7 +91,7 @@ export default function ProductCard({
 
         {hasSecondImage && (
           <Image
-            alt={`${product.name} hover`}
+            alt={`${product.productName} hover`}
             src={product.thumbnail[1]}
             fill
             sizes="280px"
@@ -156,7 +156,7 @@ export default function ProductCard({
       <div className="mt-4 space-y-1.3">
         <Link href={`/product-detail/${product.slug}`} className={pointerClass}>
           <h3 className="text-sm font-medium text-gray-900 truncate line-clamp-1 break-all">
-            {product.name}
+            {product.productName}
           </h3>
         </Link>
         <div className="flex items-center gap-2">

@@ -8,13 +8,7 @@ import { useRouter } from "next/navigation";
 import FormRowVertical from "@/src/components/common/ui/FormRowVertical";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
-
-type SignupForm = {
-  name: string;
-  email: string;
-  password: string;
-  passwordConfirm: string;
-};
+import { SignupForm } from "@/src/types/user";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -29,10 +23,11 @@ export default function SignupPage() {
 
   const onSubmit = async (data: SignupForm) => {
     try {
-      const user = await signUp({
-        name: data.name,
+      await signUp({
         email: data.email,
         password: data.password,
+        userName: data.userName,
+        phoneNumber: data.phoneNumber,
       });
       router.replace("/");
     } catch (error: any) {
@@ -58,12 +53,16 @@ export default function SignupPage() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
-            <FormRowVertical label="이름" required error={errors.name?.message}>
+            <FormRowVertical
+              label="이름"
+              required
+              error={errors.userName?.message}
+            >
               <Input
-                {...register("name", {
+                {...register("userName", {
                   required: "이름을 입력해주세요",
                 })}
-                error={!!errors.name}
+                error={!!errors.userName}
               />
             </FormRowVertical>
 
@@ -83,6 +82,25 @@ export default function SignupPage() {
                   },
                 })}
                 error={!!errors.email}
+              />
+            </FormRowVertical>
+
+            <FormRowVertical
+              label="연락처"
+              required
+              error={errors.phoneNumber?.message}
+            >
+              <Input
+                type="tel"
+                placeholder="연락처를 입력해 주세요"
+                {...register("phoneNumber", {
+                  required: "연락처를 입력해주세요",
+                  pattern: {
+                    value: /^01[0-9]-?\d{3,4}-?\d{4}$/,
+                    message: "연락처가 정확한지 확인해 주세요.",
+                  },
+                })}
+                error={!!errors.phoneNumber?.message}
               />
             </FormRowVertical>
 

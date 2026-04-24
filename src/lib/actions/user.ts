@@ -6,7 +6,7 @@ import { createClient } from "../supabase/server";
 export async function signUp({
   email,
   password,
-  name,
+  userName,
   phoneNumber,
 }: SignUpInput): Promise<void> {
   const supabase = await createClient();
@@ -16,13 +16,16 @@ export async function signUp({
     password,
     options: {
       data: {
-        name: name,
+        user_name: userName,
         phone_number: phoneNumber,
       },
     },
   });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error("DB 저장 에러 상세:", error);
+    throw new Error(`Database error: ${error.message}`);
+  }
 }
 
 export async function login({ email, password }: LoginInput): Promise<void> {

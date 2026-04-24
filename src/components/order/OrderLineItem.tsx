@@ -5,7 +5,7 @@ import Modal from "../common/modals/Modal";
 import { useModal } from "@/src/hooks/useModal";
 import ChangeOptionModal from "../cart/ChangeOptionModal";
 import clsx from "clsx";
-import { calculateDisplayPrice } from "@/src/lib/utils";
+import { calculateDisplayPrice, formatCurrency } from "@/src/lib/utils";
 import ReviewWriteModal from "../review/ReviewWriteModal";
 import { OrderItem } from "@/src/types/order";
 import { CartItem } from "@/src/types/cart";
@@ -31,6 +31,7 @@ export default function OrderLineItem({
   const existingReview = myReviews?.find(
     (r) => r.productId === product.productId,
   );
+
   const { isOpen, openModal, closeModal } = useModal();
 
   return (
@@ -43,7 +44,7 @@ export default function OrderLineItem({
       <div className="w-24 h-32 bg-gray-200 relative shrink-0">
         <Image
           src={product.thumbnail}
-          alt={product.name}
+          alt={product.productName}
           fill
           className="object-cover"
         />
@@ -55,11 +56,11 @@ export default function OrderLineItem({
         )}
       >
         <Link className="text-sm" href={`/product/${product.slug}`}>
-          {product.name}
+          {product.productName}
         </Link>
 
         <p className="text-xs text-black mt-1">
-          사이즈: {product.size} / 수량{product.quantity}개
+          사이즈: {product.size} / 수량: {product.quantity} 개
         </p>
         <div className="flex items-center gap-2 mt-5">
           {product.discountRate && (
@@ -68,7 +69,9 @@ export default function OrderLineItem({
             </span>
           )}
           <p className="text-[14px] ">
-            {calculateDisplayPrice(product.unitPrice, product.discountRate)}
+            {formatCurrency(
+              calculateDisplayPrice(product.unitPrice, product.discountRate),
+            )}
           </p>
         </div>
       </div>
@@ -119,7 +122,7 @@ export default function OrderLineItem({
             onClose={closeModal}
             orderId={(product as OrderItem).orderId}
             productId={product.productId}
-            productName={product.name}
+            productName={product.productName}
             initialData={existingReview}
           />
         )}

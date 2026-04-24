@@ -58,7 +58,7 @@ export default function ProductSummary({ product }: { product: Product }) {
     const cartItems: CartItem[] = pendingItems.map((item) => ({
       id: product.id,
       productId: product.id,
-      name: product.name,
+      productName: product.productName,
       unitPrice: finalPrice,
       thumbnail: product.images[0],
       size: item.size,
@@ -80,7 +80,7 @@ export default function ProductSummary({ product }: { product: Product }) {
           <div className="flex justify-between">
             <h1 className="text-[18px] font-medium mt-1 leading-tight">
               <span className="text-red-500 font-bold">[카리나 PICK]</span>{" "}
-              {product.name}
+              {product.productName}
             </h1>
             <div className="flex gap-3 text-gray-500 mt-1">
               <FiShare2 size={20} className="cursor-pointer" />

@@ -17,7 +17,6 @@ export default function ProductList({
       6: "grid-cols-6",
     }[cols] || "grid-cols-5";
 
-  console.log(products);
   return (
     <div>
       <div className={clsx("grid gap-x-2 gap-y-6", gridCols)}>

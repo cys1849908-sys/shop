@@ -27,9 +27,6 @@ export default async function OrderConfirmationPage({
     discountPrice: orderData.discountPrice ?? 0,
   };
 
-  console.log(orderData);
-  console.log(orderId);
-
   return (
     <div className="w-full max-w-7xl mx-auto p-6 mb-20">
       <Breadcrumb />

@@ -59,7 +59,7 @@ export default function OrderForm({
   const discountPrice = summary.originalPrice - summary.totalPrice;
 
   const initialData = {
-    name: user?.name ?? "",
+    receiverName: user?.userName ?? "",
     email: user?.email ?? "",
     phoneNumber: user?.phoneNumber ?? "",
     secondaryPhone: "",
@@ -115,7 +115,7 @@ export default function OrderForm({
               item.quantity
             : item.unitPrice * item.quantity,
         })),
-        receiverName: orderData.name,
+        receiverName: orderData.receiverName,
         email: orderData.email,
         shippingMessage: orderData.shippingMessage,
         discountPrice: discountPrice,
@@ -149,10 +149,10 @@ export default function OrderForm({
             <FormRowVertical label="주문자명" required>
               <Input
                 placeholder="주문하시는 분의 이름을 입력해 주세요"
-                {...register("name", {
+                {...register("receiverName", {
                   required: "주문하시는 분의 이름을 입력해 주세요",
                 })}
-                error={!!errors.name}
+                error={!!errors.receiverName}
                 required
               />
             </FormRowVertical>

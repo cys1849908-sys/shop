@@ -35,7 +35,7 @@ export async function addToCart(item: CartItem): Promise<void> {
         .insert({
           user_id: user.id,
           product_id: item.productId,
-          name: item.name,
+          product_name: item.productName,
           unit_price: item.unitPrice,
           discount_rate: item.discountRate,
           thumbnail: item.thumbnail,

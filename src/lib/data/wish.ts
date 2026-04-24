@@ -38,7 +38,7 @@ export async function getWishProducts(): Promise<Product[]> {
       id,
       product:products!inner (
         id, 
-        name, 
+        productName:product_name, 
         description, 
         slug, 
         stock, 

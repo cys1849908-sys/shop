@@ -1,12 +1,22 @@
-export interface Review {
+export type Review = {
   id: string;
   productId: string;
   userId: string;
   rating: number;
   content: string;
+  userName: string;
   images: string[];
   createdAt: string;
-}
+};
+export type ReviewItem = {
+  image: string;
+  userId: string;
+  reviewId: string;
+  userName: string;
+  rating: number;
+  content: string;
+  createAt: string;
+};
 
 export const FILTER_CONFIG = {
   RATING: { id: "rating", label: "별점", unit: "점" },

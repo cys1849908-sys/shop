@@ -1,7 +1,7 @@
 export type CartItem = {
   id: string;
   productId: string;
-  name: string;
+  productName: string;
   unitPrice: number;
   discountRate?: number;
   thumbnail: string;

@@ -1,50 +1,114 @@
-import Link from "next/link";
+"use client";
+
+import { useModal } from "@/src/hooks/useModal";
 import Image from "next/image";
 import { MdChevronRight } from "react-icons/md";
+import Modal from "../common/modals/Modal";
+import { useState } from "react";
+import { ReviewItem } from "@/src/types/review";
 
-export default function ReviewGallery() {
-  const images = [
-    "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400",
-    "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400",
-    "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400",
-    "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=400",
-    "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400",
-  ];
+export default function ReviewGallery({
+  reviewData,
+}: {
+  reviewData: ReviewItem[];
+}) {
+  const [selectedReview, setSelectedReview] = useState<ReviewItem | null>(null);
+  const { isOpen, openModal, closeModal } = useModal();
 
+  const handleImageClick = (item: ReviewItem) => {
+    setSelectedReview(item);
+    openModal();
+  };
+
+  console.log(selectedReview);
   return (
     <div className="py-10 border-b">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-1.5">
-          <span className="text-[17px] font-bold">포토 & 동영상</span>
+          <span className="text-[17px] font-bold">
+            사진 ({reviewData.length})
+          </span>
         </div>
 
-        <button className="flex items-center text-sm text-gray-500 hover:text-black transition-colors">
+        <button
+          className="flex items-center text-sm text-gray-500 hover:text-black transition-colors"
+          onClick={openModal}
+        >
           전체보기
           <MdChevronRight size={18} />
         </button>
       </div>
 
       <div className="grid grid-cols-5 gap-1">
-        {images.map((src, index) => (
-          <div
-            key={index}
+        {reviewData.slice(0, 5).map((item, index) => (
+          <button
+            key={`${item.image}-${index}`}
             className="relative aspect-square bg-gray-100 overflow-hidden group cursor-pointer"
+            onClick={() => handleImageClick(item)}
           >
             <Image
-              src={src}
+              src={item.image}
               alt={`리뷰 이미지 ${index + 1}`}
               fill
+              sizes="(max-width: 768px) 20vw, 150px"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
+          </button>
+        ))}
+      </div>
+      <Modal isOpen={isOpen} onClose={closeModal} backdropBlur>
+        <div className="bg-white w-[900px] flex p-4 h-[600px]">
+          <div className="grid grid-cols-3 gap-2 w-[500px] overflow-y-auto pr-2 border-r">
+            {reviewData.map((item, index) => (
+              <button
+                key={`${item.image}-${index}`}
+                className={`relative aspect-square bg-gray-100 overflow-hidden group cursor-pointer border-2 ${
+                  selectedReview?.image === item.image
+                    ? "border-black"
+                    : "border-transparent"
+                }`}
+                onClick={() => setSelectedReview(item)}
+              >
+                <Image
+                  src={item.image}
+                  alt={`리뷰 이미지 ${index + 1}`}
+                  fill
+                  sizes="150px"
+                  className="object-cover"
+                />
+              </button>
+            ))}
+          </div>
 
-            {index === 4 && (
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                <span className="text-white text-sm font-medium">+119</span>
+          <div className="flex-1 pl-4 flex flex-col">
+            {selectedReview ? (
+              <>
+                <div className="relative w-full aspect-square mb-4">
+                  <Image
+                    src={selectedReview.image}
+                    alt="선택된 리뷰 이미지"
+                    fill
+                    className="object-contain bg-black"
+                  />
+                </div>
+                <div className="flex-1">
+                  <p className="font-bold text-lg mb-2">
+                    {selectedReview.userName}님의 리뷰
+                  </p>
+                  <p className="text-gray-600">별점: {selectedReview.rating}</p>
+                  <p className="text-gray-600">
+                    리뷰 ID: {selectedReview.userName}
+                  </p>
+                </div>
+              </>
+            ) : (
+              <div className="flex items-center justify-center h-full text-gray-400">
+                이미지를 선택해주세요.
               </div>
             )}
           </div>
-        ))}
-      </div>
+        </div>
+      </Modal>
     </div>
   );
 }

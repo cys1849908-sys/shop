@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import ProductImage from "@/src/components/product/ProductImage";
@@ -8,6 +7,7 @@ import InfoContent from "@/src/components/product/ProductInfoContent";
 import SizeContent from "@/src/components/product/ProductSizeContent";
 import ReviewContent from "@/src/components/review/ReviewContent";
 import { getProductDetail } from "@/src/lib/data/products";
+import { getReviewsByProduct } from "@/src/lib/data/review";
 
 export default async function ProductDetailPage({
   params,
@@ -16,8 +16,7 @@ export default async function ProductDetailPage({
 }) {
   const { slug } = await params;
   const product = await getProductDetail(slug);
-
-  if (!product) notFound();
+  const reviews = await getReviewsByProduct(slug);
 
   return (
     <div className="flex flex-col lg:flex-row w-full py-4 gap-8">
@@ -26,7 +25,7 @@ export default async function ProductDetailPage({
         <ProductTabs
           infoContent={<InfoContent productId={product.id} />}
           sizeContent={<SizeContent productId={product.id} />}
-          reviewContent={<ReviewContent productId={product.id} />}
+          reviewContent={<ReviewContent reviews={reviews} />}
         />
       </div>
       <ProductSummary product={product} />
@@ -45,10 +44,10 @@ export async function generateMetadata({
   if (!product) return {};
 
   return {
-    title: product.name,
+    title: product.productName,
     description: product.description,
     openGraph: {
-      title: product.name,
+      title: product.productName,
       description: product.description,
       images: product.images?.[0] ? [product.images[0]] : [],
     },
