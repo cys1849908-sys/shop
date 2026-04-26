@@ -32,6 +32,7 @@ export async function createReview(
         user_id: user.id,
         rating: formData.rating,
         content: formData.content,
+        size: formData.size,
       },
     ])
     .select()
@@ -79,6 +80,7 @@ export async function updateReview(
   updateData: {
     rating: number;
     content: string;
+    size: string;
     existingImages: string[];
     newImages?: File[];
   },
@@ -92,7 +94,11 @@ export async function updateReview(
 
   const { error: reviewError } = await supabase
     .from("reviews")
-    .update({ rating: updateData.rating, content: updateData.content })
+    .update({
+      rating: updateData.rating,
+      content: updateData.content,
+      size: updateData.size,
+    })
     .eq("id", reviewId)
     .eq("user_id", user.id);
 

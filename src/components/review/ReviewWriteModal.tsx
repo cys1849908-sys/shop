@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import ReviewStar from "./ReviewStar";
 import ReviewImageUploader from "./ReviewImageUploader";
-import { createReview, updateReview } from "@/src/lib/actions/review"; // updateReview 액션 필요
+import { createReview, updateReview } from "@/src/lib/actions/review";
 import { Review } from "@/src/types/review";
 
 interface ReviewWriteModalProps {
@@ -11,6 +11,7 @@ interface ReviewWriteModalProps {
   orderId: string;
   title?: string;
   productName: string;
+  size: string;
   initialData?: Review;
   onClose: () => void;
 }
@@ -21,6 +22,7 @@ export default function ReviewWriteModal({
   title,
   orderId,
   productName,
+  size,
   initialData,
 }: ReviewWriteModalProps) {
   const [content, setContent] = useState(initialData?.content || "");
@@ -34,6 +36,7 @@ export default function ReviewWriteModal({
         await updateReview(initialData.id, {
           rating,
           content,
+          size,
           existingImages: images.filter((img) => img.startsWith("blob:")),
           newImages: imageFiles,
         });
@@ -43,6 +46,7 @@ export default function ReviewWriteModal({
           orderId,
           rating,
           content,
+          size,
           imageFiles,
         });
       }
@@ -75,6 +79,15 @@ export default function ReviewWriteModal({
           </label>
           <div className="flex gap-1">
             <ReviewStar rating={rating} setRating={setRating} />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-xs font-black tracking-widest text-black mb-3 uppercase">
+            구매한 사이즈
+          </label>
+          <div className="w-full border border-gray-200 p-3 text-sm bg-gray-50 text-gray-700">
+            {size}
           </div>
         </div>
 

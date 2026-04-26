@@ -51,7 +51,7 @@ export async function createOrder(
     return {
       order_id: orderId,
       product_id: item.productId,
-      productName: item.productName,
+      product_name: item.productName,
       unit_price: item.unitPrice,
       discount_rate: item.discountRate,
       quantity: item.quantity,

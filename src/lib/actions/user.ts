@@ -76,7 +76,7 @@ export async function updatePassword({
     throw new Error(error.message || "비밀번호 변경 중 오류가 발생했습니다.");
 }
 
-export async function signOut() {
+export async function signOut(): Promise<void> {
   const supabase = await createClient();
   await supabase.auth.signOut();
 }

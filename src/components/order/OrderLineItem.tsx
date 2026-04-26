@@ -123,6 +123,7 @@ export default function OrderLineItem({
             orderId={(product as OrderItem).orderId}
             productId={product.productId}
             productName={product.productName}
+            size={(product as OrderItem).size}
             initialData={existingReview}
           />
         )}

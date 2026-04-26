@@ -6,16 +6,8 @@ export type Review = {
   content: string;
   userName: string;
   images: string[];
+  size: string;
   createdAt: string;
-};
-export type ReviewItem = {
-  image: string;
-  userId: string;
-  reviewId: string;
-  userName: string;
-  rating: number;
-  content: string;
-  createAt: string;
 };
 
 export const FILTER_CONFIG = {

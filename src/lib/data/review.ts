@@ -1,7 +1,10 @@
 import { Review } from "@/src/types/review";
 import { createClient } from "../supabase/server";
 
-export async function getReviewsByProduct(slug: string): Promise<Review[]> {
+export async function getReviewsByProduct(
+  slug: string,
+  page: number = 0,
+): Promise<Review[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("reviews")
@@ -12,6 +15,7 @@ export async function getReviewsByProduct(slug: string): Promise<Review[]> {
       userId: user_id,
       rating,
       content,
+      size,
       images:review_images (
         url
       ),
@@ -21,7 +25,8 @@ export async function getReviewsByProduct(slug: string): Promise<Review[]> {
     `,
     )
     .eq("products.slug", slug)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .range(page * 10, (page + 1) * 10 - 1);
 
   if (error) throw new Error(error.message);
   const formattedData: Review[] = (data || []).map((review: any) => ({
@@ -47,6 +52,7 @@ export async function getMyReviews(): Promise<Review[]> {
       userId: user_id,
       rating,
       content,
+      size,
       userName: user_name,
       reviewImages:review_images (
         url

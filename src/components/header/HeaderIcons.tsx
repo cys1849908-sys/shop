@@ -16,7 +16,7 @@ export default function HeaderIcons({ user }: { user: SupabaseUser | null }) {
   const cartLength = useCartStore((c) => c.items).length;
 
   const handleLogout = async () => {
-    signOut();
+    await signOut();
     setIsOpen(false);
     window.location.href = "/";
   };
