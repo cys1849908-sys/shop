@@ -21,7 +21,7 @@ export default function ReviewFilter() {
     console.log(`${id} 로 서버에 데이터를 요청합니다.`);
   };
   return (
-    <div className="py-6 border-b border-gray-100">
+    <div className="py-8 border-y border-gray-200">
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
         <div className="flex gap-6 text-sm font-medium text-gray-400">
           {SORT_OPTIONS.map((option) => (

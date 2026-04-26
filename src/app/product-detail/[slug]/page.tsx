@@ -25,7 +25,7 @@ export default async function ProductDetailPage({
         <ProductTabs
           infoContent={<InfoContent productId={product.id} />}
           sizeContent={<SizeContent productId={product.id} />}
-          reviewContent={<ReviewContent reviews={reviews} />}
+          reviewContent={<ReviewContent reviews={reviews} slug={slug} />}
         />
       </div>
       <ProductSummary product={product} />

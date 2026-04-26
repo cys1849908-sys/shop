@@ -1,7 +1,40 @@
+"use server";
 import { Review } from "@/src/types/review";
 import { createClient } from "../supabase/server";
 
-export async function getReviewsByProduct(
+export async function getReviewsByProduct(slug: string): Promise<Review[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("reviews")
+    .select(
+      `
+      id,
+      productId: product_id,
+      userId: user_id,
+      rating,
+      content,
+      size,
+      images:review_images (
+        url
+      ),
+      userName: user_name,
+      products!inner(slug),
+      createdAt: created_at
+    `,
+    )
+    .eq("products.slug", slug)
+    .order("created_at", { ascending: false });
+
+  if (error) throw new Error(error.message);
+  const formattedData: Review[] = (data || []).map((review: any) => ({
+    ...review,
+    images: review.images?.map((img: { url: string }) => img.url) || [],
+  }));
+
+  return formattedData as Review[];
+}
+
+export async function getReviewsByProductPaged(
   slug: string,
   page: number = 0,
 ): Promise<Review[]> {
@@ -26,7 +59,8 @@ export async function getReviewsByProduct(
     )
     .eq("products.slug", slug)
     .order("created_at", { ascending: false })
-    .range(page * 10, (page + 1) * 10 - 1);
+    // .range(page * 10, (page + 1) * 10 - 1);
+    .range(page * 1, page * 1);
 
   if (error) throw new Error(error.message);
   const formattedData: Review[] = (data || []).map((review: any) => ({
@@ -36,6 +70,7 @@ export async function getReviewsByProduct(
 
   return formattedData as Review[];
 }
+
 export async function getMyReviews(): Promise<Review[]> {
   const supabase = await createClient();
   const {

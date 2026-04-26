@@ -6,11 +6,16 @@ import { useModal } from "@/src/hooks/useModal";
 import ReviewSummary from "./ReviewSummary";
 import ReviewGallery from "./ReviewGallery";
 import ReviewFilter from "./ReviewFilter";
-import ReviewList from "./ReviewList";
 import ReviewDetailModal from "./ReviewDetailModal";
-import { flattenReviewImages } from "@/src/lib/utils";
+import InfiniteScrollList from "../InfiniteScrollList";
 
-export default function ReviewContent({ reviews }: { reviews: Review[] }) {
+export default function ReviewContent({
+  reviews,
+  slug,
+}: {
+  reviews: Review[];
+  slug: string;
+}) {
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [selectedImage, setSelectedImage] = useState<string>(
     selectedReview?.images[0] || "",
@@ -28,7 +33,7 @@ export default function ReviewContent({ reviews }: { reviews: Review[] }) {
       <ReviewSummary reviews={reviews} />
       <ReviewGallery reviews={reviews} onImageClick={handleImageClick} />
       <ReviewFilter />
-      <ReviewList reviews={reviews} onImageClick={handleImageClick} />
+      <InfiniteScrollList slug={slug} onImageClick={handleImageClick} />
       <ReviewDetailModal
         isOpen={isOpen}
         onClose={closeModal}

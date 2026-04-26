@@ -11,7 +11,7 @@ export default function ReviewItem({
   onImageClick: (review: Review, img: string) => void;
 }) {
   return (
-    <div className="py-6 border-b last:border-0 flex gap-4 items-center">
+    <div className="py-8 border-b border-gray-200  flex gap-4 items-center">
       <div className="flex-1 flex flex-col gap-3">
         <div className="flex">
           {Array.from({ length: 5 }).map((_, i) => (

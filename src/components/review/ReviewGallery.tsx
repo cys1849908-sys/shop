@@ -15,8 +15,9 @@ export default function ReviewGallery({
   onImageClick,
 }: ReviewGalleryProps) {
   const flattenReview = flattenReviewImages(reviews);
+  console.log(reviews);
   return (
-    <div className="py-10 border-b">
+    <div className="py-10 ">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-1.5">
           <span className="text-[17px] font-bold">
