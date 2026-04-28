@@ -1,22 +1,23 @@
-import { FilterState } from "@/src/hooks/useFilter";
 import {
-  FILTER_CONFIG,
   FilterLabel,
   STAR_LABELS,
   HEIGHT_OPTIONS,
   WEIGHT_OPTIONS,
   SIZE_OPTIONS,
+  FilterState,
 } from "@/src/types/review";
 import { Star } from "lucide-react";
 import clsx from "clsx";
 
-interface Props {
+export function ReviewFilterContent({
+  type,
+  onSelect,
+  tempValues,
+}: {
   type: FilterLabel;
   onSelect: (value: string | number) => void;
   tempValues: FilterState;
-}
-
-export function ReviewFilterContent({ type, onSelect, tempValues }: Props) {
+}) {
   return (
     <div className="relative p-4 bg-white w-full">
       <div className="mb-3 text-sm font-bold text-gray-700">{type}</div>
@@ -55,28 +56,6 @@ export function ReviewFilterContent({ type, onSelect, tempValues }: Props) {
               </div>
             </button>
           ))}
-
-        {(type === "키" || type === "몸무게") && (
-          <ul className="grid grid-cols-4 gap-1 text-[11px]">
-            {(type === "키" ? HEIGHT_OPTIONS : WEIGHT_OPTIONS).map((option) => (
-              <li
-                key={option.value}
-                onClick={() => onSelect(option.value)}
-                className={clsx(
-                  "flex items-center py-2 px-1 justify-center border border-gray-200  cursor-pointer  text-center",
-                  (type === "키"
-                    ? tempValues.height
-                    : tempValues.weight
-                  ).includes(option.value)
-                    ? "border-gray-200 bg-black text-white"
-                    : "hover:border-black ",
-                )}
-              >
-                {option.label}
-              </li>
-            ))}
-          </ul>
-        )}
 
         {type === "사이즈" && (
           <ul className="grid grid-cols-7 gap-1 text-[11px]">

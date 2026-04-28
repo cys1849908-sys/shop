@@ -1,18 +1,5 @@
 import { useState } from "react";
-
-export interface FilterState {
-  rating: number[];
-  height: string[];
-  weight: string[];
-  size: string[];
-}
-
-export const getInitialFilter = (): FilterState => ({
-  rating: [],
-  height: [],
-  weight: [],
-  size: [],
-});
+import { FilterState, getInitialFilter, SortOption } from "../types/review";
 
 export function useFilter() {
   const [tempValues, setTempValues] = useState<FilterState>(getInitialFilter);
@@ -20,13 +7,12 @@ export function useFilter() {
     useState<FilterState>(getInitialFilter);
 
   const handleChange = (
-    key: keyof FilterState,
+    key: "rating" | "size",
     value: string | number,
   ): void => {
     setTempValues((prev) => {
       const current = prev[key] as (string | number)[];
       const exists = current.includes(value);
-
       return {
         ...prev,
         [key]: exists
@@ -36,17 +22,31 @@ export function useFilter() {
     });
   };
 
-  const applyFilter = (): void => {
-    setAppliedValues(tempValues);
+  // 정렬 — 즉시 적용 (모달 없이 바로 반영)
+  const handleSortChange = (sortBy: SortOption): void => {
+    setTempValues((prev) => ({ ...prev, sortBy }));
+    setAppliedValues((prev) => ({ ...prev, sortBy }));
   };
 
-  const cancelFilter = (): void => {
-    setTempValues(appliedValues);
+  // 포토 온리 — 즉시 적용
+  const handlePhotoOnly = (photoOnly: boolean): void => {
+    setTempValues((prev) => ({ ...prev, photoOnly }));
+    setAppliedValues((prev) => ({ ...prev, photoOnly }));
   };
+
+  // 키워드 — 즉시 적용
+  const handleKeyword = (keyword: string): void => {
+    setTempValues((prev) => ({ ...prev, keyword }));
+    setAppliedValues((prev) => ({ ...prev, keyword }));
+  };
+
+  const applyFilter = (): void => setAppliedValues(tempValues);
+
+  const cancelFilter = (): void => setTempValues(appliedValues);
 
   const resetFilter = (key?: keyof FilterState): void => {
     if (key) {
-      const resetValue = { [key]: [] };
+      const resetValue = { [key]: getInitialFilter()[key] };
       setTempValues((prev) => ({ ...prev, ...resetValue }));
       setAppliedValues((prev) => ({ ...prev, ...resetValue }));
     } else {
@@ -60,6 +60,9 @@ export function useFilter() {
     tempValues,
     appliedValues,
     handleChange,
+    handleSortChange,
+    handlePhotoOnly,
+    handleKeyword,
     applyFilter,
     resetFilter,
     cancelFilter,

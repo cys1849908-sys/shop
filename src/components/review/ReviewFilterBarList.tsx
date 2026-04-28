@@ -6,9 +6,14 @@ import { useOutsideClick } from "@/src/hooks/useOutsideClick";
 import { HiChevronDown } from "react-icons/hi";
 import { useFilter } from "@/src/hooks/useFilter";
 
-export default function ReviewFilterBarList() {
-  const [activeFilter, setActiveFilter] = useState<FilterLabel | null>(null);
+type FilterProps = ReturnType<typeof useFilter>;
 
+export default function ReviewFilterBarList({
+  filter,
+}: {
+  filter: FilterProps;
+}) {
+  const [activeFilter, setActiveFilter] = useState<FilterLabel | null>(null);
   const {
     tempValues,
     appliedValues,
@@ -16,12 +21,12 @@ export default function ReviewFilterBarList() {
     applyFilter,
     resetFilter,
     cancelFilter,
-  } = useFilter();
+  } = filter;
 
   const containerRef = useOutsideClick<HTMLDivElement>(() => {
     cancelFilter();
     setActiveFilter(null);
-  });
+  }, false);
 
   const handleSave = () => {
     applyFilter();
@@ -29,6 +34,10 @@ export default function ReviewFilterBarList() {
   };
 
   const filterList = Object.values(FILTER_CONFIG);
+  const hasApplied = (label: FilterLabel): boolean => {
+    const key = LABEL_TO_KEY[label];
+    return appliedValues[key].length > 0;
+  };
 
   return (
     <div className="relative">
@@ -36,7 +45,8 @@ export default function ReviewFilterBarList() {
         {filterList.map((filter) => (
           <button
             key={filter.id}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               if (activeFilter === filter.label) {
                 cancelFilter();
                 setActiveFilter(null);
@@ -48,17 +58,19 @@ export default function ReviewFilterBarList() {
               "px-4 py-2 border cursor-pointer",
               activeFilter === filter.label
                 ? "border-black"
-                : "border-gray-200",
+                : hasApplied(filter.label)
+                  ? "border-black"
+                  : "border-gray-200",
             )}
           >
             <span className="flex items-center justify-center">
               {filter.label}
               <HiChevronDown
-                key={filter.label}
                 className={clsx(
-                  activeFilter === filter.label
-                    ? "rotate-180 text-black"
-                    : "rotate-0 text-gray-200",
+                  activeFilter === filter.label ? "rotate-180" : "rotate-0",
+                  activeFilter === filter.label || hasApplied(filter.label)
+                    ? "text-black"
+                    : "text-gray-200",
                 )}
               />
             </span>

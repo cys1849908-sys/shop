@@ -8,6 +8,7 @@ import ReviewGallery from "./ReviewGallery";
 import ReviewFilter from "./ReviewFilter";
 import ReviewDetailModal from "./ReviewDetailModal";
 import InfiniteScrollList from "../InfiniteScrollList";
+import { useFilter } from "@/src/hooks/useFilter";
 
 export default function ReviewContent({
   reviews,
@@ -17,10 +18,9 @@ export default function ReviewContent({
   slug: string;
 }) {
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
-  const [selectedImage, setSelectedImage] = useState<string>(
-    selectedReview?.images[0] || "",
-  );
+  const [selectedImage, setSelectedImage] = useState<string>("");
   const { isOpen, openModal, closeModal } = useModal();
+  const filter = useFilter();
 
   const handleImageClick = (review: Review, img: string) => {
     setSelectedReview(review);
@@ -32,8 +32,12 @@ export default function ReviewContent({
     <div className="px-16 py-10">
       <ReviewSummary reviews={reviews} />
       <ReviewGallery reviews={reviews} onImageClick={handleImageClick} />
-      <ReviewFilter />
-      <InfiniteScrollList slug={slug} onImageClick={handleImageClick} />
+      <ReviewFilter filter={filter} />
+      <InfiniteScrollList
+        slug={slug}
+        onImageClick={handleImageClick}
+        appliedValues={filter.appliedValues}
+      />
       <ReviewDetailModal
         isOpen={isOpen}
         onClose={closeModal}

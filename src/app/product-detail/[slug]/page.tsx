@@ -33,23 +33,23 @@ export default async function ProductDetailPage({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const product = await getProductDetail(slug);
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: Promise<{ slug: string }>;
+// }): Promise<Metadata> {
+//   const { slug } = await params;
+//   const product = await getProductDetail(slug);
 
-  if (!product) return {};
+//   if (!product) return {};
 
-  return {
-    title: product.productName,
-    description: product.description,
-    openGraph: {
-      title: product.productName,
-      description: product.description,
-      images: product.images?.[0] ? [product.images[0]] : [],
-    },
-  };
-}
+//   return {
+//     title: product.productName,
+//     description: product.description,
+//     openGraph: {
+//       title: product.productName,
+//       description: product.description,
+//       images: product.images?.[0] ? [product.images[0]] : [],
+//     },
+//   };
+// }

@@ -9,11 +9,31 @@ export type Review = {
   size: string;
   createdAt: string;
 };
+export type SortOption = "latest" | "rating";
+
+export interface FilterState {
+  rating: number[];
+  size: string[];
+  sortBy: SortOption;
+  photoOnly: boolean;
+  keyword: string;
+}
+
+export const getInitialFilter = (): FilterState => ({
+  rating: [],
+  size: [],
+  sortBy: "latest",
+  photoOnly: false,
+  keyword: "",
+});
+
+export const SORT_OPTIONS: { id: SortOption; label: string }[] = [
+  { id: "latest", label: "최신순" },
+  { id: "rating", label: "별점순" },
+];
 
 export const FILTER_CONFIG = {
   RATING: { id: "rating", label: "별점", unit: "점" },
-  HEIGHT: { id: "height", label: "키", unit: "cm" },
-  WEIGHT: { id: "weight", label: "몸무게", unit: "kg" },
   SIZE: { id: "size", label: "사이즈", unit: "" },
 } as const;
 
@@ -24,11 +44,11 @@ export const STAR_LABELS: Record<number, string> = {
   2: "그저 그래요",
   1: "별로예요",
 };
-export const SORT_OPTIONS = [
-  { id: "latest", label: "최신순" },
-  { id: "recommend", label: "추천순" },
-  { id: "rating", label: "별점순" },
-];
+// export const SORT_OPTIONS = [
+//   { id: "latest", label: "최신순" },
+//   { id: "recommend", label: "추천순" },
+//   { id: "rating", label: "별점순" },
+// ];
 export const HEIGHT_OPTIONS = [
   { value: "under_150", label: "150cm 이하" },
   { value: "150_154", label: "150 ~ 154cm" },

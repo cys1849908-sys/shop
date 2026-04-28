@@ -42,7 +42,6 @@ export default function SearchFilter() {
 
   return (
     <div className="relative" ref={isOpenRef}>
-      {/* 버튼 */}
       <button
         className="border border-gray-200 px-3 py-2 flex items-center
         justify-between
@@ -59,7 +58,6 @@ export default function SearchFilter() {
         />
       </button>
 
-      {/* 드롭다운 */}
       {isOpen && (
         <div
           className="absolute left-0 top-full mt-1 border

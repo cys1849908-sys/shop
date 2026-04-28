@@ -1,36 +1,39 @@
-"use client";
-
-import { MdSearch, MdCheck } from "react-icons/md";
+import { useFilter } from "@/src/hooks/useFilter";
+import { useOutsideClick } from "@/src/hooks/useOutsideClick";
+import { SORT_OPTIONS } from "@/src/types/review";
 import clsx from "clsx";
 import { useState } from "react";
-import { useOutsideClick } from "@/src/hooks/useOutsideClick";
+import { MdCheck, MdSearch } from "react-icons/md";
 import ReviewFilterBarList from "./ReviewFilterBarList";
-import { SORT_OPTIONS } from "@/src/types/review";
 
-export default function ReviewFilter() {
-  const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [isPhotoOnly, setIsPhotoOnly] = useState<boolean>(false);
-  const [searchValue, setSearchValue] = useState<string>("");
-  const [sortBy, setSortBy] = useState<string>("latest");
+type ReviewFilterProps = {
+  filter: ReturnType<typeof useFilter>;
+};
 
+export default function ReviewFilter({ filter }: ReviewFilterProps) {
+  const {
+    tempValues,
+    appliedValues,
+    handleSortChange,
+    handlePhotoOnly,
+    handleKeyword,
+  } = filter;
+
+  const [isFocused, setIsFocused] = useState(false);
   const selectRef = useOutsideClick<HTMLDivElement>(() => setIsFocused(false));
 
-  const handleSortChange = (id: string) => {
-    setSortBy(id);
-
-    console.log(`${id} 로 서버에 데이터를 요청합니다.`);
-  };
   return (
     <div className="py-8 border-y border-gray-200">
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
+        {/* 정렬 */}
         <div className="flex gap-6 text-sm font-medium text-gray-400">
           {SORT_OPTIONS.map((option) => (
             <button
               key={option.id}
               onClick={() => handleSortChange(option.id)}
               className={clsx(
-                "text-sm transition-colors relative cursor-pointer",
-                sortBy === option.id
+                "text-sm transition-colors cursor-pointer",
+                appliedValues.sortBy === option.id
                   ? "font-bold text-black"
                   : "text-gray-400 hover:text-gray-600",
               )}
@@ -41,17 +44,18 @@ export default function ReviewFilter() {
         </div>
 
         <div className="flex items-center gap-6 text-sm">
-          <label className="flex items-center gap-2 cursor-pointer group">
+          {/* 포토 온리 */}
+          <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
               className="hidden"
-              checked={isPhotoOnly}
-              onChange={() => setIsPhotoOnly(!isPhotoOnly)}
+              checked={appliedValues.photoOnly}
+              onChange={() => handlePhotoOnly(!appliedValues.photoOnly)}
             />
             <div
               className={clsx(
                 "w-5 h-5 border rounded flex items-center justify-center transition-all",
-                isPhotoOnly
+                appliedValues.photoOnly
                   ? "border-black bg-black"
                   : "border-gray-300 bg-white",
               )}
@@ -59,34 +63,28 @@ export default function ReviewFilter() {
               <MdCheck
                 className={clsx(
                   "text-white w-full h-full p-0.5 transition-opacity",
-                  isPhotoOnly ? "opacity-100" : "opacity-0",
+                  appliedValues.photoOnly ? "opacity-100" : "opacity-0",
                 )}
               />
             </div>
             <span className="text-gray-600">포토/동영상 먼저 보기</span>
           </label>
 
+          {/* 키워드 검색 */}
           <div
+            ref={selectRef}
             className={clsx(
               "flex items-center gap-1 text-gray-400 hover:bg-gray-100 border p-1",
-              isFocused ? "bg-gray-100 " : "bg-gray-white",
+              isFocused ? "bg-gray-100" : "bg-white",
             )}
-            ref={selectRef}
             onMouseEnter={() => setIsFocused(true)}
-            onMouseLeave={() => (searchValue === "" ? setIsFocused(false) : "")}
+            onMouseLeave={() => !appliedValues.keyword && setIsFocused(false)}
           >
-            <button>
-              <MdSearch
-                size={20}
-                className={clsx(
-                  "cursor-pointer hover:border-black border-gray-200",
-                )}
-              />
-            </button>
+            <MdSearch size={20} />
             <input
               type="search"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
+              value={appliedValues.keyword}
+              onChange={(e) => handleKeyword(e.target.value)}
               placeholder="리뷰 키워드 검색"
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
@@ -96,7 +94,7 @@ export default function ReviewFilter() {
         </div>
       </div>
 
-      <ReviewFilterBarList />
+      <ReviewFilterBarList filter={filter} />
     </div>
   );
 }

@@ -1,16 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getReviewsByProductPaged } from "../lib/data/review";
-import { Review } from "../types/review";
+import { FilterState, Review } from "../types/review";
 import ReviewItem from "./review/ReviewItem";
 
 export default function InfiniteScrollList({
   slug,
   onImageClick,
+  appliedValues,
 }: {
   slug: string;
   onImageClick: (review: Review, img: string) => void;
+  appliedValues: FilterState;
 }) {
   const [items, setItems] = useState<Review[]>([]);
   const [page, setPage] = useState(0);
@@ -19,32 +21,47 @@ export default function InfiniteScrollList({
   const observerRef = useRef<HTMLDivElement>(null);
   const isFetching = useRef(false);
 
-  const fetchItems = async (currentPage: number) => {
-    if (isFetching.current || !hasMore) return;
-    isFetching.current = true;
-    setLoading(true);
-    try {
-      const reviews = await getReviewsByProductPaged(slug, currentPage);
-      if (reviews.length < 1) {
-        setHasMore(false);
+  const fetchItems = useCallback(
+    async (currentPage: number) => {
+      if (isFetching.current || !hasMore) return;
+      isFetching.current = true;
+      setLoading(true);
+      try {
+        const reviews = await getReviewsByProductPaged(
+          slug,
+          currentPage,
+          appliedValues,
+        );
+        if (reviews.length < 10) {
+          setHasMore(false);
+        }
+        setItems((prev) =>
+          currentPage === 0 ? reviews : [...prev, ...reviews],
+        );
+      } catch (error) {
+        console.error("데이터 로드 실패:", error);
+      } finally {
+        setLoading(false);
+        isFetching.current = false;
       }
-      setItems((prev) => [...prev, ...reviews]);
-    } catch (error) {
-      console.error("데이터 로드 실패:", error);
-    } finally {
-      setLoading(false);
-      isFetching.current = false;
-    }
-  };
+    },
+    [slug, appliedValues, hasMore],
+  );
+
+  useEffect(() => {
+    setItems([]);
+    setPage(0);
+    setHasMore(true);
+  }, [appliedValues]);
 
   useEffect(() => {
     fetchItems(0);
-  }, []);
+  }, [appliedValues, fetchItems]);
 
   useEffect(() => {
     if (page === 0) return;
     fetchItems(page);
-  }, [page]);
+  }, [page, fetchItems]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
